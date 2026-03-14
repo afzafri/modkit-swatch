@@ -1,330 +1,2906 @@
 [
-  {"brand":"Mr. Color","code":"C1","name":"White","hex":"#ffffff","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C2","name":"Black","hex":"#0d0d0d","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C3","name":"Red","hex":"#c82828","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C4","name":"Yellow","hex":"#e8d020","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C5","name":"Blue","hex":"#1848a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C6","name":"Green","hex":"#2d8c3c","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C7","name":"Brown","hex":"#6e3c20","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C8","name":"Silver","hex":"#c0c0c0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C9","name":"Gold","hex":"#c8a030","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C10","name":"Copper","hex":"#b87040","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C11","name":"Light Gull Gray","hex":"#afb0a9","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C13","name":"Neutral Gray","hex":"#888888","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C14","name":"Navy Blue","hex":"#1e3050","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C15","name":"IJN Green","hex":"#3a4030","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C16","name":"IJA Green","hex":"#4a5838","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C17","name":"RLM71 Dark Green","hex":"#485840","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C18","name":"RLM70 Black Green","hex":"#2e3028","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C19","name":"Sandy Brown","hex":"#c8a870","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C20","name":"Light Blue","hex":"#80b8d8","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C21","name":"Middle Stone","hex":"#c0a870","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C22","name":"Dark Earth","hex":"#6a5038","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C23","name":"Dark Green 2","hex":"#284028","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C24","name":"Orange Yellow","hex":"#e8a820","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C25","name":"Dark Seagray","hex":"#586860","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C26","name":"Duck Egg Green","hex":"#b0c8b0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C27","name":"Interior Green","hex":"#88a870","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C28","name":"Steel","hex":"#686868","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C29","name":"Hull Red","hex":"#682020","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C30","name":"Flat Base","hex":"#e8e0d0","finish":"flat","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C31","name":"Dark Gull Gray","hex":"#585858","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C32","name":"Dark Gray","hex":"#484848","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C33","name":"Flat Black","hex":"#1a1a1a","finish":"flat","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C34","name":"Sky Blue","hex":"#70a8d0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C35","name":"IJN Gray","hex":"#888880","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C36","name":"RLM74 Gray Green","hex":"#505848","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C37","name":"RLM75 Gray Violet","hex":"#586068","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C38","name":"Olive Drab 2","hex":"#50583a","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C39","name":"Dark Yellow","hex":"#c8a840","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C40","name":"German Gray","hex":"#383838","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C41","name":"Red Brown","hex":"#883828","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C42","name":"Mahogany","hex":"#5a2018","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C43","name":"Wood Brown","hex":"#a08050","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C44","name":"Tan","hex":"#c8a870","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C45","name":"Sail Color","hex":"#e8d8c0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C46","name":"Clear","hex":"#e0e0e0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C47","name":"Clear Red","hex":"#d02020","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C48","name":"Clear Yellow","hex":"#e8d020","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C49","name":"Clear Orange","hex":"#e07020","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C50","name":"Clear Blue","hex":"#2050c0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C51","name":"Flesh","hex":"#e0b898","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C54","name":"Khaki Green","hex":"#687848","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C55","name":"Khaki","hex":"#a09060","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C56","name":"IJN Gray","hex":"#7a7a70","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C57","name":"Metallic Blue Green","hex":"#308888","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C58","name":"Orange Yellow","hex":"#e8a020","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C59","name":"Orange","hex":"#e06020","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C60","name":"RLM02 Gray","hex":"#989890","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C62","name":"Flat White","hex":"#f0f0f0","finish":"flat","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C63","name":"Pink","hex":"#e080a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C64","name":"Light Gray","hex":"#b0b0b0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C65","name":"Bright Blue","hex":"#2868c8","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C66","name":"Day-Glo Orange","hex":"#f06020","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C68","name":"Red Madder","hex":"#a02038","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C69","name":"Off White","hex":"#e8e0d0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C70","name":"Dark Green","hex":"#284020","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C71","name":"Midnight Blue","hex":"#182040","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C72","name":"Medium Blue","hex":"#3868a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C73","name":"Aircraft Gray","hex":"#8898a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C74","name":"Air Superiority Blue","hex":"#7090b0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C75","name":"Metallic Red","hex":"#a82028","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C76","name":"Metallic Blue","hex":"#2848a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C77","name":"Metallic Black","hex":"#282828","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C78","name":"Metal Black","hex":"#202020","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C79","name":"Shine Red","hex":"#d01828","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C80","name":"Cobalt Blue","hex":"#1838a8","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C81","name":"Russet","hex":"#884830","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C82","name":"Dark Gray 2","hex":"#404040","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C83","name":"Woodgrain","hex":"#886838","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C84","name":"Mahogany","hex":"#582018","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C85","name":"Sail Color","hex":"#e8dcc0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C90","name":"Shine Silver","hex":"#d0d0d0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C92","name":"Black Semi-Gloss","hex":"#181818","finish":"semi-gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C97","name":"Gray FS16440","hex":"#8c8c88","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C101","name":"Smoke Gray","hex":"#606060","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C102","name":"Pearl White","hex":"#f0ece8","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C103","name":"Gun Chrome","hex":"#505050","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C104","name":"Gun Chrome 2","hex":"#484848","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C107","name":"Character White","hex":"#f8f8f0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C108","name":"Character Red","hex":"#d02020","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C109","name":"Character Yellow","hex":"#e8c820","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C110","name":"Character Blue","hex":"#2050a8","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C111","name":"Character Flesh","hex":"#e8c0a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C112","name":"Character Green","hex":"#28a048","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C113","name":"Rusty Orange","hex":"#c86830","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C114","name":"RLM23 Red","hex":"#b82828","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C115","name":"RLM65 Light Blue","hex":"#80a8c0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C116","name":"RLM66 Dark Gray","hex":"#484850","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C117","name":"RLM76 Light Blue","hex":"#90a8b8","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C118","name":"RLM78 Light Blue","hex":"#a0b8c0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C119","name":"RLM79 Sand Yellow","hex":"#c0a060","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C121","name":"Burnt Iron","hex":"#383030","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C122","name":"Pail Green","hex":"#b8c8a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C123","name":"IJA Dark Green","hex":"#384830","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C124","name":"Dark Green RAF","hex":"#284028","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C125","name":"Cowling Color","hex":"#504830","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C126","name":"Cockpit Color","hex":"#708060","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C127","name":"Tire Black","hex":"#282828","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C128","name":"Gray Green","hex":"#687868","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C129","name":"Dark Cherry","hex":"#601828","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C131","name":"Red Brown 2","hex":"#783020","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C134","name":"Field Green","hex":"#406838","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C135","name":"Russian Green 1","hex":"#3a5030","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C136","name":"Russian Green 2","hex":"#485838","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C137","name":"Tire Black","hex":"#252525","finish":"flat","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C304","name":"Olive Drab FS34087","hex":"#506040","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C305","name":"Gray FS36118","hex":"#585858","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C306","name":"Gray FS36270","hex":"#787878","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C307","name":"Gray FS36320","hex":"#8a8a8a","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C308","name":"Gray FS36375","hex":"#747474","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C311","name":"Gray FS36622","hex":"#828282","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C312","name":"Green FS34227","hex":"#486830","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C313","name":"Yellow FS33531","hex":"#c8a838","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C314","name":"Blue FS35164","hex":"#2858a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C315","name":"Gray FS16440","hex":"#8c8c88","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C316","name":"White FS17875","hex":"#f0f0f0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C317","name":"Gray FS36231","hex":"#686868","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C318","name":"Dark Gull Gray FS36231","hex":"#5c5c5c","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C333","name":"Extra Dark Seagray BS381C","hex":"#384038","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C334","name":"Barley Gray BS4800","hex":"#909890","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C335","name":"Medium Seagray BS381C","hex":"#788080","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C338","name":"Light Gray FS36495","hex":"#a0a0a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Mr. Color","code":"C339","name":"Engine Gray FS16081","hex":"#404040","finish":"gloss","type":"lacquer"},
-
-  {"brand":"Tamiya","code":"X-1","name":"Black","hex":"#0d0d0d","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-2","name":"White","hex":"#ffffff","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-3","name":"Royal Blue","hex":"#1830a0","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-4","name":"Blue","hex":"#2048b0","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-5","name":"Green","hex":"#287830","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-6","name":"Orange","hex":"#e86820","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-7","name":"Red","hex":"#c82020","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-8","name":"Lemon Yellow","hex":"#e8d818","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-10","name":"Gun Metal","hex":"#505050","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-11","name":"Chrome Silver","hex":"#c8c8c8","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-12","name":"Gold Leaf","hex":"#c8a830","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-13","name":"Metallic Blue","hex":"#2050b0","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-14","name":"Sky Blue","hex":"#68a8d8","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-15","name":"Light Green","hex":"#78c848","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-16","name":"Purple","hex":"#682898","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-17","name":"Pink","hex":"#e870a0","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-18","name":"Semi Gloss Black","hex":"#181818","finish":"semi-gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-19","name":"Smoke","hex":"#484848","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-22","name":"Clear","hex":"#e0e0e0","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-23","name":"Clear Blue","hex":"#2050c0","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-24","name":"Clear Yellow","hex":"#e8d020","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-25","name":"Clear Green","hex":"#20a838","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-26","name":"Clear Orange","hex":"#e07020","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-27","name":"Clear Red","hex":"#d02020","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-28","name":"Park Green","hex":"#188830","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-30","name":"Titanium Silver","hex":"#b0b0a8","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-31","name":"Titanium Gold","hex":"#b09838","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-32","name":"Titanium Silver","hex":"#a8a8a0","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-33","name":"Bronze","hex":"#907040","finish":"gloss","type":"acrylic"},
-  {"brand":"Tamiya","code":"X-34","name":"Metallic Brown","hex":"#684828","finish":"gloss","type":"acrylic"},
-
-  {"brand":"Tamiya","code":"XF-1","name":"Flat Black","hex":"#1a1a1a","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-2","name":"Flat White","hex":"#f0f0f0","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-3","name":"Flat Yellow","hex":"#e0c020","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-4","name":"Yellow Green","hex":"#88a030","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-5","name":"Flat Green","hex":"#306828","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-6","name":"Copper","hex":"#b07038","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-7","name":"Flat Red","hex":"#c02828","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-8","name":"Flat Blue","hex":"#1840a0","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-9","name":"Hull Red","hex":"#682020","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-10","name":"Flat Brown","hex":"#6a3820","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-11","name":"JN Green","hex":"#384828","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-12","name":"JN Grey","hex":"#787870","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-13","name":"JA Green","hex":"#485830","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-14","name":"JA Grey","hex":"#888878","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-15","name":"Flat Flesh","hex":"#e0b898","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-16","name":"Flat Aluminum","hex":"#a8a8a0","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-17","name":"Sea Blue","hex":"#183058","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-18","name":"Medium Blue","hex":"#3868a0","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-19","name":"Sky Grey","hex":"#a8b0a8","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-20","name":"Medium Grey","hex":"#888888","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-21","name":"Sky","hex":"#c0c8b8","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-22","name":"RLM Grey","hex":"#909088","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-23","name":"Light Blue","hex":"#80a8c8","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-24","name":"Dark Grey","hex":"#484848","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-25","name":"Light Sea Grey","hex":"#a0a8a0","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-26","name":"Deep Green","hex":"#184020","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-27","name":"Black Green","hex":"#283828","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-28","name":"Dark Copper","hex":"#885830","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-49","name":"Khaki","hex":"#a09060","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-50","name":"Field Blue","hex":"#486898","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-51","name":"Khaki Drab","hex":"#807050","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-52","name":"Flat Earth","hex":"#907848","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-53","name":"Neutral Grey","hex":"#909090","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-54","name":"Dark Sea Grey","hex":"#707870","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-55","name":"Deck Tan","hex":"#c0a880","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-56","name":"Metallic Grey","hex":"#707070","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-57","name":"Buff","hex":"#c8b888","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-58","name":"Olive Green","hex":"#505828","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-59","name":"Desert Yellow","hex":"#c8a050","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-60","name":"Dark Yellow","hex":"#b89838","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-61","name":"Dark Green","hex":"#284828","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-62","name":"Olive Drab","hex":"#505838","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-63","name":"German Grey","hex":"#383838","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-64","name":"Red Brown","hex":"#783828","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-65","name":"Field Grey","hex":"#687060","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-66","name":"Light Grey","hex":"#b0b0a8","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-67","name":"NATO Green","hex":"#405830","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-68","name":"NATO Brown","hex":"#604828","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-69","name":"NATO Black","hex":"#282828","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-70","name":"Dark Green 2","hex":"#2a4a28","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-71","name":"Cockpit Green","hex":"#587850","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-72","name":"Brown JGSDF","hex":"#685038","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-73","name":"Dark Green JGSDF","hex":"#385028","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-74","name":"OD JGSDF","hex":"#506038","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-75","name":"IJN Gray Kure","hex":"#787870","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-76","name":"Gray Green IJN","hex":"#708070","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-77","name":"IJN Gray Sasebo","hex":"#687068","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-78","name":"Wooden Deck Tan","hex":"#b89868","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-79","name":"Linoleum Deck Brown","hex":"#584830","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-80","name":"Royal Light Gray","hex":"#a8a8a0","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-81","name":"Dark Green 2 RAF","hex":"#2a4028","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-82","name":"Ocean Gray 2 RAF","hex":"#607060","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-83","name":"Medium Sea Gray 2 RAF","hex":"#889088","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-84","name":"Dark Iron","hex":"#383028","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-85","name":"Rubber Black","hex":"#282820","finish":"flat","type":"acrylic"},
-  {"brand":"Tamiya","code":"XF-86","name":"Flat Clear","hex":"#e0e0e0","finish":"flat","type":"acrylic"},
-
-  {"brand":"Tamiya","code":"LP-1","name":"Black","hex":"#0d0d0d","finish":"gloss","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-2","name":"White","hex":"#ffffff","finish":"gloss","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-3","name":"Flat Black","hex":"#1a1a1a","finish":"flat","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-4","name":"Flat White","hex":"#f0f0f0","finish":"flat","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-5","name":"Semi Gloss Black","hex":"#181818","finish":"semi-gloss","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-6","name":"Pure Orange","hex":"#e86020","finish":"gloss","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-7","name":"Pure Red","hex":"#d02020","finish":"gloss","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-8","name":"Pure Yellow","hex":"#e8d018","finish":"gloss","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-9","name":"Clear Yellow","hex":"#e8d020","finish":"gloss","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-11","name":"Silver","hex":"#c0c0c0","finish":"gloss","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-12","name":"IJN Grey Kure Arsenal","hex":"#787870","finish":"flat","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-13","name":"IJN Grey Sasebo Arsenal","hex":"#687068","finish":"flat","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-14","name":"IJN Grey Maizuru Arsenal","hex":"#808078","finish":"flat","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-19","name":"Gun Metal","hex":"#505050","finish":"gloss","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-20","name":"Light Gun Metal","hex":"#686868","finish":"gloss","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-36","name":"Dark Ghost Grey","hex":"#5c6068","finish":"flat","type":"lacquer"},
-  {"brand":"Tamiya","code":"LP-37","name":"Light Ghost Grey","hex":"#a0a8b0","finish":"flat","type":"lacquer"},
-
-  {"brand":"Gaianotes","code":"001","name":"Pure White","hex":"#ffffff","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"002","name":"Pure Black","hex":"#0d0d0d","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"003","name":"Bright Red","hex":"#d82020","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"004","name":"Pure Yellow","hex":"#e8d018","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"005","name":"Pure Blue","hex":"#1840b0","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"006","name":"Pure Green","hex":"#28a038","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"007","name":"Pure Orange","hex":"#e86820","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"008","name":"Pure Brown","hex":"#6a3820","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"010","name":"Fluorescent Red","hex":"#f02040","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"011","name":"Fluorescent Yellow","hex":"#f0e020","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"012","name":"Fluorescent Green","hex":"#30e050","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"013","name":"Fluorescent Blue","hex":"#2060f0","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"014","name":"Fluorescent Pink","hex":"#f030a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"015","name":"Fluorescent Orange","hex":"#f07020","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"020","name":"Semi Gloss White","hex":"#f0f0f0","finish":"semi-gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"021","name":"Semi Gloss Black","hex":"#181818","finish":"semi-gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"022","name":"Iron","hex":"#484040","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"023","name":"Stainless Silver","hex":"#b8b8b8","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"024","name":"Mirror Silver","hex":"#d8d8d8","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"025","name":"Light Gunmetal","hex":"#686860","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"026","name":"Dark Gunmetal","hex":"#404040","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"027","name":"Red Gold","hex":"#c09030","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"028","name":"Rally Red","hex":"#d02020","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"029","name":"Salmon Pink","hex":"#e89080","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"030","name":"Pale Brown","hex":"#b89870","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"031","name":"Olive Drab","hex":"#505838","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"032","name":"German Gray","hex":"#3a3a3a","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"033","name":"Machinengrau","hex":"#606860","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"034","name":"Dunkelbraun","hex":"#504028","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"035","name":"Neutral Gray I","hex":"#e0e0e0","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"036","name":"Neutral Gray II","hex":"#c0c0c0","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"037","name":"Neutral Gray III","hex":"#a0a0a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"038","name":"Neutral Gray IV","hex":"#808080","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"039","name":"Neutral Gray V","hex":"#606060","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"040","name":"Clear","hex":"#e0e0e0","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"041","name":"Clear Red","hex":"#d02020","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"042","name":"Clear Blue","hex":"#2050c0","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"043","name":"Clear Yellow","hex":"#e8d020","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"044","name":"Clear Green","hex":"#20a838","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"045","name":"Clear Orange","hex":"#e07020","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"046","name":"Clear Violet","hex":"#6020a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"047","name":"Clear Brown","hex":"#804020","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"050","name":"Cobalt Blue","hex":"#1838a8","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"051","name":"Ultimate White","hex":"#fafafa","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"052","name":"Ultimate Black","hex":"#050505","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"071","name":"Midnight Blue","hex":"#182040","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"072","name":"Mechanic Gray","hex":"#585858","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"Ex-01","name":"Ex-White","hex":"#fafafa","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"Ex-02","name":"Ex-Black","hex":"#080808","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"Ex-03","name":"Ex-Red","hex":"#d02020","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"Ex-04","name":"Ex-Yellow","hex":"#e8d018","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"Ex-05","name":"Ex-Blue","hex":"#1840b0","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"Ex-06","name":"Ex-Green","hex":"#28a038","finish":"gloss","type":"lacquer"},
-  {"brand":"Gaianotes","code":"Ex-07","name":"Ex-Silver","hex":"#c8c8c8","finish":"gloss","type":"lacquer"},
-
-  {"brand":"Jumpwind","code":"JW-A01","name":"White","hex":"#ffffff","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A02","name":"Black","hex":"#0d0d0d","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A03","name":"Red","hex":"#c82020","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A04","name":"Yellow","hex":"#e8d020","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A05","name":"Blue","hex":"#1848a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A06","name":"Green","hex":"#28a038","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A07","name":"Orange","hex":"#e86820","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A08","name":"Purple","hex":"#682898","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A09","name":"Pink","hex":"#e870a0","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A10","name":"Brown","hex":"#6a3820","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A11","name":"Light Gray","hex":"#b0b0b0","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A12","name":"Dark Gray","hex":"#484848","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A13","name":"Gold","hex":"#c8a830","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A14","name":"Silver","hex":"#c0c0c0","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A15","name":"Gun Metal","hex":"#505050","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A16","name":"Copper","hex":"#b07038","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A17","name":"Flesh","hex":"#e0b898","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A18","name":"Sky Blue","hex":"#68a8d8","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A19","name":"Dark Blue","hex":"#183060","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A20","name":"Olive Green","hex":"#505828","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A21","name":"Khaki","hex":"#a09060","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A22","name":"Rust","hex":"#904020","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A23","name":"Sand Yellow","hex":"#c8a858","finish":"gloss","type":"lacquer"},
-  {"brand":"Jumpwind","code":"JW-A24","name":"Dark Red","hex":"#801820","finish":"gloss","type":"lacquer"}
+  {
+    "brand": "Mr. Color",
+    "code": "C1",
+    "name": "White",
+    "hex": "#ffffff",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C2",
+    "name": "Black",
+    "hex": "#0d0d0d",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C3",
+    "name": "Red",
+    "hex": "#c82828",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C4",
+    "name": "Yellow",
+    "hex": "#e8d020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C5",
+    "name": "Blue",
+    "hex": "#1848a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C6",
+    "name": "Green",
+    "hex": "#2d8c3c",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C7",
+    "name": "Brown",
+    "hex": "#6e3c20",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C8",
+    "name": "Silver",
+    "hex": "#c0c0c0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C9",
+    "name": "Gold",
+    "hex": "#c8a030",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C10",
+    "name": "Copper",
+    "hex": "#b87040",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C11",
+    "name": "Light Gull Gray",
+    "hex": "#afb0a9",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C13",
+    "name": "Neutral Gray",
+    "hex": "#888888",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C14",
+    "name": "Navy Blue",
+    "hex": "#1e3050",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C15",
+    "name": "IJN Green",
+    "hex": "#3a4030",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C16",
+    "name": "IJA Green",
+    "hex": "#4a5838",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C17",
+    "name": "RLM71 Dark Green",
+    "hex": "#485840",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C18",
+    "name": "RLM70 Black Green",
+    "hex": "#2e3028",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C19",
+    "name": "Sandy Brown",
+    "hex": "#c8a870",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C20",
+    "name": "Light Blue",
+    "hex": "#80b8d8",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C21",
+    "name": "Middle Stone",
+    "hex": "#c0a870",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C22",
+    "name": "Dark Earth",
+    "hex": "#6a5038",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C23",
+    "name": "Dark Green 2",
+    "hex": "#284028",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C24",
+    "name": "Orange Yellow",
+    "hex": "#e8a820",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C25",
+    "name": "Dark Seagray",
+    "hex": "#586860",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C26",
+    "name": "Duck Egg Green",
+    "hex": "#b0c8b0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C27",
+    "name": "Interior Green",
+    "hex": "#88a870",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C28",
+    "name": "Steel",
+    "hex": "#686868",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C29",
+    "name": "Hull Red",
+    "hex": "#682020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C30",
+    "name": "Flat Base",
+    "hex": "#e8e0d0",
+    "finish": "flat",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C31",
+    "name": "Dark Gull Gray",
+    "hex": "#585858",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C32",
+    "name": "Dark Gray",
+    "hex": "#484848",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C33",
+    "name": "Flat Black",
+    "hex": "#1a1a1a",
+    "finish": "flat",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C34",
+    "name": "Sky Blue",
+    "hex": "#70a8d0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C35",
+    "name": "IJN Gray",
+    "hex": "#888880",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C36",
+    "name": "RLM74 Gray Green",
+    "hex": "#505848",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C37",
+    "name": "RLM75 Gray Violet",
+    "hex": "#586068",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C38",
+    "name": "Olive Drab 2",
+    "hex": "#50583a",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C39",
+    "name": "Dark Yellow",
+    "hex": "#c8a840",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C40",
+    "name": "German Gray",
+    "hex": "#383838",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C41",
+    "name": "Red Brown",
+    "hex": "#883828",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C42",
+    "name": "Mahogany",
+    "hex": "#5a2018",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C43",
+    "name": "Wood Brown",
+    "hex": "#a08050",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C44",
+    "name": "Tan",
+    "hex": "#c8a870",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C45",
+    "name": "Sail Color",
+    "hex": "#e8d8c0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C46",
+    "name": "Clear",
+    "hex": "#e0e0e0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C47",
+    "name": "Clear Red",
+    "hex": "#d02020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C48",
+    "name": "Clear Yellow",
+    "hex": "#e8d020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C49",
+    "name": "Clear Orange",
+    "hex": "#e07020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C50",
+    "name": "Clear Blue",
+    "hex": "#2050c0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C51",
+    "name": "Flesh",
+    "hex": "#e0b898",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C54",
+    "name": "Khaki Green",
+    "hex": "#687848",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C55",
+    "name": "Khaki",
+    "hex": "#a09060",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C56",
+    "name": "IJN Gray",
+    "hex": "#7a7a70",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C57",
+    "name": "Metallic Blue Green",
+    "hex": "#308888",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C58",
+    "name": "Orange Yellow",
+    "hex": "#e8a020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C59",
+    "name": "Orange",
+    "hex": "#e06020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C60",
+    "name": "RLM02 Gray",
+    "hex": "#989890",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C62",
+    "name": "Flat White",
+    "hex": "#f0f0f0",
+    "finish": "flat",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C63",
+    "name": "Pink",
+    "hex": "#e080a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C64",
+    "name": "Light Gray",
+    "hex": "#b0b0b0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C65",
+    "name": "Bright Blue",
+    "hex": "#2868c8",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C66",
+    "name": "Day-Glo Orange",
+    "hex": "#f06020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C68",
+    "name": "Red Madder",
+    "hex": "#a02038",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C69",
+    "name": "Off White",
+    "hex": "#e8e0d0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C70",
+    "name": "Dark Green",
+    "hex": "#284020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C71",
+    "name": "Midnight Blue",
+    "hex": "#182040",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C72",
+    "name": "Medium Blue",
+    "hex": "#3868a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C73",
+    "name": "Aircraft Gray",
+    "hex": "#8898a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C74",
+    "name": "Air Superiority Blue",
+    "hex": "#7090b0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C75",
+    "name": "Metallic Red",
+    "hex": "#a82028",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C76",
+    "name": "Metallic Blue",
+    "hex": "#2848a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C77",
+    "name": "Metallic Black",
+    "hex": "#282828",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C78",
+    "name": "Metal Black",
+    "hex": "#202020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C79",
+    "name": "Shine Red",
+    "hex": "#d01828",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C80",
+    "name": "Cobalt Blue",
+    "hex": "#1838a8",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C81",
+    "name": "Russet",
+    "hex": "#884830",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C82",
+    "name": "Dark Gray 2",
+    "hex": "#404040",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C83",
+    "name": "Woodgrain",
+    "hex": "#886838",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C84",
+    "name": "Mahogany",
+    "hex": "#582018",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C85",
+    "name": "Sail Color",
+    "hex": "#e8dcc0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C90",
+    "name": "Shine Silver",
+    "hex": "#d0d0d0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C92",
+    "name": "Black Semi-Gloss",
+    "hex": "#181818",
+    "finish": "semi-gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C97",
+    "name": "Gray FS16440",
+    "hex": "#8c8c88",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C101",
+    "name": "Smoke Gray",
+    "hex": "#606060",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C102",
+    "name": "Pearl White",
+    "hex": "#f0ece8",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C103",
+    "name": "Gun Chrome",
+    "hex": "#505050",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C104",
+    "name": "Gun Chrome 2",
+    "hex": "#484848",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C107",
+    "name": "Character White",
+    "hex": "#f8f8f0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C108",
+    "name": "Character Red",
+    "hex": "#d02020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C109",
+    "name": "Character Yellow",
+    "hex": "#e8c820",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C110",
+    "name": "Character Blue",
+    "hex": "#2050a8",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C111",
+    "name": "Character Flesh",
+    "hex": "#e8c0a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C112",
+    "name": "Character Green",
+    "hex": "#28a048",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C113",
+    "name": "Rusty Orange",
+    "hex": "#c86830",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C114",
+    "name": "RLM23 Red",
+    "hex": "#b82828",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C115",
+    "name": "RLM65 Light Blue",
+    "hex": "#80a8c0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C116",
+    "name": "RLM66 Dark Gray",
+    "hex": "#484850",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C117",
+    "name": "RLM76 Light Blue",
+    "hex": "#90a8b8",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C118",
+    "name": "RLM78 Light Blue",
+    "hex": "#a0b8c0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C119",
+    "name": "RLM79 Sand Yellow",
+    "hex": "#c0a060",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C121",
+    "name": "Burnt Iron",
+    "hex": "#383030",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C122",
+    "name": "Pail Green",
+    "hex": "#b8c8a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C123",
+    "name": "IJA Dark Green",
+    "hex": "#384830",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C124",
+    "name": "Dark Green RAF",
+    "hex": "#284028",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C125",
+    "name": "Cowling Color",
+    "hex": "#504830",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C126",
+    "name": "Cockpit Color",
+    "hex": "#708060",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C127",
+    "name": "Tire Black",
+    "hex": "#282828",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C128",
+    "name": "Gray Green",
+    "hex": "#687868",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C129",
+    "name": "Dark Cherry",
+    "hex": "#601828",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C131",
+    "name": "Red Brown 2",
+    "hex": "#783020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C134",
+    "name": "Field Green",
+    "hex": "#406838",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C135",
+    "name": "Russian Green 1",
+    "hex": "#3a5030",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C136",
+    "name": "Russian Green 2",
+    "hex": "#485838",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C137",
+    "name": "Tire Black",
+    "hex": "#252525",
+    "finish": "flat",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C304",
+    "name": "Olive Drab FS34087",
+    "hex": "#506040",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C305",
+    "name": "Gray FS36118",
+    "hex": "#585858",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C306",
+    "name": "Gray FS36270",
+    "hex": "#787878",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C307",
+    "name": "Gray FS36320",
+    "hex": "#8a8a8a",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C308",
+    "name": "Gray FS36375",
+    "hex": "#747474",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C311",
+    "name": "Gray FS36622",
+    "hex": "#828282",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C312",
+    "name": "Green FS34227",
+    "hex": "#486830",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C313",
+    "name": "Yellow FS33531",
+    "hex": "#c8a838",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C314",
+    "name": "Blue FS35164",
+    "hex": "#2858a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C315",
+    "name": "Gray FS16440",
+    "hex": "#8c8c88",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C316",
+    "name": "White FS17875",
+    "hex": "#f0f0f0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C317",
+    "name": "Gray FS36231",
+    "hex": "#686868",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C318",
+    "name": "Dark Gull Gray FS36231",
+    "hex": "#5c5c5c",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C333",
+    "name": "Extra Dark Seagray BS381C",
+    "hex": "#384038",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C334",
+    "name": "Barley Gray BS4800",
+    "hex": "#909890",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C335",
+    "name": "Medium Seagray BS381C",
+    "hex": "#788080",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C338",
+    "name": "Light Gray FS36495",
+    "hex": "#a0a0a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Mr. Color",
+    "code": "C339",
+    "name": "Engine Gray FS16081",
+    "hex": "#404040",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-1",
+    "name": "Black",
+    "hex": "#0d0d0d",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-2",
+    "name": "White",
+    "hex": "#ffffff",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-3",
+    "name": "Royal Blue",
+    "hex": "#1830a0",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-4",
+    "name": "Blue",
+    "hex": "#2048b0",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-5",
+    "name": "Green",
+    "hex": "#287830",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-6",
+    "name": "Orange",
+    "hex": "#e86820",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-7",
+    "name": "Red",
+    "hex": "#c82020",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-8",
+    "name": "Lemon Yellow",
+    "hex": "#e8d818",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-10",
+    "name": "Gun Metal",
+    "hex": "#505050",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-11",
+    "name": "Chrome Silver",
+    "hex": "#c8c8c8",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-12",
+    "name": "Gold Leaf",
+    "hex": "#c8a830",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-13",
+    "name": "Metallic Blue",
+    "hex": "#2050b0",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-14",
+    "name": "Sky Blue",
+    "hex": "#68a8d8",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-15",
+    "name": "Light Green",
+    "hex": "#78c848",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-16",
+    "name": "Purple",
+    "hex": "#682898",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-17",
+    "name": "Pink",
+    "hex": "#e870a0",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-18",
+    "name": "Semi Gloss Black",
+    "hex": "#181818",
+    "finish": "semi-gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-19",
+    "name": "Smoke",
+    "hex": "#484848",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-22",
+    "name": "Clear",
+    "hex": "#e0e0e0",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-23",
+    "name": "Clear Blue",
+    "hex": "#2050c0",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-24",
+    "name": "Clear Yellow",
+    "hex": "#e8d020",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-25",
+    "name": "Clear Green",
+    "hex": "#20a838",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-26",
+    "name": "Clear Orange",
+    "hex": "#e07020",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-27",
+    "name": "Clear Red",
+    "hex": "#d02020",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-28",
+    "name": "Park Green",
+    "hex": "#188830",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-30",
+    "name": "Titanium Silver",
+    "hex": "#b0b0a8",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-31",
+    "name": "Titanium Gold",
+    "hex": "#b09838",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-32",
+    "name": "Titanium Silver",
+    "hex": "#a8a8a0",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-33",
+    "name": "Bronze",
+    "hex": "#907040",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "X-34",
+    "name": "Metallic Brown",
+    "hex": "#684828",
+    "finish": "gloss",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-1",
+    "name": "Flat Black",
+    "hex": "#1a1a1a",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-2",
+    "name": "Flat White",
+    "hex": "#f0f0f0",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-3",
+    "name": "Flat Yellow",
+    "hex": "#e0c020",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-4",
+    "name": "Yellow Green",
+    "hex": "#88a030",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-5",
+    "name": "Flat Green",
+    "hex": "#306828",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-6",
+    "name": "Copper",
+    "hex": "#b07038",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-7",
+    "name": "Flat Red",
+    "hex": "#c02828",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-8",
+    "name": "Flat Blue",
+    "hex": "#1840a0",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-9",
+    "name": "Hull Red",
+    "hex": "#682020",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-10",
+    "name": "Flat Brown",
+    "hex": "#6a3820",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-11",
+    "name": "JN Green",
+    "hex": "#384828",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-12",
+    "name": "JN Grey",
+    "hex": "#787870",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-13",
+    "name": "JA Green",
+    "hex": "#485830",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-14",
+    "name": "JA Grey",
+    "hex": "#888878",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-15",
+    "name": "Flat Flesh",
+    "hex": "#e0b898",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-16",
+    "name": "Flat Aluminum",
+    "hex": "#a8a8a0",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-17",
+    "name": "Sea Blue",
+    "hex": "#183058",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-18",
+    "name": "Medium Blue",
+    "hex": "#3868a0",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-19",
+    "name": "Sky Grey",
+    "hex": "#a8b0a8",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-20",
+    "name": "Medium Grey",
+    "hex": "#888888",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-21",
+    "name": "Sky",
+    "hex": "#c0c8b8",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-22",
+    "name": "RLM Grey",
+    "hex": "#909088",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-23",
+    "name": "Light Blue",
+    "hex": "#80a8c8",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-24",
+    "name": "Dark Grey",
+    "hex": "#484848",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-25",
+    "name": "Light Sea Grey",
+    "hex": "#a0a8a0",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-26",
+    "name": "Deep Green",
+    "hex": "#184020",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-27",
+    "name": "Black Green",
+    "hex": "#283828",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-28",
+    "name": "Dark Copper",
+    "hex": "#885830",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-49",
+    "name": "Khaki",
+    "hex": "#a09060",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-50",
+    "name": "Field Blue",
+    "hex": "#486898",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-51",
+    "name": "Khaki Drab",
+    "hex": "#807050",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-52",
+    "name": "Flat Earth",
+    "hex": "#907848",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-53",
+    "name": "Neutral Grey",
+    "hex": "#909090",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-54",
+    "name": "Dark Sea Grey",
+    "hex": "#707870",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-55",
+    "name": "Deck Tan",
+    "hex": "#c0a880",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-56",
+    "name": "Metallic Grey",
+    "hex": "#707070",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-57",
+    "name": "Buff",
+    "hex": "#c8b888",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-58",
+    "name": "Olive Green",
+    "hex": "#505828",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-59",
+    "name": "Desert Yellow",
+    "hex": "#c8a050",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-60",
+    "name": "Dark Yellow",
+    "hex": "#b89838",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-61",
+    "name": "Dark Green",
+    "hex": "#284828",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-62",
+    "name": "Olive Drab",
+    "hex": "#505838",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-63",
+    "name": "German Grey",
+    "hex": "#383838",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-64",
+    "name": "Red Brown",
+    "hex": "#783828",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-65",
+    "name": "Field Grey",
+    "hex": "#687060",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-66",
+    "name": "Light Grey",
+    "hex": "#b0b0a8",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-67",
+    "name": "NATO Green",
+    "hex": "#405830",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-68",
+    "name": "NATO Brown",
+    "hex": "#604828",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-69",
+    "name": "NATO Black",
+    "hex": "#282828",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-70",
+    "name": "Dark Green 2",
+    "hex": "#2a4a28",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-71",
+    "name": "Cockpit Green",
+    "hex": "#587850",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-72",
+    "name": "Brown JGSDF",
+    "hex": "#685038",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-73",
+    "name": "Dark Green JGSDF",
+    "hex": "#385028",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-74",
+    "name": "OD JGSDF",
+    "hex": "#506038",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-75",
+    "name": "IJN Gray Kure",
+    "hex": "#787870",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-76",
+    "name": "Gray Green IJN",
+    "hex": "#708070",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-77",
+    "name": "IJN Gray Sasebo",
+    "hex": "#687068",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-78",
+    "name": "Wooden Deck Tan",
+    "hex": "#b89868",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-79",
+    "name": "Linoleum Deck Brown",
+    "hex": "#584830",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-80",
+    "name": "Royal Light Gray",
+    "hex": "#a8a8a0",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-81",
+    "name": "Dark Green 2 RAF",
+    "hex": "#2a4028",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-82",
+    "name": "Ocean Gray 2 RAF",
+    "hex": "#607060",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-83",
+    "name": "Medium Sea Gray 2 RAF",
+    "hex": "#889088",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-84",
+    "name": "Dark Iron",
+    "hex": "#383028",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-85",
+    "name": "Rubber Black",
+    "hex": "#282820",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "XF-86",
+    "name": "Flat Clear",
+    "hex": "#e0e0e0",
+    "finish": "flat",
+    "type": "acrylic"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-1",
+    "name": "Black",
+    "hex": "#0d0d0d",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-2",
+    "name": "White",
+    "hex": "#ffffff",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-3",
+    "name": "Flat Black",
+    "hex": "#1a1a1a",
+    "finish": "flat",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-4",
+    "name": "Flat White",
+    "hex": "#f0f0f0",
+    "finish": "flat",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-5",
+    "name": "Semi Gloss Black",
+    "hex": "#181818",
+    "finish": "semi-gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-6",
+    "name": "Pure Orange",
+    "hex": "#e86020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-7",
+    "name": "Pure Red",
+    "hex": "#d02020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-8",
+    "name": "Pure Yellow",
+    "hex": "#e8d018",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-9",
+    "name": "Clear Yellow",
+    "hex": "#e8d020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-11",
+    "name": "Silver",
+    "hex": "#c0c0c0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-12",
+    "name": "IJN Grey Kure Arsenal",
+    "hex": "#787870",
+    "finish": "flat",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-13",
+    "name": "IJN Grey Sasebo Arsenal",
+    "hex": "#687068",
+    "finish": "flat",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-14",
+    "name": "IJN Grey Maizuru Arsenal",
+    "hex": "#808078",
+    "finish": "flat",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-19",
+    "name": "Gun Metal",
+    "hex": "#505050",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-20",
+    "name": "Light Gun Metal",
+    "hex": "#686868",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-36",
+    "name": "Dark Ghost Grey",
+    "hex": "#5c6068",
+    "finish": "flat",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Tamiya",
+    "code": "LP-37",
+    "name": "Light Ghost Grey",
+    "hex": "#a0a8b0",
+    "finish": "flat",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "001",
+    "name": "Pure White",
+    "hex": "#ffffff",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "002",
+    "name": "Pure Black",
+    "hex": "#0d0d0d",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "003",
+    "name": "Bright Red",
+    "hex": "#d82020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "004",
+    "name": "Pure Yellow",
+    "hex": "#e8d018",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "005",
+    "name": "Pure Blue",
+    "hex": "#1840b0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "006",
+    "name": "Pure Green",
+    "hex": "#28a038",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "007",
+    "name": "Pure Orange",
+    "hex": "#e86820",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "008",
+    "name": "Pure Brown",
+    "hex": "#6a3820",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "010",
+    "name": "Fluorescent Red",
+    "hex": "#f02040",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "011",
+    "name": "Fluorescent Yellow",
+    "hex": "#f0e020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "012",
+    "name": "Fluorescent Green",
+    "hex": "#30e050",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "013",
+    "name": "Fluorescent Blue",
+    "hex": "#2060f0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "014",
+    "name": "Fluorescent Pink",
+    "hex": "#f030a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "015",
+    "name": "Fluorescent Orange",
+    "hex": "#f07020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "020",
+    "name": "Semi Gloss White",
+    "hex": "#f0f0f0",
+    "finish": "semi-gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "021",
+    "name": "Semi Gloss Black",
+    "hex": "#181818",
+    "finish": "semi-gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "022",
+    "name": "Iron",
+    "hex": "#484040",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "023",
+    "name": "Stainless Silver",
+    "hex": "#b8b8b8",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "024",
+    "name": "Mirror Silver",
+    "hex": "#d8d8d8",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "025",
+    "name": "Light Gunmetal",
+    "hex": "#686860",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "026",
+    "name": "Dark Gunmetal",
+    "hex": "#404040",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "027",
+    "name": "Red Gold",
+    "hex": "#c09030",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "028",
+    "name": "Rally Red",
+    "hex": "#d02020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "029",
+    "name": "Salmon Pink",
+    "hex": "#e89080",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "030",
+    "name": "Pale Brown",
+    "hex": "#b89870",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "031",
+    "name": "Olive Drab",
+    "hex": "#505838",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "032",
+    "name": "German Gray",
+    "hex": "#3a3a3a",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "033",
+    "name": "Machinengrau",
+    "hex": "#606860",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "034",
+    "name": "Dunkelbraun",
+    "hex": "#504028",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "035",
+    "name": "Neutral Gray I",
+    "hex": "#e0e0e0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "036",
+    "name": "Neutral Gray II",
+    "hex": "#c0c0c0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "037",
+    "name": "Neutral Gray III",
+    "hex": "#a0a0a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "038",
+    "name": "Neutral Gray IV",
+    "hex": "#808080",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "039",
+    "name": "Neutral Gray V",
+    "hex": "#606060",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "040",
+    "name": "Clear",
+    "hex": "#e0e0e0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "041",
+    "name": "Clear Red",
+    "hex": "#d02020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "042",
+    "name": "Clear Blue",
+    "hex": "#2050c0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "043",
+    "name": "Clear Yellow",
+    "hex": "#e8d020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "044",
+    "name": "Clear Green",
+    "hex": "#20a838",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "045",
+    "name": "Clear Orange",
+    "hex": "#e07020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "046",
+    "name": "Clear Violet",
+    "hex": "#6020a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "047",
+    "name": "Clear Brown",
+    "hex": "#804020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "050",
+    "name": "Cobalt Blue",
+    "hex": "#1838a8",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "051",
+    "name": "Ultimate White",
+    "hex": "#fafafa",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "052",
+    "name": "Ultimate Black",
+    "hex": "#050505",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "071",
+    "name": "Midnight Blue",
+    "hex": "#182040",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "072",
+    "name": "Mechanic Gray",
+    "hex": "#585858",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "Ex-01",
+    "name": "Ex-White",
+    "hex": "#fafafa",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "Ex-02",
+    "name": "Ex-Black",
+    "hex": "#080808",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "Ex-03",
+    "name": "Ex-Red",
+    "hex": "#d02020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "Ex-04",
+    "name": "Ex-Yellow",
+    "hex": "#e8d018",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "Ex-05",
+    "name": "Ex-Blue",
+    "hex": "#1840b0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "Ex-06",
+    "name": "Ex-Green",
+    "hex": "#28a038",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Gaianotes",
+    "code": "Ex-07",
+    "name": "Ex-Silver",
+    "hex": "#c8c8c8",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A01",
+    "name": "White",
+    "hex": "#ffffff",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A02",
+    "name": "Black",
+    "hex": "#0d0d0d",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A03",
+    "name": "Red",
+    "hex": "#c82020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A04",
+    "name": "Yellow",
+    "hex": "#e8d020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A05",
+    "name": "Blue",
+    "hex": "#1848a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A06",
+    "name": "Green",
+    "hex": "#28a038",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A07",
+    "name": "Orange",
+    "hex": "#e86820",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A08",
+    "name": "Purple",
+    "hex": "#682898",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A09",
+    "name": "Pink",
+    "hex": "#e870a0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A10",
+    "name": "Brown",
+    "hex": "#6a3820",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A11",
+    "name": "Light Gray",
+    "hex": "#b0b0b0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A12",
+    "name": "Dark Gray",
+    "hex": "#484848",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A13",
+    "name": "Gold",
+    "hex": "#c8a830",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A14",
+    "name": "Silver",
+    "hex": "#c0c0c0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A15",
+    "name": "Gun Metal",
+    "hex": "#505050",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A16",
+    "name": "Copper",
+    "hex": "#b07038",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A17",
+    "name": "Flesh",
+    "hex": "#e0b898",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A18",
+    "name": "Sky Blue",
+    "hex": "#68a8d8",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A19",
+    "name": "Dark Blue",
+    "hex": "#183060",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A20",
+    "name": "Olive Green",
+    "hex": "#505828",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A21",
+    "name": "Khaki",
+    "hex": "#a09060",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A22",
+    "name": "Rust",
+    "hex": "#904020",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A23",
+    "name": "Sand Yellow",
+    "hex": "#c8a858",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Jumpwind",
+    "code": "JW-A24",
+    "name": "Dark Red",
+    "hex": "#801820",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Hobby Mio",
+    "code": "002",
+    "name": "Glossy Black",
+    "hex": "#111111",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Hobby Mio",
+    "code": "003",
+    "name": "Glossy Red",
+    "hex": "#d12626",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Hobby Mio",
+    "code": "004",
+    "name": "Glossy Orange",
+    "hex": "#ea6b1f",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Hobby Mio",
+    "code": "005",
+    "name": "Glossy Blue",
+    "hex": "#2353b5",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Hobby Mio",
+    "code": "006",
+    "name": "Glossy Green",
+    "hex": "#279246",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Hobby Mio",
+    "code": "008",
+    "name": "Glossy Purple",
+    "hex": "#6d3aa6",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Hobby Mio",
+    "code": "013",
+    "name": "Glossy Pink",
+    "hex": "#eb7cab",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Hobby Mio",
+    "code": "014",
+    "name": "Glossy Azure",
+    "hex": "#3f9de0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Hobby Mio",
+    "code": "015",
+    "name": "Glossy Wine Red",
+    "hex": "#8f2038",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Hobby Mio",
+    "code": "071",
+    "name": "Light Gray",
+    "hex": "#b9bcc2",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "QNC",
+    "code": "QNC03",
+    "name": "Stainless Steel",
+    "hex": "#b5b8bd",
+    "finish": "gloss",
+    "type": "water-based acrylic"
+  },
+  {
+    "brand": "QNC",
+    "code": "QNC34",
+    "name": "Basic White",
+    "hex": "#f5f5f3",
+    "finish": "gloss",
+    "type": "water-based acrylic"
+  },
+  {
+    "brand": "QNC",
+    "code": "QNC42",
+    "name": "Sky Blue",
+    "hex": "#78b7e5",
+    "finish": "gloss",
+    "type": "water-based acrylic"
+  },
+  {
+    "brand": "QNC",
+    "code": "QNC48",
+    "name": "Dark Blue",
+    "hex": "#203a73",
+    "finish": "gloss",
+    "type": "water-based acrylic"
+  },
+  {
+    "brand": "QNC",
+    "code": "QNC69",
+    "name": "Wolf Green",
+    "hex": "#556b3d",
+    "finish": "gloss",
+    "type": "water-based acrylic"
+  },
+  {
+    "brand": "QNC",
+    "code": "QNC76",
+    "name": "Steel White",
+    "hex": "#d8dadd",
+    "finish": "gloss",
+    "type": "water-based acrylic"
+  },
+  {
+    "brand": "QNC",
+    "code": "QNC79",
+    "name": "Wood Brown",
+    "hex": "#7a4d2b",
+    "finish": "gloss",
+    "type": "water-based acrylic"
+  },
+  {
+    "brand": "QNC",
+    "code": "QNC84",
+    "name": "Mecha Blue",
+    "hex": "#1e5db8",
+    "finish": "gloss",
+    "type": "water-based acrylic"
+  },
+  {
+    "brand": "QNC",
+    "code": "QNC87",
+    "name": "Mecha Orange",
+    "hex": "#f06c1d",
+    "finish": "gloss",
+    "type": "water-based acrylic"
+  },
+  {
+    "brand": "QNC",
+    "code": "QNC97",
+    "name": "Clear Rust Yellow",
+    "hex": "#d8a336",
+    "finish": "gloss",
+    "type": "water-based acrylic"
+  },
+  {
+    "brand": "QNC",
+    "code": "QNC122",
+    "name": "Fluorescent Orange",
+    "hex": "#ff6c00",
+    "finish": "gloss",
+    "type": "water-based acrylic"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "101",
+    "name": "Clear Blue (Fluorescent)",
+    "hex": "#2f8cff",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "102",
+    "name": "Clear Pink (Fluorescent)",
+    "hex": "#ff5fb2",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "103",
+    "name": "Clear Red (Fluorescent)",
+    "hex": "#ff3b30",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "104",
+    "name": "Clear Green (Fluorescent)",
+    "hex": "#2ee66b",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "105",
+    "name": "Clear Yellow (Fluorescent)",
+    "hex": "#ffe600",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "106",
+    "name": "Clear Orange (Fluorescent)",
+    "hex": "#ff7a00",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "107",
+    "name": "Clear Yellow Green (Fluorescent)",
+    "hex": "#c8ff00",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "108",
+    "name": "Clear Blue Green (Fluorescent)",
+    "hex": "#00d9c0",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "041",
+    "name": "Clear Red",
+    "hex": "#d73535",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "042",
+    "name": "Clear Orange",
+    "hex": "#e77a28",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "047",
+    "name": "Clear Violet",
+    "hex": "#7c4cc6",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "048",
+    "name": "Clear Green",
+    "hex": "#33a95b",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "001A",
+    "name": "Clear Pink",
+    "hex": "#e970a3",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "059",
+    "name": "Clear Flesh Pink",
+    "hex": "#e8b09f",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "060",
+    "name": "Clear Flesh Orange",
+    "hex": "#e4a06b",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "081",
+    "name": "Clear Olivine / Yellow Green",
+    "hex": "#b6c438",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "082",
+    "name": "Clear Tyrany Gold / Yellow Gold",
+    "hex": "#caa331",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "083",
+    "name": "Clear Purple Blue",
+    "hex": "#4b56c8",
+    "finish": "gloss",
+    "type": "lacquer"
+  },
+  {
+    "brand": "Sunin7",
+    "code": "084",
+    "name": "Clear Yan Purple",
+    "hex": "#7c3fb2",
+    "finish": "gloss",
+    "type": "lacquer"
+  }
 ]
