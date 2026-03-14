@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "ModKit Swatch — Gunpla Paint Color Matcher",
   description:
     "Upload a reference photo, pick any color, and find the closest hobby paint match across Mr. Color, Tamiya, Gaianotes, and Jumpwind.",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({

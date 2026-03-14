@@ -48,6 +48,7 @@ export default function Home() {
     finish: "All",
     type: "All",
   });
+  const [excludeClear, setExcludeClear] = useState(true);
   const [palette, setPalette] = useState<PaintWithLab[]>([]);
   const [mounted, setMounted] = useState(false);
 
@@ -58,8 +59,8 @@ export default function Home() {
 
   const results = useMemo<PaintMatch[]>(() => {
     if (!pickedColor) return [];
-    return matchPaints(pickedColor, paints, filters);
-  }, [pickedColor, paints, filters]);
+    return matchPaints(pickedColor, paints, filters, 10, excludeClear);
+  }, [pickedColor, paints, filters, excludeClear]);
 
   const paletteKeys = useMemo(
     () => new Set(palette.map((p) => `${p.brand}-${p.code}`)),
@@ -96,7 +97,7 @@ export default function Home() {
       {/* Header */}
       <header className="border-b border-zinc-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600" />
+          <img src="/logo.png" alt="ModKit Swatch" className="w-8 h-8 rounded" />
           <div>
             <h1 className="text-lg font-bold text-zinc-900 leading-tight">
               ModKit Swatch
@@ -113,6 +114,11 @@ export default function Home() {
 
       {/* Main content */}
       <main className="max-w-7xl mx-auto px-4 py-6">
+        <ol className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-zinc-500 mb-4 list-decimal list-inside">
+          <li>Upload a reference photo of your kit</li>
+          <li>Click on the part color you want to match</li>
+          <li>Browse the closest paint matches below</li>
+        </ol>
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left panel — Canvas */}
           <div className="w-full lg:w-[55%]">
@@ -132,6 +138,15 @@ export default function Home() {
                   finishes={filterOptions.finishes}
                   types={filterOptions.types}
                 />
+                <label className="flex items-center gap-2 text-xs text-zinc-500 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={excludeClear}
+                    onChange={(e) => setExcludeClear(e.target.checked)}
+                    className="rounded border-zinc-300"
+                  />
+                  Hide clear / transparent paints
+                </label>
                 <div>
                   <h2 className="text-sm font-semibold text-zinc-700 mb-2">
                     Top Matches
