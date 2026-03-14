@@ -56,77 +56,118 @@ export default function ImageCanvas({ onColorPick }: Props) {
     [drawImage]
   );
 
-  const handleCanvasClick = useCallback(
-    (e: React.MouseEvent<HTMLCanvasElement>) => {
+  const drawMarker = useCallback(
+    (ctx: CanvasRenderingContext2D, x: number, y: number, hex: string) => {
+      // Redraw clean image
+      if (imageDataRef.current) {
+        ctx.drawImage(imageDataRef.current, 0, 0);
+      }
+
+      const r = 16;
+      const crossLen = 8;
+
+      // Outer white ring
+      ctx.beginPath();
+      ctx.arc(x, y, r + 2, 0, 2 * Math.PI);
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+
+      // Colored ring showing picked color
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, 2 * Math.PI);
+      ctx.strokeStyle = hex;
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      // Dark outer border
+      ctx.beginPath();
+      ctx.arc(x, y, r + 3.5, 0, 2 * Math.PI);
+      ctx.strokeStyle = "rgba(0,0,0,0.5)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+
+      // Crosshair lines
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x, y - r - crossLen);
+      ctx.lineTo(x, y - r + 2);
+      ctx.moveTo(x, y + r - 2);
+      ctx.lineTo(x, y + r + crossLen);
+      ctx.moveTo(x - r - crossLen, y);
+      ctx.lineTo(x - r + 2, y);
+      ctx.moveTo(x + r - 2, y);
+      ctx.lineTo(x + r + crossLen, y);
+      ctx.stroke();
+
+      // Crosshair dark shadow
+      ctx.strokeStyle = "rgba(0,0,0,0.4)";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x, y - r - crossLen);
+      ctx.lineTo(x, y - r + 2);
+      ctx.moveTo(x, y + r - 2);
+      ctx.lineTo(x, y + r + crossLen);
+      ctx.moveTo(x - r - crossLen, y);
+      ctx.lineTo(x - r + 2, y);
+      ctx.moveTo(x + r - 2, y);
+      ctx.lineTo(x + r + crossLen, y);
+      ctx.stroke();
+
+      // Center dot
+      ctx.beginPath();
+      ctx.arc(x, y, 2, 0, 2 * Math.PI);
+      ctx.fillStyle = "#ffffff";
+      ctx.fill();
+      ctx.strokeStyle = "rgba(0,0,0,0.5)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    },
+    []
+  );
+
+  const pickColor = useCallback(
+    (clientX: number, clientY: number) => {
       const canvas = canvasRef.current;
       if (!canvas) return;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
+      // Redraw clean image first so we sample the original pixel
+      if (imageDataRef.current) {
+        ctx.drawImage(imageDataRef.current, 0, 0);
+      }
+
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
-      const x = Math.floor((e.clientX - rect.left) * scaleX);
-      const y = Math.floor((e.clientY - rect.top) * scaleY);
+      const x = Math.floor((clientX - rect.left) * scaleX);
+      const y = Math.floor((clientY - rect.top) * scaleY);
 
       const pixel = ctx.getImageData(x, y, 1, 1).data;
       const hex = rgbToHex(pixel[0], pixel[1], pixel[2]);
       onColorPick(hex);
-
-      // Draw marker
-      if (imageDataRef.current) {
-        ctx.drawImage(imageDataRef.current, 0, 0);
-      }
-      ctx.beginPath();
-      ctx.arc(x, y, 12, 0, 2 * Math.PI);
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(x, y, 12, 0, 2 * Math.PI);
-      ctx.strokeStyle = "#000000";
-      ctx.lineWidth = 1;
-      ctx.stroke();
+      drawMarker(ctx, x, y, hex);
       setMarker({ x, y });
     },
-    [onColorPick]
+    [onColorPick, drawMarker]
+  );
+
+  const handleCanvasClick = useCallback(
+    (e: React.MouseEvent<HTMLCanvasElement>) => {
+      pickColor(e.clientX, e.clientY);
+    },
+    [pickColor]
   );
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent<HTMLCanvasElement>) => {
       e.preventDefault();
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
       const touch = e.touches[0];
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const x = Math.floor((touch.clientX - rect.left) * scaleX);
-      const y = Math.floor((touch.clientY - rect.top) * scaleY);
-
-      const pixel = ctx.getImageData(x, y, 1, 1).data;
-      const hex = rgbToHex(pixel[0], pixel[1], pixel[2]);
-      onColorPick(hex);
-
-      if (imageDataRef.current) {
-        ctx.drawImage(imageDataRef.current, 0, 0);
-      }
-      ctx.beginPath();
-      ctx.arc(x, y, 12, 0, 2 * Math.PI);
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(x, y, 12, 0, 2 * Math.PI);
-      ctx.strokeStyle = "#000000";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-      setMarker({ x, y });
+      pickColor(touch.clientX, touch.clientY);
     },
-    [onColorPick]
+    [pickColor]
   );
 
   // Handle window resize
