@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { getContrastColor } from "@/lib/colorMath";
 import type { PaintMatch } from "@/types/paint";
 
@@ -22,26 +23,37 @@ function capitalize(s: string): string {
     .join("-");
 }
 
+function getPaintImagePath(brand: string, code: string): string {
+  const slug = brand.toLowerCase().replace(/[\s.]+/g, "-");
+  return `/paints/${slug}/${code}.jpg`;
+}
+
 export default function PaintCard({
   paint,
   onAddToPalette,
   isInPalette,
 }: Props) {
   const textColor = getContrastColor(paint.hex);
+  const imagePath = getPaintImagePath(paint.brand, paint.code);
+  const [imgError, setImgError] = useState(false);
 
   return (
     <div className="flex items-stretch rounded-lg border border-zinc-200 overflow-hidden bg-white hover:shadow-sm transition-shadow">
-      {/* Color swatch */}
-      <div
-        className="w-16 shrink-0 flex items-center justify-center"
-        style={{ backgroundColor: paint.hex }}
-      >
-        <span
-          className="text-[10px] font-mono opacity-80"
-          style={{ color: textColor }}
-        >
-          {paint.hex}
-        </span>
+      {/* Paint image */}
+      <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden bg-white border-r border-zinc-200">
+        {!imgError ? (
+          <img
+            src={imagePath}
+            alt={`${paint.brand} ${paint.code}`}
+            className="w-full h-full object-contain"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div
+            className="w-full h-full"
+            style={{ backgroundColor: paint.hex }}
+          />
+        )}
       </div>
 
       {/* Info */}
@@ -49,6 +61,12 @@ export default function PaintCard({
         <div className="flex items-center gap-2">
           <span className="font-semibold text-sm text-zinc-900 truncate">
             {paint.brand} {paint.code}
+          </span>
+          <span
+            className="text-[10px] font-mono px-1.5 py-0.5 rounded"
+            style={{ backgroundColor: paint.hex, color: textColor }}
+          >
+            {paint.hex}
           </span>
           <span
             className={`text-xs font-mono px-1.5 py-0.5 rounded border ${getDeltaEColor(paint.deltaE)}`}
