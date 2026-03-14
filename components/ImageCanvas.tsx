@@ -307,10 +307,10 @@ export default function ImageCanvas({ onColorPick }: Props) {
     <div ref={containerRef} className="w-full relative overflow-visible">
       {!hasImage && (
         <div
-          className={`border-2 border-dashed rounded-xl p-12 text-center transition-colors cursor-pointer ${
+          className={`border-2 border-dashed rounded-2xl p-12 text-center transition-all cursor-pointer ${
             isDragging
-              ? "border-blue-500 bg-blue-50"
-              : "border-zinc-300 hover:border-zinc-400"
+              ? "border-sky-400 bg-sky-50/50"
+              : "border-slate-200 bg-white hover:border-slate-300"
           }`}
           onClick={() => fileInputRef.current?.click()}
           onDragOver={(e) => {
@@ -326,24 +326,16 @@ export default function ImageCanvas({ onColorPick }: Props) {
           }}
         >
           <div className="flex flex-col items-center gap-3">
-            <svg
-              className="w-12 h-12 text-zinc-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={1.5}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-            <p className="text-zinc-600 font-medium">
+            <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mx-auto mb-1">
+              <svg className="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <p className="font-medium text-sm text-slate-700">
               Drop your reference image here
             </p>
-            <p className="text-zinc-400 text-sm">
-              or click to browse (JPEG, PNG, WebP)
+            <p className="text-xs text-slate-400">
+              or click to browse — JPEG, PNG, WebP
             </p>
           </div>
         </div>
@@ -363,7 +355,7 @@ export default function ImageCanvas({ onColorPick }: Props) {
       <div className={`${!hasImage ? "hidden" : "inline-block"} relative`}>
         <canvas
           ref={canvasRef}
-          className="cursor-crosshair rounded-lg block"
+          className="cursor-crosshair rounded-2xl block"
           onClick={handleCanvasClick}
           onTouchStart={handleTouchStart}
           onMouseMove={handleMouseMove}
@@ -371,7 +363,7 @@ export default function ImageCanvas({ onColorPick }: Props) {
         />
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="absolute top-3 right-3 bg-black/60 hover:bg-black/80 text-white text-xs px-3 py-1.5 rounded-md transition-colors"
+          className="absolute top-3 right-3 bg-black/50 hover:bg-black/70 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm"
         >
           Change Image
         </button>

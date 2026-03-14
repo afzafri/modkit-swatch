@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
+import { Github, Paintbrush, ChevronRight } from "lucide-react";
 import paintsData from "@/data/paints.json";
 import { hexToLab } from "@/lib/colorMath";
 import { matchPaints, extractFilterOptions } from "@/lib/matcher";
@@ -29,14 +30,15 @@ function savePalette(palette: PaintWithLab[]) {
 
 export default function Home() {
   const paints = useMemo<PaintWithLab[]>(() => {
-    return (paintsData as Array<Record<string, string>>).map((p) => ({
-      brand: p.brand,
-      code: p.code,
-      name: p.name,
-      hex: p.hex,
-      finish: p.finish,
-      type: p.type,
-      lab: hexToLab(p.hex),
+    return (paintsData as Array<Record<string, unknown>>).map((p) => ({
+      brand: p.brand as string,
+      code: p.code as string,
+      name: p.name as string,
+      hex: p.hex as string,
+      finish: p.finish as string,
+      type: p.type as string,
+      suitableFor: (p.suitableFor as { airbrush: boolean; handPainting: boolean }) || { airbrush: true, handPainting: false },
+      lab: hexToLab(p.hex as string),
     }));
   }, []);
 
@@ -93,33 +95,51 @@ export default function Home() {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen bg-zinc-50">
+    <div className="min-h-screen bg-slate-50 selection:bg-sky-100 selection:text-sky-900 flex flex-col text-slate-800">
       {/* Header */}
-      <header className="border-b border-zinc-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
-          <img src="/logo.png" alt="ModKit Swatch" className="w-8 h-8 rounded" />
-          <div>
-            <h1 className="text-lg font-bold text-zinc-900 leading-tight">
-              ModKit Swatch
-            </h1>
-            <p className="text-xs text-zinc-400">
-              Gunpla Paint Color Matcher
-            </p>
+      <header className="bg-white border-b border-slate-200/80">
+        <div className="px-6 py-5 max-w-6xl mx-auto w-full flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <img src="/logo.png" alt="" className="w-9 h-9 rounded-lg shadow-sm" />
+            <div>
+              <h1 className="text-xl font-bold text-slate-900 tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
+                ModKit Swatch
+              </h1>
+              <p className="text-[11px] text-slate-400 font-medium tracking-wide uppercase">
+                Model Kit Paint Matcher
+              </p>
+            </div>
           </div>
-          <span className="ml-auto text-xs text-zinc-400 font-mono">
-            {paints.length} paints
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 bg-white text-slate-500 text-xs font-medium">
+              <Paintbrush className="w-3.5 h-3.5 text-sky-500" />
+              {paints.length} paints
+            </span>
+            <a
+              href="https://github.com/afzafri/modkit-swatch"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-slate-900 transition-colors"
+              title="View on GitHub"
+            >
+              <Github className="w-5 h-5" />
+            </a>
+          </div>
         </div>
       </header>
 
-      {/* Main content */}
-      <main className="max-w-7xl mx-auto px-4 py-6">
-        <ol className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-zinc-500 mb-4 list-decimal list-inside">
-          <li>Upload a reference photo of your kit</li>
-          <li>Click on the part color you want to match</li>
-          <li>Browse the closest paint matches below</li>
-        </ol>
-        <div className="flex flex-col lg:flex-row gap-6">
+      {/* Main */}
+      <main className="flex-1 max-w-6xl mx-auto w-full px-6 pt-8 pb-16">
+        {/* Steps */}
+        <div className="flex items-center gap-2 text-sm text-slate-400 mb-8">
+          <span className="text-slate-600 font-medium">Upload photo</span>
+          <ChevronRight className="w-3.5 h-3.5" />
+          <span className="text-slate-600 font-medium">Pick a color</span>
+          <ChevronRight className="w-3.5 h-3.5" />
+          <span className="text-slate-600 font-medium">Get matches</span>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Left panel — Canvas */}
           <div className="w-full lg:w-[55%] self-start">
             <ImageCanvas onColorPick={setPickedColor} />
@@ -138,32 +158,56 @@ export default function Home() {
                   brands={filterOptions.brands}
                   finishes={filterOptions.finishes}
                   types={filterOptions.types}
+                  excludeClear={excludeClear}
+                  onExcludeClearChange={setExcludeClear}
                 />
-                <label className="flex items-center gap-2 text-xs text-zinc-500 cursor-pointer select-none">
-                  <input
-                    type="checkbox"
-                    checked={excludeClear}
-                    onChange={(e) => setExcludeClear(e.target.checked)}
-                    className="rounded border-zinc-300"
-                  />
-                  Hide clear / transparent paints
-                </label>
-                <div>
-                  <h2 className="text-sm font-semibold text-zinc-700 mb-2">
-                    Top Matches
-                  </h2>
-                  <ResultsList
-                    results={results}
-                    onAddToPalette={addToPalette}
-                    paletteKeys={paletteKeys}
-                  />
+                <div className="flex flex-col min-h-0 flex-1">
+                  <div className="flex items-center justify-between mb-3">
+                    <h2 className="text-base font-bold text-slate-900" style={{ fontFamily: "var(--font-display)" }}>
+                      Closest Matches
+                    </h2>
+                    <span className="text-[11px] text-slate-400 font-medium uppercase tracking-widest">
+                      By similarity
+                    </span>
+                  </div>
+                  <div className="overflow-y-auto max-h-[60vh] pr-1">
+                    <ResultsList
+                      results={results}
+                      onAddToPalette={addToPalette}
+                      paletteKeys={paletteKeys}
+                    />
+                  </div>
                 </div>
               </>
             )}
+          </div>
+        </div>
 
+        {/* Disclaimer */}
+        <div className="mt-14 pt-8 border-t border-slate-200/60">
+          <div className="bg-slate-100/80 rounded-2xl p-5 border border-slate-200/60">
+            <h4 className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-2">
+              Disclaimer
+            </h4>
+            <p className="text-xs text-slate-400 leading-relaxed">
+              Paint matches are approximations based on digital color comparison (CIE2000 Delta E). Actual paint colors may vary due to monitor calibration, lighting conditions, paint batch differences, surface preparation, and application method. Always test paints on a sample before committing to your build.
+            </p>
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="mt-auto py-6 bg-white border-t border-slate-200/80">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-2 text-slate-600 font-semibold text-sm" style={{ fontFamily: "var(--font-display)" }}>
+            <img src="/logo.png" alt="" className="w-4 h-4 rounded" />
+            ModKit Swatch
+          </div>
+          <p className="text-xs text-slate-400 font-medium">
+            &copy; {new Date().getFullYear()} &middot; Built for the scale model community.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -9,9 +9,9 @@ type Props = {
 export default function ColorSwatch({ hex }: Props) {
   if (!hex) {
     return (
-      <div className="rounded-xl border border-zinc-200 bg-zinc-50 p-6 text-center">
-        <p className="text-zinc-400 text-sm">
-          Click on the image to sample a color
+      <div className="rounded-xl p-8 text-center bg-slate-100/80 border border-slate-200/60">
+        <p className="text-sm text-slate-400 font-light">
+          Click on your image to pick a color
         </p>
       </div>
     );
@@ -21,22 +21,17 @@ export default function ColorSwatch({ hex }: Props) {
   const textColor = getContrastColor(hex);
 
   return (
-    <div className="rounded-xl overflow-hidden border border-zinc-200">
+    <div className="rounded-xl overflow-hidden border border-slate-200 shadow-sm">
       <div
-        className="p-6 flex items-center justify-center gap-4"
+        className="px-5 py-4 flex items-center justify-between"
         style={{ backgroundColor: hex }}
       >
-        <span
-          className="text-2xl font-mono font-bold tracking-wider"
-          style={{ color: textColor }}
-        >
+        <span className="text-lg font-mono font-semibold tracking-wider" style={{ color: textColor }}>
           {hex.toUpperCase()}
         </span>
-      </div>
-      <div className="bg-white px-4 py-2 flex justify-center gap-6 text-xs text-zinc-500 font-mono">
-        <span>R:{rgb.r}</span>
-        <span>G:{rgb.g}</span>
-        <span>B:{rgb.b}</span>
+        <span className="text-xs font-mono opacity-60" style={{ color: textColor }}>
+          {rgb.r}, {rgb.g}, {rgb.b}
+        </span>
       </div>
     </div>
   );

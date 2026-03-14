@@ -1,26 +1,26 @@
 "use client";
 
 import { useState } from "react";
+import { Plus, Check, Wind, PenLine } from "lucide-react";
 import { getContrastColor } from "@/lib/colorMath";
 import type { PaintMatch } from "@/types/paint";
 
 type Props = {
   paint: PaintMatch;
+  rank: number;
   onAddToPalette: (paint: PaintMatch) => void;
   isInPalette: boolean;
 };
 
-function getDeltaEColor(de: number): string {
-  if (de < 3) return "text-green-600 bg-green-50 border-green-200";
-  if (de <= 6) return "text-amber-600 bg-amber-50 border-amber-200";
-  return "text-red-600 bg-red-50 border-red-200";
+function getMatchLabel(de: number): string {
+  if (de < 2) return "Excellent";
+  if (de < 5) return "Good";
+  if (de < 10) return "Fair";
+  return "Rough";
 }
 
 function capitalize(s: string): string {
-  return s
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join("-");
+  return s.split("-").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join("-");
 }
 
 function getPaintImagePath(brand: string, code: string): string {
@@ -28,19 +28,16 @@ function getPaintImagePath(brand: string, code: string): string {
   return `/paints/${slug}/${code}.jpg`;
 }
 
-export default function PaintCard({
-  paint,
-  onAddToPalette,
-  isInPalette,
-}: Props) {
+export default function PaintCard({ paint, rank, onAddToPalette, isInPalette }: Props) {
   const textColor = getContrastColor(paint.hex);
   const imagePath = getPaintImagePath(paint.brand, paint.code);
   const [imgError, setImgError] = useState(false);
+  const matchLabel = getMatchLabel(paint.deltaE);
 
   return (
-    <div className="flex items-stretch rounded-lg border border-zinc-200 overflow-hidden bg-white hover:shadow-sm transition-shadow">
+    <div className="flex items-center rounded-xl overflow-hidden bg-white border border-slate-200/80 shadow-sm hover:shadow-md hover:border-slate-300/80 transition-all">
       {/* Paint image */}
-      <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden bg-white border-r border-zinc-200">
+      <div className="w-16 h-16 shrink-0 flex items-center justify-center overflow-hidden bg-white border-r border-slate-100">
         {!imgError ? (
           <img
             src={imagePath}
@@ -49,39 +46,52 @@ export default function PaintCard({
             onError={() => setImgError(true)}
           />
         ) : (
-          <div
-            className="w-full h-full"
-            style={{ backgroundColor: paint.hex }}
-          />
+          <div className="w-full h-full" style={{ backgroundColor: paint.hex }} />
         )}
       </div>
 
       {/* Info */}
       <div className="flex-1 px-3 py-2 min-w-0">
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-sm text-zinc-900 truncate">
+          <span className="font-semibold text-sm text-slate-900 truncate">
             {paint.brand} {paint.code}
           </span>
           <span
-            className="text-[10px] font-mono px-1.5 py-0.5 rounded"
+            className="text-[10px] font-mono px-1.5 py-0.5 rounded-md shrink-0"
             style={{ backgroundColor: paint.hex, color: textColor }}
           >
             {paint.hex}
           </span>
-          <span
-            className={`text-xs font-mono px-1.5 py-0.5 rounded border ${getDeltaEColor(paint.deltaE)}`}
-            title="ΔE < 2 = near identical, ΔE < 5 = good match, ΔE > 6 = noticeable difference"
-          >
-            ΔE {paint.deltaE.toFixed(1)}
-          </span>
         </div>
-        <p className="text-xs text-zinc-500 truncate">{paint.name}</p>
-        <div className="flex gap-1.5 mt-1">
-          <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-600">
+        <p className="text-xs text-slate-500 truncate mt-0.5">{paint.name}</p>
+        <div className="flex items-center gap-1.5 mt-1">
+          <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-500 border border-slate-100">
             {capitalize(paint.finish)}
           </span>
-          <span className="text-[10px] px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-600">
+          <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-500 border border-slate-100">
             {capitalize(paint.type)}
+          </span>
+          {paint.suitableFor?.airbrush && (
+            <span className="relative group/tip" title="Suitable for airbrush">
+              <Wind className="w-3 h-3 text-slate-400" />
+              <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 text-[10px] font-medium bg-slate-900 text-white rounded-md whitespace-nowrap opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none">
+                Airbrush
+              </span>
+            </span>
+          )}
+          {paint.suitableFor?.handPainting && (
+            <span className="relative group/tip" title="Suitable for hand painting">
+              <PenLine className="w-3 h-3 text-slate-400" />
+              <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-1 text-[10px] font-medium bg-slate-900 text-white rounded-md whitespace-nowrap opacity-0 group-hover/tip:opacity-100 transition-opacity pointer-events-none">
+                Hand painting
+              </span>
+            </span>
+          )}
+          <span
+            className="text-[10px] ml-auto text-slate-400 font-mono"
+            title={`ΔE ${paint.deltaE.toFixed(1)} — ${matchLabel} match`}
+          >
+            {matchLabel}
           </span>
         </div>
       </div>
@@ -90,36 +100,14 @@ export default function PaintCard({
       <button
         onClick={() => onAddToPalette(paint)}
         disabled={isInPalette}
-        className={`px-3 flex items-center justify-center border-l border-zinc-200 transition-colors ${
+        className={`px-3 flex items-center justify-center border-l transition-colors shrink-0 self-stretch ${
           isInPalette
-            ? "text-green-500 bg-green-50 cursor-default"
-            : "text-zinc-400 hover:text-blue-500 hover:bg-blue-50"
+            ? "text-emerald-500 bg-emerald-50/50 border-emerald-100"
+            : "text-slate-400 hover:text-sky-600 hover:bg-sky-50 border-slate-100"
         }`}
         title={isInPalette ? "Already in palette" : "Add to palette"}
       >
-        {isInPalette ? (
-          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-            <path
-              fillRule="evenodd"
-              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-        ) : (
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 4v16m8-8H4"
-            />
-          </svg>
-        )}
+        {isInPalette ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
       </button>
     </div>
   );

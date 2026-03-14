@@ -5,6 +5,10 @@ export type Paint = {
   hex: string;
   finish: string;
   type: string;
+  suitableFor: {
+    airbrush: boolean;
+    handPainting: boolean;
+  };
 };
 
 export type PaintWithLab = Paint & {
