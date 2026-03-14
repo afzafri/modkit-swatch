@@ -121,12 +121,13 @@ export default function Home() {
         </ol>
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Left panel — Canvas */}
-          <div className="w-full lg:w-[55%]">
+          <div className="w-full lg:w-[55%] self-start">
             <ImageCanvas onColorPick={setPickedColor} />
           </div>
 
           {/* Right panel — Results */}
           <div className="w-full lg:w-[45%] flex flex-col gap-4">
+            <Palette palette={palette} onRemove={removeFromPalette} />
             <ColorSwatch hex={pickedColor} />
 
             {pickedColor && (
@@ -160,7 +161,6 @@ export default function Home() {
               </>
             )}
 
-            <Palette palette={palette} onRemove={removeFromPalette} />
           </div>
         </div>
       </main>

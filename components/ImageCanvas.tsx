@@ -7,13 +7,23 @@ type Props = {
   onColorPick: (hex: string) => void;
 };
 
+const ZOOM_LEVEL = 4;
+const LOUPE_SIZE = 120;
+
 export default function ImageCanvas({ onColorPick }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const loupeCanvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [hasImage, setHasImage] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [marker, setMarker] = useState<{ x: number; y: number } | null>(null);
+  const [loupe, setLoupe] = useState<{
+    visible: boolean;
+    x: number;
+    y: number;
+    hex: string;
+  }>({ visible: false, x: 0, y: 0, hex: "#000000" });
   const imageDataRef = useRef<HTMLImageElement | null>(null);
 
   const drawImage = useCallback((img: HTMLImageElement) => {
@@ -58,7 +68,6 @@ export default function ImageCanvas({ onColorPick }: Props) {
 
   const drawMarker = useCallback(
     (ctx: CanvasRenderingContext2D, x: number, y: number, hex: string) => {
-      // Redraw clean image
       if (imageDataRef.current) {
         ctx.drawImage(imageDataRef.current, 0, 0);
       }
@@ -66,28 +75,24 @@ export default function ImageCanvas({ onColorPick }: Props) {
       const r = 16;
       const crossLen = 8;
 
-      // Outer white ring
       ctx.beginPath();
       ctx.arc(x, y, r + 2, 0, 2 * Math.PI);
       ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 3;
       ctx.stroke();
 
-      // Colored ring showing picked color
       ctx.beginPath();
       ctx.arc(x, y, r, 0, 2 * Math.PI);
       ctx.strokeStyle = hex;
       ctx.lineWidth = 4;
       ctx.stroke();
 
-      // Dark outer border
       ctx.beginPath();
       ctx.arc(x, y, r + 3.5, 0, 2 * Math.PI);
       ctx.strokeStyle = "rgba(0,0,0,0.5)";
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      // Crosshair lines
       ctx.strokeStyle = "#ffffff";
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -101,7 +106,6 @@ export default function ImageCanvas({ onColorPick }: Props) {
       ctx.lineTo(x + r + crossLen, y);
       ctx.stroke();
 
-      // Crosshair dark shadow
       ctx.strokeStyle = "rgba(0,0,0,0.4)";
       ctx.lineWidth = 1;
       ctx.beginPath();
@@ -115,7 +119,6 @@ export default function ImageCanvas({ onColorPick }: Props) {
       ctx.lineTo(x + r + crossLen, y);
       ctx.stroke();
 
-      // Center dot
       ctx.beginPath();
       ctx.arc(x, y, 2, 0, 2 * Math.PI);
       ctx.fillStyle = "#ffffff";
@@ -127,6 +130,127 @@ export default function ImageCanvas({ onColorPick }: Props) {
     []
   );
 
+  const drawLoupe = useCallback(
+    (imgX: number, imgY: number) => {
+      const loupeCanvas = loupeCanvasRef.current;
+      const img = imageDataRef.current;
+      if (!loupeCanvas || !img) return;
+
+      const ctx = loupeCanvas.getContext("2d");
+      if (!ctx) return;
+
+      const srcSize = LOUPE_SIZE / ZOOM_LEVEL;
+
+      ctx.clearRect(0, 0, LOUPE_SIZE, LOUPE_SIZE);
+
+      // Save and clip to circle
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(LOUPE_SIZE / 2, LOUPE_SIZE / 2, LOUPE_SIZE / 2, 0, 2 * Math.PI);
+      ctx.clip();
+
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(
+        img,
+        imgX - srcSize / 2,
+        imgY - srcSize / 2,
+        srcSize,
+        srcSize,
+        0,
+        0,
+        LOUPE_SIZE,
+        LOUPE_SIZE
+      );
+
+      ctx.restore();
+
+      // Grid lines
+      ctx.strokeStyle = "rgba(0,0,0,0.15)";
+      ctx.lineWidth = 0.5;
+      const pixelSize = ZOOM_LEVEL;
+      for (let i = pixelSize; i < LOUPE_SIZE; i += pixelSize) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i, LOUPE_SIZE);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, i);
+        ctx.lineTo(LOUPE_SIZE, i);
+        ctx.stroke();
+      }
+
+      // Center crosshair
+      const center = LOUPE_SIZE / 2;
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(
+        center - pixelSize / 2 - 1,
+        center - pixelSize / 2 - 1,
+        pixelSize + 2,
+        pixelSize + 2
+      );
+      ctx.strokeStyle = "#000000";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(
+        center - pixelSize / 2 - 1,
+        center - pixelSize / 2 - 1,
+        pixelSize + 2,
+        pixelSize + 2
+      );
+
+      // Border ring
+      ctx.beginPath();
+      ctx.arc(center, center, LOUPE_SIZE / 2 - 1, 0, 2 * Math.PI);
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 3;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(center, center, LOUPE_SIZE / 2 + 0.5, 0, 2 * Math.PI);
+      ctx.strokeStyle = "rgba(0,0,0,0.3)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    },
+    []
+  );
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLCanvasElement>) => {
+      const canvas = canvasRef.current;
+      if (!canvas || !imageDataRef.current) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const imgX = Math.floor((e.clientX - rect.left) * scaleX);
+      const imgY = Math.floor((e.clientY - rect.top) * scaleY);
+
+      // Read pixel from original image via a temp canvas
+      const tmpCanvas = document.createElement("canvas");
+      tmpCanvas.width = imageDataRef.current.width;
+      tmpCanvas.height = imageDataRef.current.height;
+      const tmpCtx = tmpCanvas.getContext("2d");
+      if (!tmpCtx) return;
+      tmpCtx.drawImage(imageDataRef.current, 0, 0);
+      const pixel = tmpCtx.getImageData(imgX, imgY, 1, 1).data;
+      const hex = rgbToHex(pixel[0], pixel[1], pixel[2]);
+
+      // Position loupe relative to container
+      const containerRect = containerRef.current?.getBoundingClientRect();
+      if (!containerRect) return;
+
+      const loupeX = e.clientX - containerRect.left;
+      const loupeY = e.clientY - containerRect.top;
+
+      setLoupe({ visible: true, x: loupeX, y: loupeY, hex });
+      drawLoupe(imgX, imgY);
+    },
+    [drawLoupe]
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    setLoupe((prev) => ({ ...prev, visible: false }));
+  }, []);
+
   const pickColor = useCallback(
     (clientX: number, clientY: number) => {
       const canvas = canvasRef.current;
@@ -134,7 +258,6 @@ export default function ImageCanvas({ onColorPick }: Props) {
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
-      // Redraw clean image first so we sample the original pixel
       if (imageDataRef.current) {
         ctx.drawImage(imageDataRef.current, 0, 0);
       }
@@ -170,7 +293,6 @@ export default function ImageCanvas({ onColorPick }: Props) {
     [pickColor]
   );
 
-  // Handle window resize
   useEffect(() => {
     const handleResize = () => {
       if (imageDataRef.current) {
@@ -182,7 +304,7 @@ export default function ImageCanvas({ onColorPick }: Props) {
   }, [drawImage]);
 
   return (
-    <div ref={containerRef} className="w-full">
+    <div ref={containerRef} className="w-full relative overflow-visible">
       {!hasImage && (
         <div
           className={`border-2 border-dashed rounded-xl p-12 text-center transition-colors cursor-pointer ${
@@ -238,12 +360,14 @@ export default function ImageCanvas({ onColorPick }: Props) {
         }}
       />
 
-      <div className={`relative ${!hasImage ? "hidden" : ""}`}>
+      <div className={`${!hasImage ? "hidden" : "inline-block"} relative`}>
         <canvas
           ref={canvasRef}
-          className="cursor-crosshair rounded-lg w-full"
+          className="cursor-crosshair rounded-lg block"
           onClick={handleCanvasClick}
           onTouchStart={handleTouchStart}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
         />
         <button
           onClick={() => fileInputRef.current?.click()}
@@ -252,6 +376,44 @@ export default function ImageCanvas({ onColorPick }: Props) {
           Change Image
         </button>
       </div>
+
+      {/* Magnifier loupe */}
+      {loupe.visible && (
+        <div
+          className="pointer-events-none absolute z-10"
+          style={{
+            left: loupe.x - LOUPE_SIZE / 2,
+            top: loupe.y - LOUPE_SIZE - 30,
+            width: LOUPE_SIZE,
+            height: LOUPE_SIZE + 24,
+          }}
+        >
+          <canvas
+            ref={loupeCanvasRef}
+            width={LOUPE_SIZE}
+            height={LOUPE_SIZE}
+            className="rounded-full"
+            style={{
+              filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))",
+            }}
+          />
+          <div
+            className="text-center text-[10px] font-mono font-bold mt-1 px-2 py-0.5 rounded-full mx-auto w-fit"
+            style={{
+              backgroundColor: loupe.hex,
+              color:
+                parseInt(loupe.hex.slice(1, 3), 16) * 0.299 +
+                parseInt(loupe.hex.slice(3, 5), 16) * 0.587 +
+                parseInt(loupe.hex.slice(5, 7), 16) * 0.114 >
+                128
+                  ? "#000"
+                  : "#fff",
+            }}
+          >
+            {loupe.hex}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
