@@ -73,30 +73,6 @@
   },
   {
     "brand": "Gaianotes",
-    "code": "007",
-    "name": "クリアー",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "008",
-    "name": "フラットクリアー",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
     "code": "009",
     "name": "ブライトシルバー",
     "hex": "#727a7d",
@@ -328,30 +304,6 @@
     "code": "028",
     "name": "ストーングリーン",
     "hex": "#01b6ad",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "029",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "030",
-    "name": "セミグロスクリアー",
-    "hex": "#ffffff",
     "finish": "gloss",
     "type": "lacquer",
     "suitableFor": {
@@ -649,54 +601,6 @@
   },
   {
     "brand": "Gaianotes",
-    "code": "055",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "056",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "057",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "058",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
     "code": "059",
     "name": "サフレスフレッシュピンク",
     "hex": "#fea29c",
@@ -748,30 +652,6 @@
     "code": "063",
     "name": "ブルーグレー",
     "hex": "#446a6d",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "064",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "065",
-    "name": "-",
-    "hex": "#ffffff",
     "finish": "gloss",
     "type": "lacquer",
     "suitableFor": {
@@ -937,30 +817,6 @@
   },
   {
     "brand": "Gaianotes",
-    "code": "109",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "110",
-    "name": "110 蛍光クリアー",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
     "code": "121",
     "name": "スターブライトシルバー",
     "hex": "#bbbbbb",
@@ -1012,66 +868,6 @@
     "code": "125",
     "name": "スターブライトアイアン",
     "hex": "#5f5f5f",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "126",
-    "name": "スターブライト シャンパンゴールド",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "127",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "128",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "129",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "130",
-    "name": "-",
-    "hex": "#ffffff",
     "finish": "gloss",
     "type": "lacquer",
     "suitableFor": {
@@ -1189,18 +985,6 @@
   },
   {
     "brand": "Gaianotes",
-    "code": "140",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
     "code": "201",
     "name": "ダークイエロー1\n        (ドゥンケルゲルプ1)",
     "hex": "#b69d4c",
@@ -1288,30 +1072,6 @@
     "code": "208",
     "name": "グラウ\n        (グレー)",
     "hex": "#cab793",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "209",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "210",
-    "name": "-",
-    "hex": "#ffffff",
     "finish": "gloss",
     "type": "lacquer",
     "suitableFor": {
@@ -1429,18 +1189,6 @@
   },
   {
     "brand": "Gaianotes",
-    "code": "220",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
     "code": "221",
     "name": "ジャーマングレー\n        (ドゥンケルグラウ)",
     "hex": "#29282c",
@@ -1468,78 +1216,6 @@
     "code": "223",
     "name": "インテリアカラー\n        (戦車車内色)",
     "hex": "#ecdebd",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "224",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "225",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "996",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "997",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "998",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "999",
-    "name": "-",
-    "hex": "#ffffff",
     "finish": "gloss",
     "type": "lacquer",
     "suitableFor": {
@@ -1705,30 +1381,6 @@
   },
   {
     "brand": "Gaianotes",
-    "code": "1014",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "1015",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
     "code": "1021",
     "name": "コンテナブルー",
     "hex": "#3a96ab",
@@ -1813,42 +1465,6 @@
   },
   {
     "brand": "Gaianotes",
-    "code": "1028",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "1029",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "1030",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
     "code": "Ex-01",
     "name": "Ex-ホワイト",
     "hex": "#ffffff",
@@ -1864,30 +1480,6 @@
     "code": "Ex-02",
     "name": "Ex-Black",
     "hex": "#080808",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "Ex-03",
-    "name": "Ex-クリアー",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "Ex-04",
-    "name": "Ex-フラットクリアー",
-    "hex": "#ffffff",
     "finish": "gloss",
     "type": "lacquer",
     "suitableFor": {
@@ -1936,30 +1528,6 @@
     "code": "Ex-08",
     "name": "Ex-ゴールド",
     "hex": "#e3ab47",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "Ex-09",
-    "name": "Ex-セミグロスクリアー プレミアム",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
-    "code": "Ex-10",
-    "name": "Ex-フラットクリアー プレミアム",
-    "hex": "#ffffff",
     "finish": "gloss",
     "type": "lacquer",
     "suitableFor": {
@@ -2245,18 +1813,6 @@
   },
   {
     "brand": "Gaianotes",
-    "code": "GP-10",
-    "name": "-",
-    "hex": "#ffffff",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Gaianotes",
     "code": "TL-001",
     "name": "NATOグリーン",
     "hex": "#45543e",
@@ -2308,126 +1864,6 @@
     "code": "TL-005",
     "name": "ダークグレーFS36176",
     "hex": "#7a8894",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Hobby Mio",
-    "code": "002",
-    "name": "Glossy Black",
-    "hex": "#111111",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Hobby Mio",
-    "code": "003",
-    "name": "Glossy Red",
-    "hex": "#d12626",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Hobby Mio",
-    "code": "004",
-    "name": "Glossy Orange",
-    "hex": "#ea6b1f",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Hobby Mio",
-    "code": "005",
-    "name": "Glossy Blue",
-    "hex": "#2353b5",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Hobby Mio",
-    "code": "006",
-    "name": "Glossy Green",
-    "hex": "#279246",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Hobby Mio",
-    "code": "008",
-    "name": "Glossy Purple",
-    "hex": "#6d3aa6",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Hobby Mio",
-    "code": "013",
-    "name": "Glossy Pink",
-    "hex": "#eb7cab",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Hobby Mio",
-    "code": "014",
-    "name": "Glossy Azure",
-    "hex": "#3f9de0",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Hobby Mio",
-    "code": "015",
-    "name": "Glossy Wine Red",
-    "hex": "#8f2038",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Hobby Mio",
-    "code": "071",
-    "name": "Light Gray",
-    "hex": "#b9bcc2",
     "finish": "gloss",
     "type": "lacquer",
     "suitableFor": {
@@ -2537,30 +1973,6 @@
     "name": "Glossy Rose Red",
     "hex": "#c43060",
     "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Hobby Mio",
-    "code": "HM-010",
-    "name": "Glass Glanzend",
-    "hex": "#e8e8e8",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Hobby Mio",
-    "code": "HM-011",
-    "name": "SemiTopcoat",
-    "hex": "#f0f0f0",
-    "finish": "semi-gloss",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -3101,42 +2513,6 @@
     "name": "Brown",
     "hex": "#c5573c",
     "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Jumpwind",
-    "code": "JW-010",
-    "name": "Gloss Clear",
-    "hex": "#ecede8",
-    "finish": "gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Jumpwind",
-    "code": "JW-011",
-    "name": "Semi-Gloss Clear",
-    "hex": "#f2f3ee",
-    "finish": "semi-gloss",
-    "type": "lacquer",
-    "suitableFor": {
-      "airbrush": true,
-      "handPainting": false
-    }
-  },
-  {
-    "brand": "Jumpwind",
-    "code": "JW-012",
-    "name": "Matt Clear",
-    "hex": "#f0f1ec",
-    "finish": "flat",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,

@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { Github, Paintbrush, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 import paintsData from "@/data/paints.json";
 import { hexToLab } from "@/lib/colorMath";
 import { matchPaints, extractFilterOptions } from "@/lib/matcher";
@@ -96,37 +98,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-slate-50 selection:bg-sky-100 selection:text-sky-900 flex flex-col text-slate-800">
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200/80">
-        <div className="px-6 py-5 max-w-6xl mx-auto w-full flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="" className="w-9 h-9 rounded-lg shadow-sm" />
-            <div>
-              <h1 className="text-xl font-bold text-slate-900 tracking-tight" style={{ fontFamily: "var(--font-display)" }}>
-                ModKit Swatch
-              </h1>
-              <p className="text-[11px] text-slate-400 font-medium tracking-wide uppercase">
-                Gunpla &amp; Model Kit Paint Matcher
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 bg-white text-slate-500 text-xs font-medium">
-              <Paintbrush className="w-3.5 h-3.5 text-sky-500" />
-              {paints.length} paints
-            </span>
-            <a
-              href="https://github.com/afzafri/modkit-swatch"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-400 hover:text-slate-900 transition-colors"
-              title="View on GitHub"
-            >
-              <Github className="w-5 h-5" />
-            </a>
-          </div>
-        </div>
-      </header>
+      <SiteHeader paintCount={paints.length} />
 
       {/* Main */}
       <main className="flex-1 max-w-6xl mx-auto w-full px-6 pt-8 pb-16">
@@ -202,6 +174,9 @@ export default function Home() {
             <p className="text-xs text-slate-400 leading-relaxed">
               Paint matches are approximations based on digital color comparison (CIE2000 Delta E). Actual paint colors may vary due to monitor calibration, lighting conditions, paint batch differences, surface preparation, and application method. Always test paints on a sample before committing to your build.
             </p>
+            <p className="text-xs text-slate-400 leading-relaxed mt-2">
+              This is an independent hobby project and is not affiliated with, endorsed by, or sponsored by any paint manufacturer or model kit brand mentioned on this site. All product names, logos, and brands are the property of their respective owners.
+            </p>
           </div>
         </div>
       </main>
@@ -251,18 +226,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="mt-auto py-6 bg-white border-t border-slate-200/80">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2 text-slate-600 font-semibold text-sm" style={{ fontFamily: "var(--font-display)" }}>
-            <img src="/logo.png" alt="" className="w-4 h-4 rounded" />
-            ModKit Swatch
-          </div>
-          <p className="text-xs text-slate-400 font-medium">
-            &copy; {new Date().getFullYear()} &middot; Built for the Gunpla &amp; scale model community.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
