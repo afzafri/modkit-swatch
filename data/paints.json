@@ -4204,7 +4204,7 @@
     "code": "C47",
     "name": "Clear Red",
     "hex": "#d02020",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -4216,7 +4216,7 @@
     "code": "C48",
     "name": "Clear Yellow",
     "hex": "#e8d020",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -4228,7 +4228,7 @@
     "code": "C49",
     "name": "Clear Orange",
     "hex": "#e07020",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -4240,7 +4240,7 @@
     "code": "C50",
     "name": "Clear Blue",
     "hex": "#2050c0",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5356,7 +5356,7 @@
     "code": "QNC97",
     "name": "Clear Rust Yellow",
     "hex": "#d8a336",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "water-based acrylic",
     "suitableFor": {
       "airbrush": false,
@@ -5380,7 +5380,43 @@
     "code": "001A",
     "name": "Clear Pink",
     "hex": "#e970a3",
-    "finish": "gloss",
+    "finish": "clear",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "009",
+    "name": "Silver",
+    "hex": "#c0c0c0",
+    "finish": "metallic",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "010",
+    "name": "Gold",
+    "hex": "#cfb53b",
+    "finish": "metallic",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "020",
+    "name": "Gun Metallic",
+    "hex": "#505050",
+    "finish": "metallic",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5392,7 +5428,7 @@
     "code": "041",
     "name": "Clear Red",
     "hex": "#d73535",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5404,7 +5440,7 @@
     "code": "042",
     "name": "Clear Orange",
     "hex": "#e77a28",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5416,7 +5452,7 @@
     "code": "047",
     "name": "Clear Violet",
     "hex": "#7c4cc6",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5428,7 +5464,7 @@
     "code": "048",
     "name": "Clear Green",
     "hex": "#33a95b",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5440,7 +5476,7 @@
     "code": "059",
     "name": "Clear Flesh Pink",
     "hex": "#e8b09f",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5452,7 +5488,7 @@
     "code": "060",
     "name": "Clear Flesh Orange",
     "hex": "#e4a06b",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5464,7 +5500,7 @@
     "code": "081",
     "name": "Clear Olivine / Yellow Green",
     "hex": "#b6c438",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5476,7 +5512,7 @@
     "code": "082",
     "name": "Clear Tyrany Gold / Yellow Gold",
     "hex": "#caa331",
-    "finish": "metallic",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5488,7 +5524,7 @@
     "code": "083",
     "name": "Clear Purple Blue",
     "hex": "#4b56c8",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5500,7 +5536,7 @@
     "code": "084",
     "name": "Clear Yan Purple",
     "hex": "#7c3fb2",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5512,7 +5548,7 @@
     "code": "101",
     "name": "Clear Blue (Fluorescent)",
     "hex": "#2f8cff",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5524,7 +5560,7 @@
     "code": "102",
     "name": "Clear Pink (Fluorescent)",
     "hex": "#ff5fb2",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5536,7 +5572,7 @@
     "code": "103",
     "name": "Clear Red (Fluorescent)",
     "hex": "#ff3b30",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5548,7 +5584,7 @@
     "code": "104",
     "name": "Clear Green (Fluorescent)",
     "hex": "#2ee66b",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5560,7 +5596,7 @@
     "code": "105",
     "name": "Clear Yellow (Fluorescent)",
     "hex": "#ffe600",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5572,7 +5608,7 @@
     "code": "106",
     "name": "Clear Orange (Fluorescent)",
     "hex": "#ff7a00",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5584,7 +5620,7 @@
     "code": "107",
     "name": "Clear Yellow Green (Fluorescent)",
     "hex": "#c8ff00",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5596,7 +5632,127 @@
     "code": "108",
     "name": "Clear Blue Green (Fluorescent)",
     "hex": "#00d9c0",
-    "finish": "gloss",
+    "finish": "clear",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "121",
+    "name": "Star Light Silver",
+    "hex": "#d0d0d0",
+    "finish": "metallic",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "122",
+    "name": "Star Light Gold",
+    "hex": "#d4b840",
+    "finish": "metallic",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "123",
+    "name": "Star Light Aluminium",
+    "hex": "#b8b8b8",
+    "finish": "metallic",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "124",
+    "name": "Noble Gold",
+    "hex": "#c8a030",
+    "finish": "metallic",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "125",
+    "name": "Star Bright Iron",
+    "hex": "#606060",
+    "finish": "metallic",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "J57",
+    "name": "Metallic Blue",
+    "hex": "#3050a0",
+    "finish": "metallic",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "J75",
+    "name": "Metallic Red",
+    "hex": "#a02030",
+    "finish": "metallic",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "J76",
+    "name": "Metallic Blue",
+    "hex": "#2040b0",
+    "finish": "metallic",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "J77",
+    "name": "Metallic Green",
+    "hex": "#208040",
+    "finish": "metallic",
+    "type": "lacquer",
+    "suitableFor": {
+      "airbrush": true,
+      "handPainting": false
+    }
+  },
+  {
+    "brand": "Sunin7",
+    "code": "J78",
+    "name": "Metallic Black",
+    "hex": "#1a1a1a",
+    "finish": "metallic",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -5704,7 +5860,7 @@
     "code": "LP-9",
     "name": "Clear Yellow",
     "hex": "#e8d020",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
@@ -6028,7 +6184,7 @@
     "code": "X-23",
     "name": "Clear Blue",
     "hex": "#2050c0",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "acrylic",
     "suitableFor": {
       "airbrush": true,
@@ -6040,7 +6196,7 @@
     "code": "X-24",
     "name": "Clear Yellow",
     "hex": "#e8d020",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "acrylic",
     "suitableFor": {
       "airbrush": true,
@@ -6052,7 +6208,7 @@
     "code": "X-25",
     "name": "Clear Green",
     "hex": "#20a838",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "acrylic",
     "suitableFor": {
       "airbrush": true,
@@ -6064,7 +6220,7 @@
     "code": "X-26",
     "name": "Clear Orange",
     "hex": "#e07020",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "acrylic",
     "suitableFor": {
       "airbrush": true,
@@ -6076,7 +6232,7 @@
     "code": "X-27",
     "name": "Clear Red",
     "hex": "#d02020",
-    "finish": "gloss",
+    "finish": "clear",
     "type": "acrylic",
     "suitableFor": {
       "airbrush": true,

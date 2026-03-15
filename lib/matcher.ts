@@ -1,10 +1,8 @@
 import { hexToLab, deltaE } from "./colorMath";
 import type { PaintWithLab, PaintMatch, Filters } from "@/types/paint";
 
-const CLEAR_PATTERN = /^(clear|smoke|flat base)/i;
-
 export function isClearPaint(paint: PaintWithLab): boolean {
-  return CLEAR_PATTERN.test(paint.name);
+  return paint.finish === "clear";
 }
 
 export function matchPaints(
