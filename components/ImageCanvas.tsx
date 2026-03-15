@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect } from "react";
+import { Crosshair, Lock, Unlock } from "lucide-react";
 import { rgbToHex } from "@/lib/colorMath";
 
 type Props = {
@@ -18,6 +19,8 @@ export default function ImageCanvas({ onColorPick }: Props) {
   const [hasImage, setHasImage] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [marker, setMarker] = useState<{ x: number; y: number } | null>(null);
+  const [pickMode, setPickMode] = useState(true);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [loupe, setLoupe] = useState<{
     visible: boolean;
     x: number;
@@ -286,12 +289,17 @@ export default function ImageCanvas({ onColorPick }: Props) {
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent<HTMLCanvasElement>) => {
+      if (!pickMode) return; // allow normal scroll when pick mode is off
       e.preventDefault();
       const touch = e.touches[0];
       pickColor(touch.clientX, touch.clientY);
     },
-    [pickColor]
+    [pickColor, pickMode]
   );
+
+  useEffect(() => {
+    setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -353,20 +361,49 @@ export default function ImageCanvas({ onColorPick }: Props) {
       />
 
       <div className={`${!hasImage ? "hidden" : "inline-block"} relative`}>
+        {/* Pick mode overlay for touch devices */}
+        {isTouchDevice && !pickMode && (
+          <div className="absolute inset-0 z-10 rounded-2xl bg-black/5 pointer-events-none" />
+        )}
         <canvas
           ref={canvasRef}
-          className="cursor-crosshair rounded-2xl block"
-          onClick={handleCanvasClick}
+          className={`rounded-2xl block ${pickMode ? "cursor-crosshair" : "cursor-default"}`}
+          onClick={pickMode ? handleCanvasClick : undefined}
           onTouchStart={handleTouchStart}
-          onMouseMove={handleMouseMove}
+          onMouseMove={pickMode ? handleMouseMove : undefined}
           onMouseLeave={handleMouseLeave}
+          style={{ touchAction: pickMode && isTouchDevice ? "none" : "auto" }}
         />
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          className="absolute top-3 right-3 bg-black/50 hover:bg-black/70 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm"
-        >
-          Change Image
-        </button>
+        <div className="absolute top-3 right-3 flex gap-2">
+          {isTouchDevice && (
+            <button
+              onClick={() => setPickMode(!pickMode)}
+              className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm ${
+                pickMode
+                  ? "bg-sky-500/90 hover:bg-sky-600/90 text-white"
+                  : "bg-black/50 hover:bg-black/70 text-white"
+              }`}
+            >
+              {pickMode ? (
+                <>
+                  <Crosshair className="w-3.5 h-3.5" />
+                  Picking
+                </>
+              ) : (
+                <>
+                  <Unlock className="w-3.5 h-3.5" />
+                  Scroll
+                </>
+              )}
+            </button>
+          )}
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="bg-black/50 hover:bg-black/70 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm"
+          >
+            Change Image
+          </button>
+        </div>
       </div>
 
       {/* Magnifier loupe */}
