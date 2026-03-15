@@ -335,7 +335,7 @@ export default function ImageCanvas({ onColorPick }: Props) {
               Drop your reference image here
             </p>
             <p className="text-xs text-slate-400">
-              or click to browse — JPEG, PNG, WebP
+              or click to browse (JPEG, PNG, WebP)
             </p>
           </div>
         </div>

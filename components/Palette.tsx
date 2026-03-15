@@ -18,7 +18,7 @@ export default function Palette({ palette, onRemove }: Props) {
 
   const handleExport = () => {
     const text = palette
-      .map((p) => `${p.brand} ${p.code} — ${p.name} (${capitalize(p.finish)} ${capitalize(p.type)})`)
+      .map((p) => `${p.brand} ${p.code} - ${p.name} (${capitalize(p.finish)} ${capitalize(p.type)})`)
       .join("\n");
     navigator.clipboard.writeText(text);
     setCopied(true);

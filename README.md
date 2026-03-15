@@ -1,37 +1,44 @@
 # ModKit Swatch
 
-A client-side web app for Gundam and scale model kit builders. Upload a reference photo, click anywhere on the image to sample a color, and get ranked paint matches across major hobby paint brands.
+> Find the perfect paint match for your Gunpla, Gundam model kit, or any scale model.
+
+Upload a reference photo, click to sample any color, and instantly get ranked paint matches across major hobby brands.
+
+![ModKit Swatch](public/og-image.png)
 
 ## Features
 
-- **Image Upload** — Drag-and-drop or click to browse (JPEG, PNG, WebP)
-- **Canvas Color Picker** — Click any pixel to sample its color, with magnifier loupe for precision
-- **Delta E Matching** — CIE2000 color difference ranking against 580+ hobby paints
-- **Multi-Brand Support** — Mr. Color, Tamiya, Gaianotes, Jumpwind (Meka & Neo series), Hobby Mio, QNC, Sunin7
-- **Paint Images** — Bottle/swatch photos for Mr. Color, Tamiya, Gaianotes, and Jumpwind
-- **Filters** — Filter results by brand, finish, and paint type
-- **Clear Paint Filter** — Hides transparent/clear paints by default (toggleable)
-- **Saved Palette** — Save picks to a palette, export as text to clipboard
-- **Fully Static** — No backend required, all processing runs client-side
+- Upload any reference image (JPEG, PNG, WebP) via drag-and-drop or file browser
+- Click anywhere on the image to sample a color, with a magnifier loupe for precision
+- CIE2000 Delta E color matching across 600+ hobby paints
+- Filter by brand, finish (gloss, flat, semi-gloss, metallic), and paint type
+- Paint bottle/swatch images shown alongside results
+- Save paints to a palette and export as a text list
+- Fully client-side, no backend or signup required
 
-## Tech Stack
+## Supported Brands
 
-- Next.js (App Router), TypeScript, Tailwind CSS
-- `chroma-js` for color math
-- Fully static — deployable to Vercel or any static host
+Mr. Color, Tamiya, Gaianotes, Jumpwind (Meka & Neo), Hobby Mio, QNC, Sunin7
 
-## Getting Started
+## Quick Start
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+App runs at `http://localhost:3000`.
+
+## Tech Stack
+
+- **Next.js** (App Router), TypeScript, Tailwind CSS
+- **chroma-js** for color math (hex/rgb/lab conversions, Delta E CIE2000)
+- **lucide-react** for icons
+- Fully static, deployable to Vercel or any static host
 
 ## Paint Database
 
-587 paints across 7 brands in `data/paints.json`. Add new entries with this shape:
+Paint data lives in `data/paints.json`. Each entry looks like this:
 
 ```json
 {
@@ -40,12 +47,17 @@ Open [http://localhost:3000](http://localhost:3000).
   "name": "Blue",
   "hex": "#1030a0",
   "finish": "gloss",
-  "type": "lacquer"
+  "type": "lacquer",
+  "suitableFor": { "airbrush": true, "handPainting": false }
 }
 ```
 
-Brands, finishes, and types are derived from the data at runtime — no code changes needed to add new values.
+Brands, finishes, and types are derived from the data at runtime. No code changes needed to add new values.
 
 ### Paint Images
 
-Place paint images in `public/paints/{brand-slug}/{code}.jpg`. The app automatically looks for a matching image and falls back to a hex color swatch if none is found.
+Place paint images in `public/paints/{brand-slug}/{code}.jpg`. The app automatically looks for a matching image and falls back to a hex color swatch if none exists.
+
+## License
+
+This project is licensed under the `MIT license` - see the `LICENSE` file for details.

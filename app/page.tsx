@@ -106,7 +106,7 @@ export default function Home() {
                 ModKit Swatch
               </h1>
               <p className="text-[11px] text-slate-400 font-medium tracking-wide uppercase">
-                Model Kit Paint Matcher
+                Gunpla &amp; Model Kit Paint Matcher
               </p>
             </div>
           </div>
@@ -130,6 +130,16 @@ export default function Home() {
 
       {/* Main */}
       <main className="flex-1 max-w-6xl mx-auto w-full px-6 pt-8 pb-16">
+        {/* Hero tagline */}
+        <div className="mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mb-2" style={{ fontFamily: "var(--font-display)" }}>
+            Find the perfect paint for your next build.
+          </h2>
+          <p className="text-sm text-slate-500 max-w-xl">
+            Whether you&apos;re building Gunpla, military armor, or any scale model, just upload a reference photo, sample any color, and instantly get ranked paint recommendations across {filterOptions.brands.length} brands.
+          </p>
+        </div>
+
         {/* Steps */}
         <div className="flex items-center gap-2 text-sm text-slate-400 mb-8">
           <span className="text-slate-600 font-medium">Upload photo</span>
@@ -196,6 +206,51 @@ export default function Home() {
         </div>
       </main>
 
+      {/* SEO Content Section */}
+      <section className="bg-white border-t border-slate-200/80">
+        <div className="max-w-6xl mx-auto px-6 py-12">
+          <div className="grid sm:grid-cols-3 gap-8 mb-12">
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 mb-2" style={{ fontFamily: "var(--font-display)" }}>
+                Color Science, Not Guessing
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Uses CIE2000 Delta E, the industry standard for perceptual color difference, to rank paint matches by how close they actually look to the human eye.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 mb-2" style={{ fontFamily: "var(--font-display)" }}>
+                All Major Hobby Brands
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Search across Mr. Color, Tamiya, Gaianotes, Jumpwind, Hobby Mio, Sunin7, QNC and more. Lacquer, acrylic, water-based. Filter by brand, finish, and paint type.
+              </p>
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-900 mb-2" style={{ fontFamily: "var(--font-display)" }}>
+                No Signup, Fully Free
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Everything runs in your browser. No uploads to any server, no account required. Perfect for Gundam model kit builders and hobbyists. Just open, pick, and build.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <h3 className="text-sm font-bold text-slate-900 mb-3" style={{ fontFamily: "var(--font-display)" }}>
+              Supported Paint Brands
+            </h3>
+            <div className="flex flex-wrap justify-center gap-2">
+              {filterOptions.brands.map((brand) => (
+                <span key={brand} className="text-xs px-3 py-1 rounded-full border border-slate-200 text-slate-500">
+                  {brand}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="mt-auto py-6 bg-white border-t border-slate-200/80">
         <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-3">
@@ -204,7 +259,7 @@ export default function Home() {
             ModKit Swatch
           </div>
           <p className="text-xs text-slate-400 font-medium">
-            &copy; {new Date().getFullYear()} &middot; Built for the scale model community.
+            &copy; {new Date().getFullYear()} &middot; Built for the Gunpla &amp; scale model community.
           </p>
         </div>
       </footer>

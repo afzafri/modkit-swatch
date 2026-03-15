@@ -89,7 +89,7 @@ export default function PaintCard({ paint, rank, onAddToPalette, isInPalette }: 
           )}
           <span
             className="text-[10px] ml-auto text-slate-400 font-mono"
-            title={`ΔE ${paint.deltaE.toFixed(1)} — ${matchLabel} match`}
+            title={`ΔE ${paint.deltaE.toFixed(1)}, ${matchLabel} match`}
           >
             {matchLabel}
           </span>
