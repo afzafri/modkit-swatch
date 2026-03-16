@@ -14,6 +14,7 @@ const LOUPE_SIZE = 120;
 export default function ImageCanvas({ onColorPick }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const loupeCanvasRef = useRef<HTMLCanvasElement>(null);
+  const pinnedLoupeCanvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [hasImage, setHasImage] = useState(false);
@@ -27,6 +28,14 @@ export default function ImageCanvas({ onColorPick }: Props) {
     y: number;
     hex: string;
   }>({ visible: false, x: 0, y: 0, hex: "#000000" });
+  const [pinnedLoupe, setPinnedLoupe] = useState<{
+    visible: boolean;
+    x: number;
+    y: number;
+    hex: string;
+    imgX: number;
+    imgY: number;
+  }>({ visible: false, x: 0, y: 0, hex: "#000000", imgX: 0, imgY: 0 });
   const imageDataRef = useRef<HTMLImageElement | null>(null);
 
   const drawImage = useCallback((img: HTMLImageElement) => {
@@ -75,29 +84,29 @@ export default function ImageCanvas({ onColorPick }: Props) {
         ctx.drawImage(imageDataRef.current, 0, 0);
       }
 
-      const r = 16;
-      const crossLen = 8;
+      const r = 28;
+      const crossLen = 14;
 
       ctx.beginPath();
-      ctx.arc(x, y, r + 2, 0, 2 * Math.PI);
+      ctx.arc(x, y, r + 3, 0, 2 * Math.PI);
       ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 4;
       ctx.stroke();
 
       ctx.beginPath();
       ctx.arc(x, y, r, 0, 2 * Math.PI);
       ctx.strokeStyle = hex;
-      ctx.lineWidth = 4;
+      ctx.lineWidth = 5;
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(x, y, r + 3.5, 0, 2 * Math.PI);
+      ctx.arc(x, y, r + 5, 0, 2 * Math.PI);
       ctx.strokeStyle = "rgba(0,0,0,0.5)";
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 1.5;
       ctx.stroke();
 
       ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.moveTo(x, y - r - crossLen);
       ctx.lineTo(x, y - r + 2);
@@ -123,7 +132,7 @@ export default function ImageCanvas({ onColorPick }: Props) {
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(x, y, 2, 0, 2 * Math.PI);
+      ctx.arc(x, y, 3.5, 0, 2 * Math.PI);
       ctx.fillStyle = "#ffffff";
       ctx.fill();
       ctx.strokeStyle = "rgba(0,0,0,0.5)";
@@ -133,13 +142,12 @@ export default function ImageCanvas({ onColorPick }: Props) {
     []
   );
 
-  const drawLoupe = useCallback(
-    (imgX: number, imgY: number) => {
-      const loupeCanvas = loupeCanvasRef.current;
+  const drawLoupeToCanvas = useCallback(
+    (canvasEl: HTMLCanvasElement | null, imgX: number, imgY: number) => {
       const img = imageDataRef.current;
-      if (!loupeCanvas || !img) return;
+      if (!canvasEl || !img) return;
 
-      const ctx = loupeCanvas.getContext("2d");
+      const ctx = canvasEl.getContext("2d");
       if (!ctx) return;
 
       const srcSize = LOUPE_SIZE / ZOOM_LEVEL;
@@ -245,9 +253,9 @@ export default function ImageCanvas({ onColorPick }: Props) {
       const loupeY = e.clientY - containerRect.top;
 
       setLoupe({ visible: true, x: loupeX, y: loupeY, hex });
-      drawLoupe(imgX, imgY);
+      drawLoupeToCanvas(loupeCanvasRef.current, imgX, imgY);
     },
-    [drawLoupe]
+    [drawLoupeToCanvas]
   );
 
   const handleMouseLeave = useCallback(() => {
@@ -276,8 +284,16 @@ export default function ImageCanvas({ onColorPick }: Props) {
       onColorPick(hex);
       drawMarker(ctx, x, y, hex);
       setMarker({ x, y });
+
+      // Pin the second loupe at the picked position
+      const containerRect = containerRef.current?.getBoundingClientRect();
+      if (containerRect) {
+        const loupeX = clientX - containerRect.left;
+        const loupeY = clientY - containerRect.top;
+        setPinnedLoupe({ visible: true, x: loupeX, y: loupeY, hex, imgX: x, imgY: y });
+      }
     },
-    [onColorPick, drawMarker]
+    [onColorPick, drawMarker, drawLoupeToCanvas]
   );
 
   const handleCanvasClick = useCallback(
@@ -300,6 +316,13 @@ export default function ImageCanvas({ onColorPick }: Props) {
   useEffect(() => {
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
   }, []);
+
+  // Draw pinned loupe after React renders the canvas element
+  useEffect(() => {
+    if (pinnedLoupe.visible) {
+      drawLoupeToCanvas(pinnedLoupeCanvasRef.current, pinnedLoupe.imgX, pinnedLoupe.imgY);
+    }
+  }, [pinnedLoupe, drawLoupeToCanvas]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -406,7 +429,7 @@ export default function ImageCanvas({ onColorPick }: Props) {
         </div>
       </div>
 
-      {/* Magnifier loupe */}
+      {/* Hover loupe - follows mouse */}
       {loupe.visible && (
         <div
           className="pointer-events-none absolute z-10"
@@ -422,9 +445,7 @@ export default function ImageCanvas({ onColorPick }: Props) {
             width={LOUPE_SIZE}
             height={LOUPE_SIZE}
             className="rounded-full"
-            style={{
-              filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))",
-            }}
+            style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))" }}
           />
           <div
             className="text-center text-[10px] font-mono font-bold mt-1 px-2 py-0.5 rounded-full mx-auto w-fit"
@@ -433,13 +454,45 @@ export default function ImageCanvas({ onColorPick }: Props) {
               color:
                 parseInt(loupe.hex.slice(1, 3), 16) * 0.299 +
                 parseInt(loupe.hex.slice(3, 5), 16) * 0.587 +
-                parseInt(loupe.hex.slice(5, 7), 16) * 0.114 >
-                128
-                  ? "#000"
-                  : "#fff",
+                parseInt(loupe.hex.slice(5, 7), 16) * 0.114 > 128
+                  ? "#000" : "#fff",
             }}
           >
             {loupe.hex}
+          </div>
+        </div>
+      )}
+
+      {/* Pinned loupe - sticks to last picked marker */}
+      {pinnedLoupe.visible && (
+        <div
+          className="pointer-events-none absolute z-10"
+          style={{
+            left: pinnedLoupe.x - LOUPE_SIZE / 2,
+            top: pinnedLoupe.y - LOUPE_SIZE - 30,
+            width: LOUPE_SIZE,
+            height: LOUPE_SIZE + 24,
+          }}
+        >
+          <canvas
+            ref={pinnedLoupeCanvasRef}
+            width={LOUPE_SIZE}
+            height={LOUPE_SIZE}
+            className="rounded-full"
+            style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))", border: "2px solid rgba(255,255,255,0.8)" }}
+          />
+          <div
+            className="text-center text-[10px] font-mono font-bold mt-1 px-2 py-0.5 rounded-full mx-auto w-fit"
+            style={{
+              backgroundColor: pinnedLoupe.hex,
+              color:
+                parseInt(pinnedLoupe.hex.slice(1, 3), 16) * 0.299 +
+                parseInt(pinnedLoupe.hex.slice(3, 5), 16) * 0.587 +
+                parseInt(pinnedLoupe.hex.slice(5, 7), 16) * 0.114 > 128
+                  ? "#000" : "#fff",
+            }}
+          >
+            {pinnedLoupe.hex}
           </div>
         </div>
       )}

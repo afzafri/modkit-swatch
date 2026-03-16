@@ -86,9 +86,9 @@
   {
     "brand": "Gaianotes",
     "code": "010",
-    "name": "Fluorescent Red",
-    "hex": "#f02040",
-    "finish": "gloss",
+    "name": "Bright Gold",
+    "hex": "#9b6322",
+    "finish": "metallic",
     "type": "lacquer",
     "suitableFor": {
       "airbrush": true,
