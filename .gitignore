@@ -37,7 +37,7 @@ yarn-error.log*
 /scripts/
 
 # docs (internal reference CSVs, not part of the app)
-/docs/
+/docs/dev
 
 # spec (reference only)
 SPEC_*.md

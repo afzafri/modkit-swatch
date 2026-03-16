@@ -4,7 +4,7 @@
 
 Upload a reference photo, click to sample any color, and instantly get ranked paint matches across major hobby brands.
 
-![ModKit Swatch](public/og-image.png)
+![ModKit Swatch](docs/screenshot.png)
 
 ## Features
 
@@ -57,6 +57,17 @@ Brands, finishes, and types are derived from the data at runtime. No code change
 ### Paint Images
 
 Place paint images in `public/paints/{brand-slug}/{code}.jpg`. The app automatically looks for a matching image and falls back to a hex color swatch if none exists.
+
+## Documentation
+
+Full documentation is available in [`docs/`](docs/README.md).
+
+| Topic | Link |
+|-------|------|
+| Architecture and how it works | [docs/01-architecture](docs/01-architecture/README.md) |
+| Getting started | [docs/02-development/01-getting-started.md](docs/02-development/01-getting-started.md) |
+| Paint database format | [docs/03-paint-database/01-data-format.md](docs/03-paint-database/01-data-format.md) |
+| Adding new paints | [docs/03-paint-database/02-adding-paints.md](docs/03-paint-database/02-adding-paints.md) |
 
 ## License
 
