@@ -1,14 +1,16 @@
 # Documentation
 
 ModKit Swatch is a client-side web application that helps Gunpla and scale model builders
-find the right hobby paint by uploading a reference photo, sampling colors, and getting
-ranked matches across multiple brands using CIE2000 Delta E color science.
+find the right hobby paint. Upload a reference photo, place multiple color markers on the
+image, and get ranked paint matches across multiple brands using CIE2000 Delta E color
+science. Assign paints to each marker and export the annotated image as a PNG.
 
 ## Documentation Structure
 
 ### [01. Architecture](01-architecture/README.md)
 
-System design, component overview, color matching pipeline, and data model.
+System design, component overview, color matching pipeline, metallic detection, and
+data model.
 
 ### [02. Development](02-development/README.md)
 

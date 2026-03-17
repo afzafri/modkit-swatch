@@ -38,12 +38,12 @@ npm run lint
 
 ## Project Commands
 
-| Command | Description |
+| Command           | Description              |
 | ----------------- | ------------------------ |
-| `npm run dev` | Start development server |
-| `npm run build` | Production build |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
+| `npm run dev`     | Start development server |
+| `npm run build`   | Production build         |
+| `npm run start`   | Start production server  |
+| `npm run lint`    | Run ESLint               |
 
 ## Next Steps
 

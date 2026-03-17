@@ -1,5 +1,12 @@
 # ModKit Swatch
 
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=nextdotjs)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square&logo=tailwindcss)
+![chroma-js](https://img.shields.io/badge/chroma--js-3-FF6B6B?style=flat-square)
+[![License](https://img.shields.io/github/license/afzafri/modkit-swatch?style=flat-square)](LICENSE)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fmodkitswatch.afifzafri.com&style=flat-square&label=demo)](https://modkitswatch.afifzafri.com)
+
 > Find the perfect paint match for your Gunpla, Gundam model kit, or any scale model.
 
 Upload a reference photo, click to sample any color, and instantly get ranked paint matches across major hobby brands.
@@ -10,11 +17,19 @@ Upload a reference photo, click to sample any color, and instantly get ranked pa
 
 - Upload any reference image (JPEG, PNG, WebP) via drag-and-drop or file browser
 - Click anywhere on the image to sample a color, with a magnifier loupe for precision
+- Place multiple markers and assign paints to each one
 - CIE2000 Delta E color matching across 600+ hobby paints
+- Metallic surface detection via pixel variance analysis
 - Filter by brand, finish (gloss, flat, semi-gloss, metallic), and paint type
 - Paint bottle/swatch images shown alongside results
-- Save paints to a palette and export as a text list
+- Export annotated image as PNG with branded watermark
+- Copy paint assignments list to clipboard
+- Mobile bottom sheet for paint selection on touch devices
 - Fully client-side, no backend or signup required
+
+## Export
+
+Annotate your reference photo with paint assignments and export it as a PNG. The exported image includes all marker labels with brand, code, and paint name, plus a watermark that automatically adapts between light and dark based on the background.
 
 ## Supported Brands
 
