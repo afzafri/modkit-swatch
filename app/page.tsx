@@ -14,6 +14,7 @@ import ColorSwatch from "@/components/ColorSwatch";
 import FilterBar from "@/components/FilterBar";
 import ResultsList from "@/components/ResultsList";
 import AssignmentsPanel from "@/components/AssignmentsPanel";
+import MobileBottomSheet from "@/components/MobileBottomSheet";
 
 const MARKERS_KEY = "modkitswatch_markers";
 
@@ -52,6 +53,7 @@ export default function Home() {
   const [nextMarkerId, setNextMarkerId] = useState(1);
   const [metallicOnly, setMetallicOnly] = useState(false);
   const [metallicSignal, setMetallicSignal] = useState<MetallicSignal>("none");
+  const [showMobileSheet, setShowMobileSheet] = useState(false);
   const [filters, setFilters] = useState<Filters>({
     brand: "All",
     finish: "All",
@@ -107,6 +109,11 @@ export default function Home() {
         );
         setMarkers(updated);
         saveMarkers(updated);
+      }
+
+      // Show bottom sheet on mobile
+      if (window.innerWidth < 1024) {
+        setShowMobileSheet(true);
       }
     },
     [markers, activeMarkerId, nextMarkerId]
@@ -196,8 +203,8 @@ export default function Home() {
             />
           </div>
 
-          {/* Right panel */}
-          <div className="w-full lg:w-[45%] flex flex-col gap-4">
+          {/* Right panel (desktop only) */}
+          <div className="hidden lg:flex w-full lg:w-[45%] flex-col gap-4">
             <ColorSwatch hex={pickedColor} />
 
             {/* Metallic detection hint */}
@@ -314,6 +321,22 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Mobile bottom sheet for paint selection */}
+      <MobileBottomSheet
+        visible={showMobileSheet}
+        hex={pickedColor}
+        metallicSignal={metallicSignal}
+        filters={filters}
+        onFiltersChange={setFilters}
+        filterOptions={filterOptions}
+        results={results}
+        onAssign={assignPaint}
+        assignedPaintKey={assignedPaintKey}
+        hasAssignment={!!activeMarker?.assignedPaint}
+        onDismiss={() => setShowMobileSheet(false)}
+        onClearMetallic={() => { setMetallicSignal("none"); setMetallicOnly(false); }}
+      />
 
       <SiteFooter />
     </div>

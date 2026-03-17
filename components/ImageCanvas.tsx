@@ -400,29 +400,36 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
     [markers, activeMarkerId, findNearbyMarker, resolvePickAt, onSelectMarker]
   );
 
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent<HTMLCanvasElement>) => {
-      if (!pickMode) return;
-      e.preventDefault();
-      const touch = e.touches[0];
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const imgX = Math.floor((touch.clientX - rect.left) * scaleX);
-      const imgY = Math.floor((touch.clientY - rect.top) * scaleY);
+  // Attach touchstart as non-passive so preventDefault works
+  const touchHandlerRef = useRef<((e: TouchEvent) => void) | null>(null);
+  touchHandlerRef.current = (e: TouchEvent) => {
+    if (!pickMode) return;
+    e.preventDefault();
+    const touch = e.touches[0];
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const imgX = Math.floor((touch.clientX - rect.left) * scaleX);
+    const imgY = Math.floor((touch.clientY - rect.top) * scaleY);
 
-      const nearby = findNearbyMarker(imgX, imgY);
-      if (nearby && nearby.id !== activeMarkerId) {
-        onSelectMarker(nearby.id);
-        return;
-      }
+    const nearby = findNearbyMarker(imgX, imgY);
+    if (nearby && nearby.id !== activeMarkerId) {
+      onSelectMarker(nearby.id);
+      return;
+    }
 
-      resolvePickAt(touch.clientX, touch.clientY, "new");
-    },
-    [pickMode, markers, activeMarkerId, findNearbyMarker, resolvePickAt, onSelectMarker]
-  );
+    resolvePickAt(touch.clientX, touch.clientY, "new");
+  };
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const handler = (e: TouchEvent) => touchHandlerRef.current?.(e);
+    canvas.addEventListener("touchstart", handler, { passive: false });
+    return () => canvas.removeEventListener("touchstart", handler);
+  }, []);
 
   useEffect(() => {
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
@@ -487,7 +494,6 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
           ref={canvasRef}
           className={`rounded-2xl block ${pickMode ? "cursor-crosshair" : "cursor-default"}`}
           onClick={pickMode ? handleCanvasClick : undefined}
-          onTouchStart={handleTouchStart}
           onMouseMove={pickMode ? handleMouseMove : undefined}
           onMouseLeave={handleMouseLeave}
           style={{ touchAction: pickMode && isTouchDevice ? "none" : "auto" }}
