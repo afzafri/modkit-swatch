@@ -10,12 +10,14 @@ export function matchPaints(
   paints: PaintWithLab[],
   filters: Filters,
   topN: number = 10,
-  excludeClear: boolean = true
+  excludeClear: boolean = true,
+  metallicOnly: boolean = false
 ): PaintMatch[] {
   const pickedLab = hexToLab(pickedHex);
 
   const filtered = paints.filter((p) => {
     if (excludeClear && isClearPaint(p)) return false;
+    if (metallicOnly && p.finish !== "metallic") return false;
     if (filters.brand !== "All" && p.brand !== filters.brand) return false;
     if (filters.finish !== "All" && p.finish !== filters.finish) return false;
     if (filters.type !== "All" && p.type !== filters.type) return false;

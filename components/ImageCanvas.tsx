@@ -2,10 +2,11 @@
 
 import { useRef, useState, useCallback, useEffect } from "react";
 import { Crosshair, Lock, Unlock } from "lucide-react";
-import { rgbToHex } from "@/lib/colorMath";
+import { rgbToHex, sampleRegion, hexToLab, detectMetallic } from "@/lib/colorMath";
+import type { MetallicSignal } from "@/lib/colorMath";
 
 type Props = {
-  onColorPick: (hex: string) => void;
+  onColorPick: (hex: string, metallicSignal: MetallicSignal) => void;
 };
 
 const ZOOM_LEVEL = 4;
@@ -70,6 +71,8 @@ export default function ImageCanvas({ onColorPick }: Props) {
         img.onload = () => {
           drawImage(img);
           setMarker(null);
+          setLoupe((prev) => ({ ...prev, visible: false }));
+          setPinnedLoupe((prev) => ({ ...prev, visible: false }));
         };
         img.src = e.target?.result as string;
       };
@@ -279,9 +282,10 @@ export default function ImageCanvas({ onColorPick }: Props) {
       const x = Math.floor((clientX - rect.left) * scaleX);
       const y = Math.floor((clientY - rect.top) * scaleY);
 
-      const pixel = ctx.getImageData(x, y, 1, 1).data;
-      const hex = rgbToHex(pixel[0], pixel[1], pixel[2]);
-      onColorPick(hex);
+      const { hex, variance } = sampleRegion(ctx, x, y, 3);
+      const lab = hexToLab(hex);
+      const metallicSignal = detectMetallic(lab, variance);
+      onColorPick(hex, metallicSignal);
       drawMarker(ctx, x, y, hex);
       setMarker({ x, y });
 
