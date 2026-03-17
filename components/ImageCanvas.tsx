@@ -39,7 +39,6 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
   const [pinnedLoupe, setPinnedLoupe] = useState<{
     visible: boolean; x: number; y: number; hex: string; imgX: number; imgY: number;
   }>({ visible: false, x: 0, y: 0, hex: "#000000", imgX: 0, imgY: 0 });
-  const [prompt, setPrompt] = useState<{ visible: boolean; x: number; y: number; clientX: number; clientY: number } | null>(null);
   const [labelRects, setLabelRects] = useState<LabelRect[]>([]);
   const imageDataRef = useRef<HTMLImageElement | null>(null);
 
@@ -70,7 +69,6 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
         drawImage(img);
         setLoupe((prev) => ({ ...prev, visible: false }));
         setPinnedLoupe((prev) => ({ ...prev, visible: false }));
-        setPrompt(null);
       };
       img.src = src;
     },
@@ -101,13 +99,13 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
     if (stored) loadImageFromSrc(stored);
   }, [loadImageFromSrc]);
 
-  // Separate draw function that accepts an override for activeMarkerId (null = no active highlight)
-  const drawMarkersToCtx = useCallback((ctx: CanvasRenderingContext2D, canvasW: number, canvasH: number, img: HTMLImageElement, activeId: number | null) => {
+  const drawMarkersToCtx = useCallback((ctx: CanvasRenderingContext2D, canvasW: number, canvasH: number, img: HTMLImageElement, activeId: number | null): LabelRect[] => {
     ctx.drawImage(img, 0, 0);
     const s = Math.max(canvasW, canvasH) / 800;
     const cw = canvasW;
     const ch = canvasH;
     const placedLabels: { x: number; y: number; w: number; h: number }[] = [];
+    const labelRects: LabelRect[] = [];
     const dotR = 12 * s;
 
     for (const m of markers) {
@@ -181,6 +179,7 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
       if (m.x > centerCardX) { lineFromX = cardX + cardW; } else { lineFromX = cardX; }
       if (m.y > centerCardY) { lineFromY = cardY + cardH; } else { lineFromY = cardY; }
       placedLabels.push({ x: cardX, y: cardY, w: cardW, h: cardH });
+      labelRects.push({ markerId: m.id, x: cardX, y: cardY, w: cardW, h: cardH });
 
       ctx.beginPath(); ctx.moveTo(lineFromX, lineFromY); ctx.lineTo(m.x, m.y);
       ctx.strokeStyle = "rgba(0,0,0,0.5)"; ctx.lineWidth = 5 * s; ctx.stroke();
@@ -198,6 +197,8 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
       ctx.font = `${fontSize2}px system-ui, sans-serif`; ctx.fillStyle = "#64748b";
       ctx.fillText(nameLine, cardX + pad, cardY + pad + fontSize1 + lineGap + fontSize2);
     }
+
+    return labelRects;
   }, [markers]);
 
   const exportImage = useCallback(() => {
@@ -250,7 +251,7 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
       link.click();
     };
     watermark.src = isDark ? "/watermark-light.svg" : "/watermark.svg";
-  }, []);
+  }, [drawMarkersToCtx]);
 
   // Draw all markers on the canvas
   const drawAllMarkers = useCallback(() => {
@@ -260,218 +261,9 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    ctx.drawImage(img, 0, 0);
-
-    // Scale factor: markers/labels scale with image size so they're visible
-    const s = Math.max(canvas.width, canvas.height) / 800;
-    const cw = canvas.width;
-    const ch = canvas.height;
-
-    // Track placed label rects for collision avoidance and DOM overlays
-    const placedLabels: { x: number; y: number; w: number; h: number }[] = [];
-    const newLabelRects: LabelRect[] = [];
-
-    for (const m of markers) {
-      const isActive = m.id === activeMarkerId;
-      const hasAssignment = !!m.assignedPaint;
-
-      if (!isActive && !hasAssignment) continue;
-
-      // Active unassigned marker: full crosshair for picking
-      if (isActive && !hasAssignment) {
-        const r = 28 * s;
-        const crossLen = 14 * s;
-
-        ctx.beginPath();
-        ctx.arc(m.x, m.y, r + 3 * s, 0, 2 * Math.PI);
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 4 * s;
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(m.x, m.y, r, 0, 2 * Math.PI);
-        ctx.strokeStyle = m.hex;
-        ctx.lineWidth = 5 * s;
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(m.x, m.y, r + 5 * s, 0, 2 * Math.PI);
-        ctx.strokeStyle = "rgba(0,0,0,0.5)";
-        ctx.lineWidth = 1.5 * s;
-        ctx.stroke();
-
-        ctx.strokeStyle = "#ffffff";
-        ctx.lineWidth = 3 * s;
-        ctx.beginPath();
-        ctx.moveTo(m.x, m.y - r - crossLen); ctx.lineTo(m.x, m.y - r + 2 * s);
-        ctx.moveTo(m.x, m.y + r - 2 * s); ctx.lineTo(m.x, m.y + r + crossLen);
-        ctx.moveTo(m.x - r - crossLen, m.y); ctx.lineTo(m.x - r + 2 * s, m.y);
-        ctx.moveTo(m.x + r - 2 * s, m.y); ctx.lineTo(m.x + r + crossLen, m.y);
-        ctx.stroke();
-
-        ctx.strokeStyle = "rgba(0,0,0,0.4)";
-        ctx.lineWidth = 1 * s;
-        ctx.beginPath();
-        ctx.moveTo(m.x, m.y - r - crossLen); ctx.lineTo(m.x, m.y - r + 2 * s);
-        ctx.moveTo(m.x, m.y + r - 2 * s); ctx.lineTo(m.x, m.y + r + crossLen);
-        ctx.moveTo(m.x - r - crossLen, m.y); ctx.lineTo(m.x - r + 2 * s, m.y);
-        ctx.moveTo(m.x + r - 2 * s, m.y); ctx.lineTo(m.x + r + crossLen, m.y);
-        ctx.stroke();
-
-        ctx.beginPath();
-        ctx.arc(m.x, m.y, 3.5 * s, 0, 2 * Math.PI);
-        ctx.fillStyle = "#ffffff";
-        ctx.fill();
-        ctx.strokeStyle = "rgba(0,0,0,0.5)";
-        ctx.lineWidth = 1 * s;
-        ctx.stroke();
-        continue;
-      }
-
-      if (!hasAssignment) continue;
-      const paint = m.assignedPaint!;
-
-      // Marker dot
-      const dotR = 12 * s;
-      ctx.beginPath();
-      ctx.arc(m.x, m.y, dotR, 0, 2 * Math.PI);
-      ctx.fillStyle = m.hex;
-      ctx.fill();
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 3 * s;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(m.x, m.y, dotR + 2 * s, 0, 2 * Math.PI);
-      ctx.strokeStyle = "rgba(0,0,0,0.4)";
-      ctx.lineWidth = 1 * s;
-      ctx.stroke();
-
-      // Label card
-      const fontSize1 = Math.round(16 * s);
-      const fontSize2 = Math.round(14 * s);
-      const pad = 10 * s;
-      const lineGap = 4 * s;
-      const cornerR = 8 * s;
-
-      const codeLine = `${paint.brand} ${paint.code}`;
-      const nameLine = paint.name;
-      ctx.font = `bold ${fontSize1}px system-ui, sans-serif`;
-      const codeWidth = ctx.measureText(codeLine).width;
-      ctx.font = `${fontSize2}px system-ui, sans-serif`;
-      const nameWidth = ctx.measureText(nameLine).width;
-      const cardW = Math.max(codeWidth, nameWidth) + pad * 2;
-      const cardH = fontSize1 + fontSize2 + lineGap + pad * 2;
-
-      // Dynamic positioning: try 8 directions, pick best one with least overlap
-      const gap = 30 * s;
-
-      // 8 candidate positions around the marker
-      const candidates: { x: number; y: number }[] = [
-        { x: m.x + gap, y: m.y - cardH / 2 },                    // right
-        { x: m.x - cardW - gap, y: m.y - cardH / 2 },            // left
-        { x: m.x - cardW / 2, y: m.y - cardH - gap },            // top
-        { x: m.x - cardW / 2, y: m.y + gap },                    // bottom
-        { x: m.x + gap, y: m.y - cardH - gap },                  // top-right
-        { x: m.x - cardW - gap, y: m.y - cardH - gap },          // top-left
-        { x: m.x + gap, y: m.y + gap },                          // bottom-right
-        { x: m.x - cardW - gap, y: m.y + gap },                  // bottom-left
-      ];
-
-      // Score each candidate: prefer no overlap, then prefer more space from edges
-      let bestScore = -Infinity;
-      let bestCand = candidates[0];
-
-      for (const c of candidates) {
-        const cx = Math.max(4 * s, Math.min(c.x, cw - cardW - 4 * s));
-        const cy = Math.max(4 * s, Math.min(c.y, ch - cardH - 4 * s));
-
-        let score = 0;
-
-        // Penalize overlap with placed labels
-        for (const placed of placedLabels) {
-          if (cx < placed.x + placed.w && cx + cardW > placed.x &&
-              cy < placed.y + placed.h && cy + cardH > placed.y) {
-            score -= 1000;
-          }
-        }
-
-        // Penalize overlap with marker dots
-        for (const other of markers) {
-          if (other.id === m.id) continue;
-          if (cx < other.x + dotR * 2 && cx + cardW > other.x - dotR * 2 &&
-              cy < other.y + dotR * 2 && cy + cardH > other.y - dotR * 2) {
-            score -= 500;
-          }
-        }
-
-        // Prefer positions within canvas bounds (penalize clamping)
-        if (c.x === cx && c.y === cy) score += 100;
-
-        // Prefer edges over center — the subject is usually in the middle
-        const cardCenterX = cx + cardW / 2;
-        const cardCenterY = cy + cardH / 2;
-        const distFromCenterX = Math.abs(cardCenterX - cw / 2) / (cw / 2); // 0=center, 1=edge
-        const distFromCenterY = Math.abs(cardCenterY - ch / 2) / (ch / 2);
-        const edgeScore = (distFromCenterX + distFromCenterY) * 50; // up to 100 bonus at edges
-        score += edgeScore;
-
-        if (score > bestScore) {
-          bestScore = score;
-          bestCand = { x: cx, y: cy };
-        }
-      }
-
-      let cardX = Math.max(4 * s, Math.min(bestCand.x, cw - cardW - 4 * s));
-      let cardY = Math.max(4 * s, Math.min(bestCand.y, ch - cardH - 4 * s));
-
-      // Connector anchor: closest card edge to the dot
-      let lineFromX: number, lineFromY: number;
-
-      // Connector anchor: closest card edge to dot
-      const centerCardX = cardX + cardW / 2;
-      const centerCardY = cardY + cardH / 2;
-      if (m.x > centerCardX) { lineFromX = cardX + cardW; } else { lineFromX = cardX; }
-      if (m.y > centerCardY) { lineFromY = cardY + cardH; } else { lineFromY = cardY; }
-
-      placedLabels.push({ x: cardX, y: cardY, w: cardW, h: cardH });
-      newLabelRects.push({ markerId: m.id, x: cardX, y: cardY, w: cardW, h: cardH });
-
-      // Connector line — dark outline + white core
-      ctx.beginPath();
-      ctx.moveTo(lineFromX, lineFromY);
-      ctx.lineTo(m.x, m.y);
-      ctx.strokeStyle = "rgba(0,0,0,0.5)";
-      ctx.lineWidth = 5 * s;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(lineFromX, lineFromY);
-      ctx.lineTo(m.x, m.y);
-      ctx.strokeStyle = "rgba(255,255,255,0.95)";
-      ctx.lineWidth = 3 * s;
-      ctx.stroke();
-
-      // Card background
-      ctx.fillStyle = isActive ? "rgba(255,255,255,0.97)" : "rgba(255,255,255,0.93)";
-      ctx.beginPath();
-      ctx.roundRect(cardX, cardY, cardW, cardH, cornerR);
-      ctx.fill();
-      ctx.strokeStyle = isActive ? "rgba(56,189,248,0.8)" : "rgba(0,0,0,0.12)";
-      ctx.lineWidth = isActive ? 3 * s : 1.5 * s;
-      ctx.stroke();
-
-      // Code text
-      ctx.font = `bold ${fontSize1}px system-ui, sans-serif`;
-      ctx.fillStyle = "#0f172a";
-      ctx.fillText(codeLine, cardX + pad, cardY + pad + fontSize1);
-
-      // Name text
-      ctx.font = `${fontSize2}px system-ui, sans-serif`;
-      ctx.fillStyle = "#64748b";
-      ctx.fillText(nameLine, cardX + pad, cardY + pad + fontSize1 + lineGap + fontSize2);
-    }
-
-    setLabelRects(newLabelRects);
-  }, [markers, activeMarkerId]);
+    const rects = drawMarkersToCtx(ctx, canvas.width, canvas.height, img, activeMarkerId);
+    setLabelRects(rects);
+  }, [markers, activeMarkerId, drawMarkersToCtx]);
 
   // Redraw markers whenever they change
   useEffect(() => {
@@ -581,7 +373,6 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
       // Hide loupes after picking
       setLoupe((prev) => ({ ...prev, visible: false }));
       setPinnedLoupe((prev) => ({ ...prev, visible: false }));
-      setPrompt(null);
     },
     [onColorPick]
   );
@@ -603,22 +394,8 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
         return;
       }
 
-      // If no markers exist, just create first one
-      if (markers.length === 0) {
-        resolvePickAt(e.clientX, e.clientY, "new");
-        return;
-      }
-
-      // Show prompt: reselect or add new
-      const containerRect = containerRef.current?.getBoundingClientRect();
-      if (!containerRect) return;
-      setPrompt({
-        visible: true,
-        x: e.clientX - containerRect.left,
-        y: e.clientY - containerRect.top,
-        clientX: e.clientX,
-        clientY: e.clientY,
-      });
+      // Always create a new marker
+      resolvePickAt(e.clientX, e.clientY, "new");
     },
     [markers, activeMarkerId, findNearbyMarker, resolvePickAt, onSelectMarker]
   );
@@ -642,20 +419,7 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
         return;
       }
 
-      if (markers.length === 0) {
-        resolvePickAt(touch.clientX, touch.clientY, "new");
-        return;
-      }
-
-      const containerRect = containerRef.current?.getBoundingClientRect();
-      if (!containerRect) return;
-      setPrompt({
-        visible: true,
-        x: touch.clientX - containerRect.left,
-        y: touch.clientY - containerRect.top,
-        clientX: touch.clientX,
-        clientY: touch.clientY,
-      });
+      resolvePickAt(touch.clientX, touch.clientY, "new");
     },
     [pickMode, markers, activeMarkerId, findNearbyMarker, resolvePickAt, onSelectMarker]
   );
@@ -678,14 +442,6 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
     return () => window.removeEventListener("resize", handleResize);
   }, [drawImage]);
 
-  // Dismiss prompt on Escape
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setPrompt(null);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, []);
 
   const loupeHexStyle = (hex: string) => ({
     backgroundColor: hex,
@@ -723,7 +479,7 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
       <input ref={fileInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden"
         onChange={(e) => { const file = e.target.files?.[0]; if (file) handleFile(file); }} />
 
-      <div className={`${!hasImage ? "hidden" : "inline-block"} relative group/canvas`}>
+      <div className={`${!hasImage ? "hidden" : "inline-block"} relative`}>
         {isTouchDevice && !pickMode && (
           <div className="absolute inset-0 z-10 rounded-2xl bg-black/5 pointer-events-none" />
         )}
@@ -779,7 +535,7 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
             <button
               key={`rm-${lr.markerId}`}
               onClick={(e) => { e.stopPropagation(); onRemoveMarker(lr.markerId); }}
-              className="absolute z-20 rounded-full bg-black/60 hover:bg-red-500 text-white flex items-center justify-center opacity-0 group-hover/canvas:opacity-70 hover:!opacity-100 transition-opacity"
+              className="absolute z-20 rounded-full bg-black/50 hover:bg-red-500 text-white flex items-center justify-center transition-colors"
               style={{ left: dx, top: dy, width: btnSize, height: btnSize }}
               title="Remove marker"
             >
@@ -790,32 +546,6 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
           );
         })}
 
-        {/* Reselect / Add New prompt */}
-        {prompt?.visible && (
-          <>
-            <div className="fixed inset-0 z-30" onClick={() => setPrompt(null)} />
-            <div
-              className="absolute z-40 bg-white rounded-xl shadow-lg border border-slate-200 p-1.5 flex gap-1"
-              style={{
-                left: Math.min(prompt.x, (containerRef.current?.clientWidth ?? 300) - 200),
-                top: Math.max(prompt.y - 50, 10),
-              }}
-            >
-              <button
-                onClick={() => resolvePickAt(prompt.clientX, prompt.clientY, "reselect")}
-                className="text-xs px-3 py-1.5 rounded-lg hover:bg-slate-100 text-slate-700 font-medium transition-colors"
-              >
-                Reselect
-              </button>
-              <button
-                onClick={() => resolvePickAt(prompt.clientX, prompt.clientY, "new")}
-                className="text-xs px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-600 text-white font-medium transition-colors"
-              >
-                Add New
-              </button>
-            </div>
-          </>
-        )}
       </div>
 
       {/* Hover loupe */}
