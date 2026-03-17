@@ -24,3 +24,11 @@ export type Filters = {
   finish: string;
   type: string;
 };
+
+export type Marker = {
+  id: number;
+  x: number;
+  y: number;
+  hex: string;
+  assignedPaint: PaintMatch | null;
+};

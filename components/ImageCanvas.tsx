@@ -1,18 +1,29 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect } from "react";
-import { Crosshair, Lock, Unlock } from "lucide-react";
+import { Crosshair, Unlock } from "lucide-react";
 import { rgbToHex, sampleRegion, hexToLab, detectMetallic } from "@/lib/colorMath";
 import type { MetallicSignal } from "@/lib/colorMath";
+import type { Marker } from "@/types/paint";
 
 type Props = {
-  onColorPick: (hex: string, metallicSignal: MetallicSignal) => void;
+  markers: Marker[];
+  activeMarkerId: number | null;
+  onColorPick: (hex: string, metallicSignal: MetallicSignal, x: number, y: number, action: "new" | "reselect") => void;
+  onSelectMarker: (id: number) => void;
+  onRemoveMarker: (id: number) => void;
+};
+
+type LabelRect = {
+  markerId: number;
+  x: number; y: number; w: number; h: number; // canvas coords
 };
 
 const ZOOM_LEVEL = 4;
 const LOUPE_SIZE = 120;
+const MARKER_RADIUS = 28;
 
-export default function ImageCanvas({ onColorPick }: Props) {
+export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSelectMarker, onRemoveMarker }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const loupeCanvasRef = useRef<HTMLCanvasElement>(null);
   const pinnedLoupeCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -20,23 +31,16 @@ export default function ImageCanvas({ onColorPick }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [hasImage, setHasImage] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
-  const [marker, setMarker] = useState<{ x: number; y: number } | null>(null);
   const [pickMode, setPickMode] = useState(true);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const [loupe, setLoupe] = useState<{
-    visible: boolean;
-    x: number;
-    y: number;
-    hex: string;
-  }>({ visible: false, x: 0, y: 0, hex: "#000000" });
+  const [loupe, setLoupe] = useState<{ visible: boolean; x: number; y: number; hex: string }>({
+    visible: false, x: 0, y: 0, hex: "#000000",
+  });
   const [pinnedLoupe, setPinnedLoupe] = useState<{
-    visible: boolean;
-    x: number;
-    y: number;
-    hex: string;
-    imgX: number;
-    imgY: number;
+    visible: boolean; x: number; y: number; hex: string; imgX: number; imgY: number;
   }>({ visible: false, x: 0, y: 0, hex: "#000000", imgX: 0, imgY: 0 });
+  const [prompt, setPrompt] = useState<{ visible: boolean; x: number; y: number; clientX: number; clientY: number } | null>(null);
+  const [labelRects, setLabelRects] = useState<LabelRect[]>([]);
   const imageDataRef = useRef<HTMLImageElement | null>(null);
 
   const drawImage = useCallback((img: HTMLImageElement) => {
@@ -47,13 +51,10 @@ export default function ImageCanvas({ onColorPick }: Props) {
 
     const maxWidth = Math.min(800, container.clientWidth);
     const scale = maxWidth / img.width;
-    const width = img.width * scale;
-    const height = img.height * scale;
-
     canvas.width = img.width;
     canvas.height = img.height;
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
+    canvas.style.width = `${img.width * scale}px`;
+    canvas.style.height = `${img.height * scale}px`;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -62,167 +63,340 @@ export default function ImageCanvas({ onColorPick }: Props) {
     setHasImage(true);
   }, []);
 
+  const loadImageFromSrc = useCallback(
+    (src: string) => {
+      const img = new Image();
+      img.onload = () => {
+        drawImage(img);
+        setLoupe((prev) => ({ ...prev, visible: false }));
+        setPinnedLoupe((prev) => ({ ...prev, visible: false }));
+        setPrompt(null);
+      };
+      img.src = src;
+    },
+    [drawImage]
+  );
+
   const handleFile = useCallback(
     (file: File) => {
       if (!file.type.match(/^image\/(jpeg|png|webp)$/)) return;
       const reader = new FileReader();
       reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          drawImage(img);
-          setMarker(null);
-          setLoupe((prev) => ({ ...prev, visible: false }));
-          setPinnedLoupe((prev) => ({ ...prev, visible: false }));
-        };
-        img.src = e.target?.result as string;
+        const dataUrl = e.target?.result as string;
+        loadImageFromSrc(dataUrl);
+        try {
+          localStorage.setItem("modkitswatch_image", dataUrl);
+        } catch {
+          // localStorage full — silently skip
+        }
       };
       reader.readAsDataURL(file);
     },
-    [drawImage]
+    [loadImageFromSrc]
   );
 
-  const drawMarker = useCallback(
-    (ctx: CanvasRenderingContext2D, x: number, y: number, hex: string) => {
-      if (imageDataRef.current) {
-        ctx.drawImage(imageDataRef.current, 0, 0);
+  // Restore image from localStorage on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("modkitswatch_image");
+    if (stored) loadImageFromSrc(stored);
+  }, [loadImageFromSrc]);
+
+  // Draw all markers on the canvas
+  const drawAllMarkers = useCallback(() => {
+    const canvas = canvasRef.current;
+    const img = imageDataRef.current;
+    if (!canvas || !img) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    ctx.drawImage(img, 0, 0);
+
+    // Scale factor: markers/labels scale with image size so they're visible
+    const s = Math.max(canvas.width, canvas.height) / 800;
+    const cw = canvas.width;
+    const ch = canvas.height;
+
+    // Track placed label rects for collision avoidance and DOM overlays
+    const placedLabels: { x: number; y: number; w: number; h: number }[] = [];
+    const newLabelRects: LabelRect[] = [];
+
+    function resolveOverlap(cx: number, cy: number, w: number, h: number, dotX: number, dotY: number): { x: number; y: number } {
+      let bestX = cx;
+      let bestY = cy;
+
+      // Try the computed position first, then shift if colliding
+      for (let attempt = 0; attempt < 8; attempt++) {
+        let collision = false;
+        for (const placed of placedLabels) {
+          if (
+            bestX < placed.x + placed.w &&
+            bestX + w > placed.x &&
+            bestY < placed.y + placed.h &&
+            bestY + h > placed.y
+          ) {
+            collision = true;
+            break;
+          }
+        }
+        if (!collision) break;
+
+        // Nudge: try different directions
+        const nudge = (h + 10 * s) * (attempt + 1);
+        switch (attempt % 4) {
+          case 0: bestY = cy - nudge; break;
+          case 1: bestY = cy + nudge; break;
+          case 2: bestX = cx - nudge; break;
+          case 3: bestX = cx + nudge; break;
+        }
+
+        // Clamp
+        bestX = Math.max(4 * s, Math.min(bestX, cw - w - 4 * s));
+        bestY = Math.max(4 * s, Math.min(bestY, ch - h - 4 * s));
       }
 
-      const r = 28;
-      const crossLen = 14;
+      return { x: bestX, y: bestY };
+    }
 
-      ctx.beginPath();
-      ctx.arc(x, y, r + 3, 0, 2 * Math.PI);
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 4;
-      ctx.stroke();
+    for (const m of markers) {
+      const isActive = m.id === activeMarkerId;
+      const hasAssignment = !!m.assignedPaint;
 
-      ctx.beginPath();
-      ctx.arc(x, y, r, 0, 2 * Math.PI);
-      ctx.strokeStyle = hex;
-      ctx.lineWidth = 5;
-      ctx.stroke();
+      if (!isActive && !hasAssignment) continue;
 
-      ctx.beginPath();
-      ctx.arc(x, y, r + 5, 0, 2 * Math.PI);
-      ctx.strokeStyle = "rgba(0,0,0,0.5)";
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
+      // Active unassigned marker: full crosshair for picking
+      if (isActive && !hasAssignment) {
+        const r = 28 * s;
+        const crossLen = 14 * s;
 
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(x, y - r - crossLen);
-      ctx.lineTo(x, y - r + 2);
-      ctx.moveTo(x, y + r - 2);
-      ctx.lineTo(x, y + r + crossLen);
-      ctx.moveTo(x - r - crossLen, y);
-      ctx.lineTo(x - r + 2, y);
-      ctx.moveTo(x + r - 2, y);
-      ctx.lineTo(x + r + crossLen, y);
-      ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, r + 3 * s, 0, 2 * Math.PI);
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 4 * s;
+        ctx.stroke();
 
-      ctx.strokeStyle = "rgba(0,0,0,0.4)";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(x, y - r - crossLen);
-      ctx.lineTo(x, y - r + 2);
-      ctx.moveTo(x, y + r - 2);
-      ctx.lineTo(x, y + r + crossLen);
-      ctx.moveTo(x - r - crossLen, y);
-      ctx.lineTo(x - r + 2, y);
-      ctx.moveTo(x + r - 2, y);
-      ctx.lineTo(x + r + crossLen, y);
-      ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, r, 0, 2 * Math.PI);
+        ctx.strokeStyle = m.hex;
+        ctx.lineWidth = 5 * s;
+        ctx.stroke();
 
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, r + 5 * s, 0, 2 * Math.PI);
+        ctx.strokeStyle = "rgba(0,0,0,0.5)";
+        ctx.lineWidth = 1.5 * s;
+        ctx.stroke();
+
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 3 * s;
+        ctx.beginPath();
+        ctx.moveTo(m.x, m.y - r - crossLen); ctx.lineTo(m.x, m.y - r + 2 * s);
+        ctx.moveTo(m.x, m.y + r - 2 * s); ctx.lineTo(m.x, m.y + r + crossLen);
+        ctx.moveTo(m.x - r - crossLen, m.y); ctx.lineTo(m.x - r + 2 * s, m.y);
+        ctx.moveTo(m.x + r - 2 * s, m.y); ctx.lineTo(m.x + r + crossLen, m.y);
+        ctx.stroke();
+
+        ctx.strokeStyle = "rgba(0,0,0,0.4)";
+        ctx.lineWidth = 1 * s;
+        ctx.beginPath();
+        ctx.moveTo(m.x, m.y - r - crossLen); ctx.lineTo(m.x, m.y - r + 2 * s);
+        ctx.moveTo(m.x, m.y + r - 2 * s); ctx.lineTo(m.x, m.y + r + crossLen);
+        ctx.moveTo(m.x - r - crossLen, m.y); ctx.lineTo(m.x - r + 2 * s, m.y);
+        ctx.moveTo(m.x + r - 2 * s, m.y); ctx.lineTo(m.x + r + crossLen, m.y);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(m.x, m.y, 3.5 * s, 0, 2 * Math.PI);
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
+        ctx.strokeStyle = "rgba(0,0,0,0.5)";
+        ctx.lineWidth = 1 * s;
+        ctx.stroke();
+        continue;
+      }
+
+      if (!hasAssignment) continue;
+      const paint = m.assignedPaint!;
+
+      // Marker dot
+      const dotR = 12 * s;
       ctx.beginPath();
-      ctx.arc(x, y, 3.5, 0, 2 * Math.PI);
-      ctx.fillStyle = "#ffffff";
+      ctx.arc(m.x, m.y, dotR, 0, 2 * Math.PI);
+      ctx.fillStyle = m.hex;
       ctx.fill();
-      ctx.strokeStyle = "rgba(0,0,0,0.5)";
-      ctx.lineWidth = 1;
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 3 * s;
       ctx.stroke();
-    },
-    []
-  );
+      ctx.beginPath();
+      ctx.arc(m.x, m.y, dotR + 2 * s, 0, 2 * Math.PI);
+      ctx.strokeStyle = "rgba(0,0,0,0.4)";
+      ctx.lineWidth = 1 * s;
+      ctx.stroke();
+
+      // Label card
+      const fontSize1 = Math.round(16 * s);
+      const fontSize2 = Math.round(14 * s);
+      const pad = 10 * s;
+      const lineGap = 4 * s;
+      const cornerR = 8 * s;
+
+      const codeLine = `${paint.brand} ${paint.code}`;
+      const nameLine = paint.name;
+      ctx.font = `bold ${fontSize1}px system-ui, sans-serif`;
+      const codeWidth = ctx.measureText(codeLine).width;
+      ctx.font = `${fontSize2}px system-ui, sans-serif`;
+      const nameWidth = ctx.measureText(nameLine).width;
+      const cardW = Math.max(codeWidth, nameWidth) + pad * 2;
+      const cardH = fontSize1 + fontSize2 + lineGap + pad * 2;
+
+      // Dynamic positioning: try 8 directions, pick best one with least overlap
+      const gap = 30 * s;
+
+      // 8 candidate positions around the marker
+      const candidates: { x: number; y: number }[] = [
+        { x: m.x + gap, y: m.y - cardH / 2 },                    // right
+        { x: m.x - cardW - gap, y: m.y - cardH / 2 },            // left
+        { x: m.x - cardW / 2, y: m.y - cardH - gap },            // top
+        { x: m.x - cardW / 2, y: m.y + gap },                    // bottom
+        { x: m.x + gap, y: m.y - cardH - gap },                  // top-right
+        { x: m.x - cardW - gap, y: m.y - cardH - gap },          // top-left
+        { x: m.x + gap, y: m.y + gap },                          // bottom-right
+        { x: m.x - cardW - gap, y: m.y + gap },                  // bottom-left
+      ];
+
+      // Score each candidate: prefer no overlap, then prefer more space from edges
+      let bestScore = -Infinity;
+      let bestCand = candidates[0];
+
+      for (const c of candidates) {
+        const cx = Math.max(4 * s, Math.min(c.x, cw - cardW - 4 * s));
+        const cy = Math.max(4 * s, Math.min(c.y, ch - cardH - 4 * s));
+
+        let score = 0;
+
+        // Penalize overlap with placed labels
+        for (const placed of placedLabels) {
+          if (cx < placed.x + placed.w && cx + cardW > placed.x &&
+              cy < placed.y + placed.h && cy + cardH > placed.y) {
+            score -= 1000;
+          }
+        }
+
+        // Penalize overlap with marker dots
+        for (const other of markers) {
+          if (other.id === m.id) continue;
+          if (cx < other.x + dotR * 2 && cx + cardW > other.x - dotR * 2 &&
+              cy < other.y + dotR * 2 && cy + cardH > other.y - dotR * 2) {
+            score -= 500;
+          }
+        }
+
+        // Prefer positions within canvas bounds (penalize clamping)
+        if (c.x === cx && c.y === cy) score += 100;
+
+        // Prefer edges over center — the subject is usually in the middle
+        const cardCenterX = cx + cardW / 2;
+        const cardCenterY = cy + cardH / 2;
+        const distFromCenterX = Math.abs(cardCenterX - cw / 2) / (cw / 2); // 0=center, 1=edge
+        const distFromCenterY = Math.abs(cardCenterY - ch / 2) / (ch / 2);
+        const edgeScore = (distFromCenterX + distFromCenterY) * 50; // up to 100 bonus at edges
+        score += edgeScore;
+
+        if (score > bestScore) {
+          bestScore = score;
+          bestCand = { x: cx, y: cy };
+        }
+      }
+
+      let cardX = Math.max(4 * s, Math.min(bestCand.x, cw - cardW - 4 * s));
+      let cardY = Math.max(4 * s, Math.min(bestCand.y, ch - cardH - 4 * s));
+
+      // Connector anchor: closest card edge to the dot
+      let lineFromX: number, lineFromY: number;
+
+      // Connector anchor: closest card edge to dot
+      const centerCardX = cardX + cardW / 2;
+      const centerCardY = cardY + cardH / 2;
+      if (m.x > centerCardX) { lineFromX = cardX + cardW; } else { lineFromX = cardX; }
+      if (m.y > centerCardY) { lineFromY = cardY + cardH; } else { lineFromY = cardY; }
+
+      placedLabels.push({ x: cardX, y: cardY, w: cardW, h: cardH });
+      newLabelRects.push({ markerId: m.id, x: cardX, y: cardY, w: cardW, h: cardH });
+
+      // Connector line — dark outline + white core
+      ctx.beginPath();
+      ctx.moveTo(lineFromX, lineFromY);
+      ctx.lineTo(m.x, m.y);
+      ctx.strokeStyle = "rgba(0,0,0,0.5)";
+      ctx.lineWidth = 5 * s;
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(lineFromX, lineFromY);
+      ctx.lineTo(m.x, m.y);
+      ctx.strokeStyle = "rgba(255,255,255,0.95)";
+      ctx.lineWidth = 3 * s;
+      ctx.stroke();
+
+      // Card background
+      ctx.fillStyle = isActive ? "rgba(255,255,255,0.97)" : "rgba(255,255,255,0.93)";
+      ctx.beginPath();
+      ctx.roundRect(cardX, cardY, cardW, cardH, cornerR);
+      ctx.fill();
+      ctx.strokeStyle = isActive ? "rgba(56,189,248,0.8)" : "rgba(0,0,0,0.12)";
+      ctx.lineWidth = isActive ? 3 * s : 1.5 * s;
+      ctx.stroke();
+
+      // Code text
+      ctx.font = `bold ${fontSize1}px system-ui, sans-serif`;
+      ctx.fillStyle = "#0f172a";
+      ctx.fillText(codeLine, cardX + pad, cardY + pad + fontSize1);
+
+      // Name text
+      ctx.font = `${fontSize2}px system-ui, sans-serif`;
+      ctx.fillStyle = "#64748b";
+      ctx.fillText(nameLine, cardX + pad, cardY + pad + fontSize1 + lineGap + fontSize2);
+    }
+
+    setLabelRects(newLabelRects);
+  }, [markers, activeMarkerId]);
+
+  // Redraw markers whenever they change
+  useEffect(() => {
+    if (hasImage) drawAllMarkers();
+  }, [markers, activeMarkerId, hasImage, drawAllMarkers]);
 
   const drawLoupeToCanvas = useCallback(
     (canvasEl: HTMLCanvasElement | null, imgX: number, imgY: number) => {
       const img = imageDataRef.current;
       if (!canvasEl || !img) return;
-
       const ctx = canvasEl.getContext("2d");
       if (!ctx) return;
-
       const srcSize = LOUPE_SIZE / ZOOM_LEVEL;
-
       ctx.clearRect(0, 0, LOUPE_SIZE, LOUPE_SIZE);
-
-      // Save and clip to circle
       ctx.save();
       ctx.beginPath();
       ctx.arc(LOUPE_SIZE / 2, LOUPE_SIZE / 2, LOUPE_SIZE / 2, 0, 2 * Math.PI);
       ctx.clip();
-
       ctx.imageSmoothingEnabled = false;
-      ctx.drawImage(
-        img,
-        imgX - srcSize / 2,
-        imgY - srcSize / 2,
-        srcSize,
-        srcSize,
-        0,
-        0,
-        LOUPE_SIZE,
-        LOUPE_SIZE
-      );
-
+      ctx.drawImage(img, imgX - srcSize / 2, imgY - srcSize / 2, srcSize, srcSize, 0, 0, LOUPE_SIZE, LOUPE_SIZE);
       ctx.restore();
-
-      // Grid lines
+      // Grid
       ctx.strokeStyle = "rgba(0,0,0,0.15)";
       ctx.lineWidth = 0.5;
-      const pixelSize = ZOOM_LEVEL;
-      for (let i = pixelSize; i < LOUPE_SIZE; i += pixelSize) {
-        ctx.beginPath();
-        ctx.moveTo(i, 0);
-        ctx.lineTo(i, LOUPE_SIZE);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(0, i);
-        ctx.lineTo(LOUPE_SIZE, i);
-        ctx.stroke();
+      for (let i = ZOOM_LEVEL; i < LOUPE_SIZE; i += ZOOM_LEVEL) {
+        ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, LOUPE_SIZE); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(LOUPE_SIZE, i); ctx.stroke();
       }
-
       // Center crosshair
       const center = LOUPE_SIZE / 2;
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 2;
-      ctx.strokeRect(
-        center - pixelSize / 2 - 1,
-        center - pixelSize / 2 - 1,
-        pixelSize + 2,
-        pixelSize + 2
-      );
-      ctx.strokeStyle = "#000000";
-      ctx.lineWidth = 1;
-      ctx.strokeRect(
-        center - pixelSize / 2 - 1,
-        center - pixelSize / 2 - 1,
-        pixelSize + 2,
-        pixelSize + 2
-      );
-
-      // Border ring
-      ctx.beginPath();
-      ctx.arc(center, center, LOUPE_SIZE / 2 - 1, 0, 2 * Math.PI);
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-      ctx.beginPath();
-      ctx.arc(center, center, LOUPE_SIZE / 2 + 0.5, 0, 2 * Math.PI);
-      ctx.strokeStyle = "rgba(0,0,0,0.3)";
-      ctx.lineWidth = 1;
-      ctx.stroke();
+      ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2;
+      ctx.strokeRect(center - ZOOM_LEVEL / 2 - 1, center - ZOOM_LEVEL / 2 - 1, ZOOM_LEVEL + 2, ZOOM_LEVEL + 2);
+      ctx.strokeStyle = "#000000"; ctx.lineWidth = 1;
+      ctx.strokeRect(center - ZOOM_LEVEL / 2 - 1, center - ZOOM_LEVEL / 2 - 1, ZOOM_LEVEL + 2, ZOOM_LEVEL + 2);
+      // Border
+      ctx.beginPath(); ctx.arc(center, center, LOUPE_SIZE / 2 - 1, 0, 2 * Math.PI);
+      ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 3; ctx.stroke();
+      ctx.beginPath(); ctx.arc(center, center, LOUPE_SIZE / 2 + 0.5, 0, 2 * Math.PI);
+      ctx.strokeStyle = "rgba(0,0,0,0.3)"; ctx.lineWidth = 1; ctx.stroke();
     },
     []
   );
@@ -231,14 +405,11 @@ export default function ImageCanvas({ onColorPick }: Props) {
     (e: React.MouseEvent<HTMLCanvasElement>) => {
       const canvas = canvasRef.current;
       if (!canvas || !imageDataRef.current) return;
-
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const scaleY = canvas.height / rect.height;
       const imgX = Math.floor((e.clientX - rect.left) * scaleX);
       const imgY = Math.floor((e.clientY - rect.top) * scaleY);
-
-      // Read pixel from original image via a temp canvas
       const tmpCanvas = document.createElement("canvas");
       tmpCanvas.width = imageDataRef.current.width;
       tmpCanvas.height = imageDataRef.current.height;
@@ -247,15 +418,9 @@ export default function ImageCanvas({ onColorPick }: Props) {
       tmpCtx.drawImage(imageDataRef.current, 0, 0);
       const pixel = tmpCtx.getImageData(imgX, imgY, 1, 1).data;
       const hex = rgbToHex(pixel[0], pixel[1], pixel[2]);
-
-      // Position loupe relative to container
       const containerRect = containerRef.current?.getBoundingClientRect();
       if (!containerRect) return;
-
-      const loupeX = e.clientX - containerRect.left;
-      const loupeY = e.clientY - containerRect.top;
-
-      setLoupe({ visible: true, x: loupeX, y: loupeY, hex });
+      setLoupe({ visible: true, x: e.clientX - containerRect.left, y: e.clientY - containerRect.top, hex });
       drawLoupeToCanvas(loupeCanvasRef.current, imgX, imgY);
     },
     [drawLoupeToCanvas]
@@ -265,16 +430,27 @@ export default function ImageCanvas({ onColorPick }: Props) {
     setLoupe((prev) => ({ ...prev, visible: false }));
   }, []);
 
-  const pickColor = useCallback(
-    (clientX: number, clientY: number) => {
+  // Check if click is near an existing marker
+  const findNearbyMarker = useCallback(
+    (imgX: number, imgY: number): Marker | null => {
+      for (const m of markers) {
+        const dist = Math.sqrt((m.x - imgX) ** 2 + (m.y - imgY) ** 2);
+        if (dist < 40) return m;
+      }
+      return null;
+    },
+    [markers]
+  );
+
+  const resolvePickAt = useCallback(
+    (clientX: number, clientY: number, action: "new" | "reselect") => {
       const canvas = canvasRef.current;
       if (!canvas) return;
       const ctx = canvas.getContext("2d");
-      if (!ctx) return;
+      if (!ctx || !imageDataRef.current) return;
 
-      if (imageDataRef.current) {
-        ctx.drawImage(imageDataRef.current, 0, 0);
-      }
+      // Redraw clean image for sampling
+      ctx.drawImage(imageDataRef.current, 0, 0);
 
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
@@ -285,43 +461,95 @@ export default function ImageCanvas({ onColorPick }: Props) {
       const { hex, variance } = sampleRegion(ctx, x, y, 3);
       const lab = hexToLab(hex);
       const metallicSignal = detectMetallic(lab, variance);
-      onColorPick(hex, metallicSignal);
-      drawMarker(ctx, x, y, hex);
-      setMarker({ x, y });
 
-      // Pin the second loupe at the picked position
-      const containerRect = containerRef.current?.getBoundingClientRect();
-      if (containerRect) {
-        const loupeX = clientX - containerRect.left;
-        const loupeY = clientY - containerRect.top;
-        setPinnedLoupe({ visible: true, x: loupeX, y: loupeY, hex, imgX: x, imgY: y });
-      }
+      onColorPick(hex, metallicSignal, x, y, action);
+
+      // Hide loupes after picking
+      setLoupe((prev) => ({ ...prev, visible: false }));
+      setPinnedLoupe((prev) => ({ ...prev, visible: false }));
+      setPrompt(null);
     },
-    [onColorPick, drawMarker, drawLoupeToCanvas]
+    [onColorPick]
   );
 
   const handleCanvasClick = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
-      pickColor(e.clientX, e.clientY);
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const imgX = Math.floor((e.clientX - rect.left) * scaleX);
+      const imgY = Math.floor((e.clientY - rect.top) * scaleY);
+
+      // Check if clicking on an existing marker
+      const nearby = findNearbyMarker(imgX, imgY);
+      if (nearby && nearby.id !== activeMarkerId) {
+        onSelectMarker(nearby.id);
+        return;
+      }
+
+      // If no markers exist, just create first one
+      if (markers.length === 0) {
+        resolvePickAt(e.clientX, e.clientY, "new");
+        return;
+      }
+
+      // Show prompt: reselect or add new
+      const containerRect = containerRef.current?.getBoundingClientRect();
+      if (!containerRect) return;
+      setPrompt({
+        visible: true,
+        x: e.clientX - containerRect.left,
+        y: e.clientY - containerRect.top,
+        clientX: e.clientX,
+        clientY: e.clientY,
+      });
     },
-    [pickColor]
+    [markers, activeMarkerId, findNearbyMarker, resolvePickAt, onSelectMarker]
   );
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent<HTMLCanvasElement>) => {
-      if (!pickMode) return; // allow normal scroll when pick mode is off
+      if (!pickMode) return;
       e.preventDefault();
       const touch = e.touches[0];
-      pickColor(touch.clientX, touch.clientY);
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const imgX = Math.floor((touch.clientX - rect.left) * scaleX);
+      const imgY = Math.floor((touch.clientY - rect.top) * scaleY);
+
+      const nearby = findNearbyMarker(imgX, imgY);
+      if (nearby && nearby.id !== activeMarkerId) {
+        onSelectMarker(nearby.id);
+        return;
+      }
+
+      if (markers.length === 0) {
+        resolvePickAt(touch.clientX, touch.clientY, "new");
+        return;
+      }
+
+      const containerRect = containerRef.current?.getBoundingClientRect();
+      if (!containerRect) return;
+      setPrompt({
+        visible: true,
+        x: touch.clientX - containerRect.left,
+        y: touch.clientY - containerRect.top,
+        clientX: touch.clientX,
+        clientY: touch.clientY,
+      });
     },
-    [pickColor, pickMode]
+    [pickMode, markers, activeMarkerId, findNearbyMarker, resolvePickAt, onSelectMarker]
   );
 
   useEffect(() => {
     setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
   }, []);
 
-  // Draw pinned loupe after React renders the canvas element
   useEffect(() => {
     if (pinnedLoupe.visible) {
       drawLoupeToCanvas(pinnedLoupeCanvasRef.current, pinnedLoupe.imgX, pinnedLoupe.imgY);
@@ -330,35 +558,41 @@ export default function ImageCanvas({ onColorPick }: Props) {
 
   useEffect(() => {
     const handleResize = () => {
-      if (imageDataRef.current) {
-        drawImage(imageDataRef.current);
-      }
+      if (imageDataRef.current) drawImage(imageDataRef.current);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [drawImage]);
+
+  // Dismiss prompt on Escape
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setPrompt(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const loupeHexStyle = (hex: string) => ({
+    backgroundColor: hex,
+    color:
+      parseInt(hex.slice(1, 3), 16) * 0.299 +
+      parseInt(hex.slice(3, 5), 16) * 0.587 +
+      parseInt(hex.slice(5, 7), 16) * 0.114 > 128
+        ? "#000" : "#fff",
+  });
 
   return (
     <div ref={containerRef} className="w-full relative overflow-visible">
       {!hasImage && (
         <div
           className={`border-2 border-dashed rounded-2xl p-12 text-center transition-all cursor-pointer ${
-            isDragging
-              ? "border-sky-400 bg-sky-50/50"
-              : "border-slate-200 bg-white hover:border-slate-300"
+            isDragging ? "border-sky-400 bg-sky-50/50" : "border-slate-200 bg-white hover:border-slate-300"
           }`}
           onClick={() => fileInputRef.current?.click()}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDragging(true);
-          }}
+          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setIsDragging(false);
-            const file = e.dataTransfer.files[0];
-            if (file) handleFile(file);
-          }}
+          onDrop={(e) => { e.preventDefault(); setIsDragging(false); const file = e.dataTransfer.files[0]; if (file) handleFile(file); }}
         >
           <div className="flex flex-col items-center gap-3">
             <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mx-auto mb-1">
@@ -366,29 +600,16 @@ export default function ImageCanvas({ onColorPick }: Props) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <p className="font-medium text-sm text-slate-700">
-              Drop your reference image here
-            </p>
-            <p className="text-xs text-slate-400">
-              or click to browse (JPEG, PNG, WebP)
-            </p>
+            <p className="font-medium text-sm text-slate-700">Drop your reference image here</p>
+            <p className="text-xs text-slate-400">or click to browse (JPEG, PNG, WebP)</p>
           </div>
         </div>
       )}
 
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/jpeg,image/png,image/webp"
-        className="hidden"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) handleFile(file);
-        }}
-      />
+      <input ref={fileInputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden"
+        onChange={(e) => { const file = e.target.files?.[0]; if (file) handleFile(file); }} />
 
-      <div className={`${!hasImage ? "hidden" : "inline-block"} relative`}>
-        {/* Pick mode overlay for touch devices */}
+      <div className={`${!hasImage ? "hidden" : "inline-block"} relative group/canvas`}>
         {isTouchDevice && !pickMode && (
           <div className="absolute inset-0 z-10 rounded-2xl bg-black/5 pointer-events-none" />
         )}
@@ -406,22 +627,10 @@ export default function ImageCanvas({ onColorPick }: Props) {
             <button
               onClick={() => setPickMode(!pickMode)}
               className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm ${
-                pickMode
-                  ? "bg-sky-500/90 hover:bg-sky-600/90 text-white"
-                  : "bg-black/50 hover:bg-black/70 text-white"
+                pickMode ? "bg-sky-500/90 hover:bg-sky-600/90 text-white" : "bg-black/50 hover:bg-black/70 text-white"
               }`}
             >
-              {pickMode ? (
-                <>
-                  <Crosshair className="w-3.5 h-3.5" />
-                  Picking
-                </>
-              ) : (
-                <>
-                  <Unlock className="w-3.5 h-3.5" />
-                  Scroll
-                </>
-              )}
+              {pickMode ? (<><Crosshair className="w-3.5 h-3.5" />Picking</>) : (<><Unlock className="w-3.5 h-3.5" />Scroll</>)}
             </button>
           )}
           <button
@@ -431,73 +640,80 @@ export default function ImageCanvas({ onColorPick }: Props) {
             Change Image
           </button>
         </div>
+
+        {/* Remove buttons on label cards */}
+        {labelRects.map((lr) => {
+          const canvas = canvasRef.current;
+          if (!canvas) return null;
+          const displayW = canvas.clientWidth;
+          const displayH = canvas.clientHeight;
+          const scaleX = displayW / canvas.width;
+          const scaleY = displayH / canvas.height;
+          const btnSize = 18;
+          const dx = lr.x * scaleX + lr.w * scaleX - btnSize / 2 + 4;
+          const dy = lr.y * scaleY - btnSize / 2 + 4;
+          return (
+            <button
+              key={`rm-${lr.markerId}`}
+              onClick={(e) => { e.stopPropagation(); onRemoveMarker(lr.markerId); }}
+              className="absolute z-20 rounded-full bg-black/60 hover:bg-red-500 text-white flex items-center justify-center opacity-0 group-hover/canvas:opacity-70 hover:!opacity-100 transition-opacity"
+              style={{ left: dx, top: dy, width: btnSize, height: btnSize }}
+              title="Remove marker"
+            >
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          );
+        })}
+
+        {/* Reselect / Add New prompt */}
+        {prompt?.visible && (
+          <>
+            <div className="fixed inset-0 z-30" onClick={() => setPrompt(null)} />
+            <div
+              className="absolute z-40 bg-white rounded-xl shadow-lg border border-slate-200 p-1.5 flex gap-1"
+              style={{
+                left: Math.min(prompt.x, (containerRef.current?.clientWidth ?? 300) - 200),
+                top: Math.max(prompt.y - 50, 10),
+              }}
+            >
+              <button
+                onClick={() => resolvePickAt(prompt.clientX, prompt.clientY, "reselect")}
+                className="text-xs px-3 py-1.5 rounded-lg hover:bg-slate-100 text-slate-700 font-medium transition-colors"
+              >
+                Reselect
+              </button>
+              <button
+                onClick={() => resolvePickAt(prompt.clientX, prompt.clientY, "new")}
+                className="text-xs px-3 py-1.5 rounded-lg bg-sky-500 hover:bg-sky-600 text-white font-medium transition-colors"
+              >
+                Add New
+              </button>
+            </div>
+          </>
+        )}
       </div>
 
-      {/* Hover loupe - follows mouse */}
+      {/* Hover loupe */}
       {loupe.visible && (
-        <div
-          className="pointer-events-none absolute z-10"
-          style={{
-            left: loupe.x - LOUPE_SIZE / 2,
-            top: loupe.y - LOUPE_SIZE - 30,
-            width: LOUPE_SIZE,
-            height: LOUPE_SIZE + 24,
-          }}
-        >
-          <canvas
-            ref={loupeCanvasRef}
-            width={LOUPE_SIZE}
-            height={LOUPE_SIZE}
-            className="rounded-full"
-            style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))" }}
-          />
-          <div
-            className="text-center text-[10px] font-mono font-bold mt-1 px-2 py-0.5 rounded-full mx-auto w-fit"
-            style={{
-              backgroundColor: loupe.hex,
-              color:
-                parseInt(loupe.hex.slice(1, 3), 16) * 0.299 +
-                parseInt(loupe.hex.slice(3, 5), 16) * 0.587 +
-                parseInt(loupe.hex.slice(5, 7), 16) * 0.114 > 128
-                  ? "#000" : "#fff",
-            }}
-          >
-            {loupe.hex}
-          </div>
+        <div className="pointer-events-none absolute z-10"
+          style={{ left: loupe.x - LOUPE_SIZE / 2, top: loupe.y - LOUPE_SIZE - 30, width: LOUPE_SIZE, height: LOUPE_SIZE + 24 }}>
+          <canvas ref={loupeCanvasRef} width={LOUPE_SIZE} height={LOUPE_SIZE} className="rounded-full"
+            style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))" }} />
+          <div className="text-center text-[10px] font-mono font-bold mt-1 px-2 py-0.5 rounded-full mx-auto w-fit"
+            style={loupeHexStyle(loupe.hex)}>{loupe.hex}</div>
         </div>
       )}
 
-      {/* Pinned loupe - sticks to last picked marker */}
+      {/* Pinned loupe */}
       {pinnedLoupe.visible && (
-        <div
-          className="pointer-events-none absolute z-10"
-          style={{
-            left: pinnedLoupe.x - LOUPE_SIZE / 2,
-            top: pinnedLoupe.y - LOUPE_SIZE - 30,
-            width: LOUPE_SIZE,
-            height: LOUPE_SIZE + 24,
-          }}
-        >
-          <canvas
-            ref={pinnedLoupeCanvasRef}
-            width={LOUPE_SIZE}
-            height={LOUPE_SIZE}
-            className="rounded-full"
-            style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))", border: "2px solid rgba(255,255,255,0.8)" }}
-          />
-          <div
-            className="text-center text-[10px] font-mono font-bold mt-1 px-2 py-0.5 rounded-full mx-auto w-fit"
-            style={{
-              backgroundColor: pinnedLoupe.hex,
-              color:
-                parseInt(pinnedLoupe.hex.slice(1, 3), 16) * 0.299 +
-                parseInt(pinnedLoupe.hex.slice(3, 5), 16) * 0.587 +
-                parseInt(pinnedLoupe.hex.slice(5, 7), 16) * 0.114 > 128
-                  ? "#000" : "#fff",
-            }}
-          >
-            {pinnedLoupe.hex}
-          </div>
+        <div className="pointer-events-none absolute z-10"
+          style={{ left: pinnedLoupe.x - LOUPE_SIZE / 2, top: pinnedLoupe.y - LOUPE_SIZE - 30, width: LOUPE_SIZE, height: LOUPE_SIZE + 24 }}>
+          <canvas ref={pinnedLoupeCanvasRef} width={LOUPE_SIZE} height={LOUPE_SIZE} className="rounded-full"
+            style={{ filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.3))", border: "2px solid rgba(255,255,255,0.8)" }} />
+          <div className="text-center text-[10px] font-mono font-bold mt-1 px-2 py-0.5 rounded-full mx-auto w-fit"
+            style={loupeHexStyle(pinnedLoupe.hex)}>{pinnedLoupe.hex}</div>
         </div>
       )}
     </div>

@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Check, Wind, PenLine } from "lucide-react";
+import { Check, Wind, PenLine } from "lucide-react";
 import { getContrastColor } from "@/lib/colorMath";
 import type { PaintMatch } from "@/types/paint";
 
 type Props = {
   paint: PaintMatch;
   rank: number;
-  onAddToPalette: (paint: PaintMatch) => void;
-  isInPalette: boolean;
+  onAssign: (paint: PaintMatch) => void;
+  isAssigned: boolean;
 };
 
 function getMatchLabel(de: number): string {
@@ -28,7 +28,7 @@ function getPaintImagePath(brand: string, code: string): string {
   return `/paints/${slug}/${code}.jpg`;
 }
 
-export default function PaintCard({ paint, rank, onAddToPalette, isInPalette }: Props) {
+export default function PaintCard({ paint, rank, onAssign, isAssigned }: Props) {
   const textColor = getContrastColor(paint.hex);
   const imagePath = getPaintImagePath(paint.brand, paint.code);
   const [imgError, setImgError] = useState(false);
@@ -96,18 +96,22 @@ export default function PaintCard({ paint, rank, onAddToPalette, isInPalette }: 
         </div>
       </div>
 
-      {/* Add to palette */}
+      {/* Assign button */}
       <button
-        onClick={() => onAddToPalette(paint)}
-        disabled={isInPalette}
+        onClick={() => onAssign(paint)}
+        disabled={isAssigned}
         className={`px-3 flex items-center justify-center border-l transition-colors shrink-0 self-stretch ${
-          isInPalette
+          isAssigned
             ? "text-emerald-500 bg-emerald-50/50 border-emerald-100"
-            : "text-slate-400 hover:text-sky-600 hover:bg-sky-50 border-slate-100"
+            : "text-sky-600 hover:bg-sky-50 border-slate-100"
         }`}
-        title={isInPalette ? "Already in palette" : "Add to palette"}
+        title={isAssigned ? "Assigned to this marker" : "Use this paint"}
       >
-        {isInPalette ? <Check className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+        {isAssigned ? (
+          <Check className="w-4 h-4" />
+        ) : (
+          <span className="text-[10px] font-semibold">Use</span>
+        )}
       </button>
     </div>
   );

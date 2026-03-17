@@ -8,27 +8,27 @@ import paintsData from "@/data/paints.json";
 import { hexToLab } from "@/lib/colorMath";
 import type { MetallicSignal } from "@/lib/colorMath";
 import { matchPaints, extractFilterOptions } from "@/lib/matcher";
-import type { PaintWithLab, PaintMatch, Filters } from "@/types/paint";
+import type { PaintWithLab, PaintMatch, Filters, Marker } from "@/types/paint";
 import ImageCanvas from "@/components/ImageCanvas";
 import ColorSwatch from "@/components/ColorSwatch";
 import FilterBar from "@/components/FilterBar";
 import ResultsList from "@/components/ResultsList";
-import Palette from "@/components/Palette";
+import AssignmentsPanel from "@/components/AssignmentsPanel";
 
-const PALETTE_KEY = "gpm_palette";
+const MARKERS_KEY = "modkitswatch_markers";
 
-function loadPalette(): PaintWithLab[] {
+function loadMarkers(): Marker[] {
   if (typeof window === "undefined") return [];
   try {
-    const stored = localStorage.getItem(PALETTE_KEY);
+    const stored = localStorage.getItem(MARKERS_KEY);
     return stored ? JSON.parse(stored) : [];
   } catch {
     return [];
   }
 }
 
-function savePalette(palette: PaintWithLab[]) {
-  localStorage.setItem(PALETTE_KEY, JSON.stringify(palette));
+function saveMarkers(markers: Marker[]) {
+  localStorage.setItem(MARKERS_KEY, JSON.stringify(markers));
 }
 
 export default function Home() {
@@ -47,54 +47,109 @@ export default function Home() {
 
   const filterOptions = useMemo(() => extractFilterOptions(paints), [paints]);
 
-  const [pickedColor, setPickedColor] = useState<string | null>(null);
+  const [markers, setMarkers] = useState<Marker[]>([]);
+  const [activeMarkerId, setActiveMarkerId] = useState<number | null>(null);
+  const [nextMarkerId, setNextMarkerId] = useState(1);
+  const [metallicOnly, setMetallicOnly] = useState(false);
+  const [metallicSignal, setMetallicSignal] = useState<MetallicSignal>("none");
   const [filters, setFilters] = useState<Filters>({
     brand: "All",
     finish: "All",
     type: "All",
   });
-  const [metallicOnly, setMetallicOnly] = useState(false);
-  const [metallicSignal, setMetallicSignal] = useState<MetallicSignal>("none");
-  const [palette, setPalette] = useState<PaintWithLab[]>([]);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setPalette(loadPalette());
+    const loaded = loadMarkers();
+    setMarkers(loaded);
+    if (loaded.length > 0) {
+      const maxId = Math.max(...loaded.map((m) => m.id));
+      setNextMarkerId(maxId + 1);
+      setActiveMarkerId(loaded[loaded.length - 1].id);
+    }
     setMounted(true);
   }, []);
+
+  const activeMarker = useMemo(
+    () => markers.find((m) => m.id === activeMarkerId) ?? null,
+    [markers, activeMarkerId]
+  );
+
+  const pickedColor = activeMarker?.hex ?? null;
 
   const results = useMemo<PaintMatch[]>(() => {
     if (!pickedColor) return [];
     return matchPaints(pickedColor, paints, filters, 10, true, metallicOnly);
   }, [pickedColor, paints, filters, metallicOnly]);
 
-  const paletteKeys = useMemo(
-    () => new Set(palette.map((p) => `${p.brand}-${p.code}`)),
-    [palette]
+  const handleColorPick = useCallback(
+    (hex: string, signal: MetallicSignal, x: number, y: number, action: "new" | "reselect") => {
+      setMetallicSignal(signal);
+      if (signal === "high") {
+        setMetallicOnly(true);
+      } else if (signal === "none") {
+        setMetallicOnly(false);
+      }
+
+      if (action === "new") {
+        // Remove any unassigned markers before adding new one
+        const cleaned = markers.filter((m) => m.assignedPaint !== null);
+        const newMarker: Marker = { id: nextMarkerId, x, y, hex, assignedPaint: null };
+        const updated = [...cleaned, newMarker];
+        setMarkers(updated);
+        setActiveMarkerId(nextMarkerId);
+        setNextMarkerId(nextMarkerId + 1);
+        saveMarkers(updated);
+      } else {
+        // reselect: update active marker position and color
+        const updated = markers.map((m) =>
+          m.id === activeMarkerId ? { ...m, x, y, hex, assignedPaint: null } : m
+        );
+        setMarkers(updated);
+        saveMarkers(updated);
+      }
+    },
+    [markers, activeMarkerId, nextMarkerId]
   );
 
-  const addToPalette = useCallback(
+  const assignPaint = useCallback(
     (paint: PaintMatch) => {
-      const key = `${paint.brand}-${paint.code}`;
-      if (paletteKeys.has(key)) return;
-      const { deltaE: _, ...paintWithLab } = paint;
-      const next = [...palette, paintWithLab];
-      setPalette(next);
-      savePalette(next);
+      if (!activeMarkerId) return;
+      const updated = markers.map((m) =>
+        m.id === activeMarkerId ? { ...m, assignedPaint: paint } : m
+      );
+      setMarkers(updated);
+      saveMarkers(updated);
     },
-    [palette, paletteKeys]
+    [markers, activeMarkerId]
   );
 
-  const removeFromPalette = useCallback(
-    (brand: string, code: string) => {
-      const next = palette.filter(
-        (p) => !(p.brand === brand && p.code === code)
-      );
-      setPalette(next);
-      savePalette(next);
+  const removeMarker = useCallback(
+    (id: number) => {
+      const updated = markers.filter((m) => m.id !== id);
+      setMarkers(updated);
+      saveMarkers(updated);
+      if (activeMarkerId === id) {
+        setActiveMarkerId(updated.length > 0 ? updated[updated.length - 1].id : null);
+      }
     },
-    [palette]
+    [markers, activeMarkerId]
   );
+
+  const selectMarker = useCallback((id: number) => {
+    setActiveMarkerId(id);
+  }, []);
+
+  const clearAllMarkers = useCallback(() => {
+    setMarkers([]);
+    setActiveMarkerId(null);
+    setNextMarkerId(1);
+    saveMarkers([]);
+  }, []);
+
+  const assignedPaintKey = activeMarker?.assignedPaint
+    ? `${activeMarker.assignedPaint.brand}-${activeMarker.assignedPaint.code}`
+    : null;
 
   if (!mounted) return null;
 
@@ -102,7 +157,6 @@ export default function Home() {
     <div className="min-h-screen bg-slate-50 selection:bg-sky-100 selection:text-sky-900 flex flex-col text-slate-800">
       <SiteHeader paintCount={paints.length} />
 
-      {/* Main */}
       <main className="flex-1 max-w-6xl mx-auto w-full px-6 pt-8 pb-16">
         {/* Hero tagline */}
         <div className="mb-8">
@@ -118,28 +172,32 @@ export default function Home() {
         <div className="flex items-center gap-2 text-sm text-slate-400 mb-8">
           <span className="text-slate-600 font-medium">Upload photo</span>
           <ChevronRight className="w-3.5 h-3.5" />
-          <span className="text-slate-600 font-medium">Pick a color</span>
+          <span className="text-slate-600 font-medium">Pick colors</span>
           <ChevronRight className="w-3.5 h-3.5" />
-          <span className="text-slate-600 font-medium">Get matches</span>
+          <span className="text-slate-600 font-medium">Assign paints</span>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left panel — Canvas */}
-          <div className="w-full lg:w-[55%] self-start">
-            <ImageCanvas onColorPick={(hex, signal) => {
-              setPickedColor(hex);
-              setMetallicSignal(signal);
-              if (signal === "high") {
-                setMetallicOnly(true);
-              } else if (signal === "none") {
-                setMetallicOnly(false);
-              }
-            }} />
+          {/* Left panel */}
+          <div className="w-full lg:w-[55%] self-start flex flex-col gap-4">
+            <ImageCanvas
+              markers={markers}
+              activeMarkerId={activeMarkerId}
+              onColorPick={handleColorPick}
+              onSelectMarker={selectMarker}
+              onRemoveMarker={removeMarker}
+            />
+            <AssignmentsPanel
+              markers={markers}
+              activeMarkerId={activeMarkerId}
+              onSelectMarker={selectMarker}
+              onRemoveMarker={removeMarker}
+              onClearAll={clearAllMarkers}
+            />
           </div>
 
-          {/* Right panel — Results */}
+          {/* Right panel */}
           <div className="w-full lg:w-[45%] flex flex-col gap-4">
-            <Palette palette={palette} onRemove={removeFromPalette} />
             <ColorSwatch hex={pickedColor} />
 
             {/* Metallic detection hint */}
@@ -177,17 +235,17 @@ export default function Home() {
                 <div className="flex flex-col min-h-0 flex-1">
                   <div className="flex items-center justify-between mb-3">
                     <h2 className="text-base font-bold text-slate-900" style={{ fontFamily: "var(--font-display)" }}>
-                      Closest Matches
+                      {activeMarker?.assignedPaint ? "Change Paint" : "Choose a Paint"}
                     </h2>
                     <span className="text-[11px] text-slate-400 font-medium uppercase tracking-widest">
-                      By similarity
+                      Marker #{activeMarker?.id}
                     </span>
                   </div>
                   <div className="overflow-y-auto max-h-[60vh] pr-1">
                     <ResultsList
                       results={results}
-                      onAddToPalette={addToPalette}
-                      paletteKeys={paletteKeys}
+                      onAssign={assignPaint}
+                      assignedPaintKey={assignedPaintKey}
                     />
                   </div>
                 </div>

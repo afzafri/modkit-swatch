@@ -5,20 +5,20 @@ import PaintCard from "./PaintCard";
 
 type Props = {
   results: PaintMatch[];
-  onAddToPalette: (paint: PaintMatch) => void;
-  paletteKeys: Set<string>;
+  onAssign: (paint: PaintMatch) => void;
+  assignedPaintKey: string | null;
 };
 
 export default function ResultsList({
   results,
-  onAddToPalette,
-  paletteKeys,
+  onAssign,
+  assignedPaintKey,
 }: Props) {
   if (results.length === 0) {
     return (
       <div
         className="text-center py-10 rounded-2xl"
-        style={{ background: "var(--surface-warm)", color: "var(--text-tertiary)" }}
+        style={{ background: "var(--surface-warm, #f1f5f9)", color: "var(--text-tertiary, #94a3b8)" }}
       >
         <p className="text-sm">No matching paints found for current filters</p>
       </div>
@@ -32,8 +32,8 @@ export default function ResultsList({
           key={`${paint.brand}-${paint.code}`}
           paint={paint}
           rank={i + 1}
-          onAddToPalette={onAddToPalette}
-          isInPalette={paletteKeys.has(`${paint.brand}-${paint.code}`)}
+          onAssign={onAssign}
+          isAssigned={assignedPaintKey === `${paint.brand}-${paint.code}`}
         />
       ))}
     </div>
