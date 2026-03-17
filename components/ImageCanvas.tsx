@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect } from "react";
-import { Crosshair, Unlock } from "lucide-react";
+import { Crosshair, Unlock, Download } from "lucide-react";
 import { rgbToHex, sampleRegion, hexToLab, detectMetallic } from "@/lib/colorMath";
 import type { MetallicSignal } from "@/lib/colorMath";
 import type { Marker } from "@/types/paint";
@@ -101,6 +101,157 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
     if (stored) loadImageFromSrc(stored);
   }, [loadImageFromSrc]);
 
+  // Separate draw function that accepts an override for activeMarkerId (null = no active highlight)
+  const drawMarkersToCtx = useCallback((ctx: CanvasRenderingContext2D, canvasW: number, canvasH: number, img: HTMLImageElement, activeId: number | null) => {
+    ctx.drawImage(img, 0, 0);
+    const s = Math.max(canvasW, canvasH) / 800;
+    const cw = canvasW;
+    const ch = canvasH;
+    const placedLabels: { x: number; y: number; w: number; h: number }[] = [];
+    const dotR = 12 * s;
+
+    for (const m of markers) {
+      const isActive = m.id === activeId;
+      const hasAssignment = !!m.assignedPaint;
+      if (!isActive && !hasAssignment) continue;
+
+      if (isActive && !hasAssignment) {
+        const r = 28 * s;
+        const crossLen = 14 * s;
+        ctx.beginPath(); ctx.arc(m.x, m.y, r + 3 * s, 0, 2 * Math.PI); ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 4 * s; ctx.stroke();
+        ctx.beginPath(); ctx.arc(m.x, m.y, r, 0, 2 * Math.PI); ctx.strokeStyle = m.hex; ctx.lineWidth = 5 * s; ctx.stroke();
+        ctx.beginPath(); ctx.arc(m.x, m.y, r + 5 * s, 0, 2 * Math.PI); ctx.strokeStyle = "rgba(0,0,0,0.5)"; ctx.lineWidth = 1.5 * s; ctx.stroke();
+        ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 3 * s; ctx.beginPath();
+        ctx.moveTo(m.x, m.y - r - crossLen); ctx.lineTo(m.x, m.y - r + 2 * s);
+        ctx.moveTo(m.x, m.y + r - 2 * s); ctx.lineTo(m.x, m.y + r + crossLen);
+        ctx.moveTo(m.x - r - crossLen, m.y); ctx.lineTo(m.x - r + 2 * s, m.y);
+        ctx.moveTo(m.x + r - 2 * s, m.y); ctx.lineTo(m.x + r + crossLen, m.y); ctx.stroke();
+        ctx.strokeStyle = "rgba(0,0,0,0.4)"; ctx.lineWidth = 1 * s; ctx.beginPath();
+        ctx.moveTo(m.x, m.y - r - crossLen); ctx.lineTo(m.x, m.y - r + 2 * s);
+        ctx.moveTo(m.x, m.y + r - 2 * s); ctx.lineTo(m.x, m.y + r + crossLen);
+        ctx.moveTo(m.x - r - crossLen, m.y); ctx.lineTo(m.x - r + 2 * s, m.y);
+        ctx.moveTo(m.x + r - 2 * s, m.y); ctx.lineTo(m.x + r + crossLen, m.y); ctx.stroke();
+        ctx.beginPath(); ctx.arc(m.x, m.y, 3.5 * s, 0, 2 * Math.PI); ctx.fillStyle = "#ffffff"; ctx.fill();
+        ctx.strokeStyle = "rgba(0,0,0,0.5)"; ctx.lineWidth = 1 * s; ctx.stroke();
+        continue;
+      }
+      if (!hasAssignment) continue;
+      const paint = m.assignedPaint!;
+
+      ctx.beginPath(); ctx.arc(m.x, m.y, dotR, 0, 2 * Math.PI); ctx.fillStyle = m.hex; ctx.fill();
+      ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 3 * s; ctx.stroke();
+      ctx.beginPath(); ctx.arc(m.x, m.y, dotR + 2 * s, 0, 2 * Math.PI); ctx.strokeStyle = "rgba(0,0,0,0.4)"; ctx.lineWidth = 1 * s; ctx.stroke();
+
+      const fontSize1 = Math.round(16 * s); const fontSize2 = Math.round(14 * s);
+      const pad = 10 * s; const lineGap = 4 * s; const cornerR = 8 * s;
+      const codeLine = `${paint.brand} ${paint.code}`; const nameLine = paint.name;
+      ctx.font = `bold ${fontSize1}px system-ui, sans-serif`; const codeWidth = ctx.measureText(codeLine).width;
+      ctx.font = `${fontSize2}px system-ui, sans-serif`; const nameWidth = ctx.measureText(nameLine).width;
+      const cardW = Math.max(codeWidth, nameWidth) + pad * 2;
+      const cardH = fontSize1 + fontSize2 + lineGap + pad * 2;
+      const gap = 30 * s;
+
+      const candidates = [
+        { x: m.x + gap, y: m.y - cardH / 2 }, { x: m.x - cardW - gap, y: m.y - cardH / 2 },
+        { x: m.x - cardW / 2, y: m.y - cardH - gap }, { x: m.x - cardW / 2, y: m.y + gap },
+        { x: m.x + gap, y: m.y - cardH - gap }, { x: m.x - cardW - gap, y: m.y - cardH - gap },
+        { x: m.x + gap, y: m.y + gap }, { x: m.x - cardW - gap, y: m.y + gap },
+      ];
+      let bestScore = -Infinity; let bestCand = candidates[0];
+      for (const c of candidates) {
+        const cx = Math.max(4 * s, Math.min(c.x, cw - cardW - 4 * s));
+        const cy = Math.max(4 * s, Math.min(c.y, ch - cardH - 4 * s));
+        let score = 0;
+        for (const placed of placedLabels) {
+          if (cx < placed.x + placed.w && cx + cardW > placed.x && cy < placed.y + placed.h && cy + cardH > placed.y) score -= 1000;
+        }
+        for (const other of markers) {
+          if (other.id === m.id) continue;
+          if (cx < other.x + dotR * 2 && cx + cardW > other.x - dotR * 2 && cy < other.y + dotR * 2 && cy + cardH > other.y - dotR * 2) score -= 500;
+        }
+        if (c.x === cx && c.y === cy) score += 100;
+        const cardCenterX = cx + cardW / 2; const cardCenterY = cy + cardH / 2;
+        score += (Math.abs(cardCenterX - cw / 2) / (cw / 2) + Math.abs(cardCenterY - ch / 2) / (ch / 2)) * 50;
+        if (score > bestScore) { bestScore = score; bestCand = { x: cx, y: cy }; }
+      }
+      let cardX = Math.max(4 * s, Math.min(bestCand.x, cw - cardW - 4 * s));
+      let cardY = Math.max(4 * s, Math.min(bestCand.y, ch - cardH - 4 * s));
+      const centerCardX = cardX + cardW / 2; const centerCardY = cardY + cardH / 2;
+      let lineFromX: number, lineFromY: number;
+      if (m.x > centerCardX) { lineFromX = cardX + cardW; } else { lineFromX = cardX; }
+      if (m.y > centerCardY) { lineFromY = cardY + cardH; } else { lineFromY = cardY; }
+      placedLabels.push({ x: cardX, y: cardY, w: cardW, h: cardH });
+
+      ctx.beginPath(); ctx.moveTo(lineFromX, lineFromY); ctx.lineTo(m.x, m.y);
+      ctx.strokeStyle = "rgba(0,0,0,0.5)"; ctx.lineWidth = 5 * s; ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(lineFromX, lineFromY); ctx.lineTo(m.x, m.y);
+      ctx.strokeStyle = "rgba(255,255,255,0.95)"; ctx.lineWidth = 3 * s; ctx.stroke();
+
+      // Card — no active highlight for export (activeId = null)
+      ctx.fillStyle = "rgba(255,255,255,0.93)";
+      ctx.beginPath(); ctx.roundRect(cardX, cardY, cardW, cardH, cornerR); ctx.fill();
+      ctx.strokeStyle = isActive ? "rgba(56,189,248,0.8)" : "rgba(0,0,0,0.12)";
+      ctx.lineWidth = isActive ? 3 * s : 1.5 * s; ctx.stroke();
+
+      ctx.font = `bold ${fontSize1}px system-ui, sans-serif`; ctx.fillStyle = "#0f172a";
+      ctx.fillText(codeLine, cardX + pad, cardY + pad + fontSize1);
+      ctx.font = `${fontSize2}px system-ui, sans-serif`; ctx.fillStyle = "#64748b";
+      ctx.fillText(nameLine, cardX + pad, cardY + pad + fontSize1 + lineGap + fontSize2);
+    }
+  }, [markers]);
+
+  const exportImage = useCallback(() => {
+    const canvas = canvasRef.current;
+    const img = imageDataRef.current;
+    if (!canvas || !img) return;
+
+    const offscreen = document.createElement("canvas");
+    offscreen.width = canvas.width;
+    offscreen.height = canvas.height;
+    const octx = offscreen.getContext("2d");
+    if (!octx) return;
+
+    // Draw image + markers with NO active highlight (null)
+    drawMarkersToCtx(octx, canvas.width, canvas.height, img, null);
+
+    // Calculate watermark size and position (70% of original)
+    const wmScale = Math.max(canvas.width, canvas.height) / 800 * 0.7;
+    const wmW = 320 * wmScale;
+    const wmH = 62 * wmScale;
+    const wmX = (canvas.width - wmW) / 2;
+    const wmY = canvas.height - wmH - 16 * wmScale;
+
+    // Sample the area where the watermark will be placed to determine brightness
+    const sampleW = Math.min(Math.floor(wmW), canvas.width);
+    const sampleH = Math.min(Math.floor(wmH), canvas.height);
+    const sampleX = Math.max(0, Math.floor(wmX));
+    const sampleY = Math.max(0, Math.floor(wmY));
+    const pixelData = octx.getImageData(sampleX, sampleY, sampleW, sampleH).data;
+
+    let rSum = 0, gSum = 0, bSum = 0;
+    const pixelCount = pixelData.length / 4;
+    for (let i = 0; i < pixelData.length; i += 4) {
+      rSum += pixelData[i];
+      gSum += pixelData[i + 1];
+      bSum += pixelData[i + 2];
+    }
+    const avgLuminance = (rSum / pixelCount * 0.299 + gSum / pixelCount * 0.587 + bSum / pixelCount * 0.114);
+    const isDark = avgLuminance < 128;
+
+    const watermark = new Image();
+    watermark.onload = () => {
+      octx.globalAlpha = 0.5;
+      octx.drawImage(watermark, wmX, wmY, wmW, wmH);
+      octx.globalAlpha = 1;
+
+      const link = document.createElement("a");
+      link.download = "modkitswatch-export.png";
+      link.href = offscreen.toDataURL("image/png");
+      link.click();
+    };
+    watermark.src = isDark ? "/watermark-light.svg" : "/watermark.svg";
+  }, []);
+
   // Draw all markers on the canvas
   const drawAllMarkers = useCallback(() => {
     const canvas = canvasRef.current;
@@ -119,43 +270,6 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
     // Track placed label rects for collision avoidance and DOM overlays
     const placedLabels: { x: number; y: number; w: number; h: number }[] = [];
     const newLabelRects: LabelRect[] = [];
-
-    function resolveOverlap(cx: number, cy: number, w: number, h: number, dotX: number, dotY: number): { x: number; y: number } {
-      let bestX = cx;
-      let bestY = cy;
-
-      // Try the computed position first, then shift if colliding
-      for (let attempt = 0; attempt < 8; attempt++) {
-        let collision = false;
-        for (const placed of placedLabels) {
-          if (
-            bestX < placed.x + placed.w &&
-            bestX + w > placed.x &&
-            bestY < placed.y + placed.h &&
-            bestY + h > placed.y
-          ) {
-            collision = true;
-            break;
-          }
-        }
-        if (!collision) break;
-
-        // Nudge: try different directions
-        const nudge = (h + 10 * s) * (attempt + 1);
-        switch (attempt % 4) {
-          case 0: bestY = cy - nudge; break;
-          case 1: bestY = cy + nudge; break;
-          case 2: bestX = cx - nudge; break;
-          case 3: bestX = cx + nudge; break;
-        }
-
-        // Clamp
-        bestX = Math.max(4 * s, Math.min(bestX, cw - w - 4 * s));
-        bestY = Math.max(4 * s, Math.min(bestY, ch - h - 4 * s));
-      }
-
-      return { x: bestX, y: bestY };
-    }
 
     for (const m of markers) {
       const isActive = m.id === activeMarkerId;
@@ -633,9 +747,18 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
               {pickMode ? (<><Crosshair className="w-3.5 h-3.5" />Picking</>) : (<><Unlock className="w-3.5 h-3.5" />Scroll</>)}
             </button>
           )}
+          {markers.filter((m) => m.assignedPaint).length > 0 && (
+            <button
+              onClick={exportImage}
+              className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/20"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Export
+            </button>
+          )}
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="bg-black/50 hover:bg-black/70 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm"
+            className="bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/20"
           >
             Change Image
           </button>
