@@ -414,8 +414,11 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
     const scaleY = canvas.height / rect.height;
     const imgX = (clientX - rect.left) * scaleX;
     const imgY = (clientY - rect.top) * scaleY;
+    // Add padding for touch targets (20px in image coords)
+    const pad = 20 * (Math.max(canvas.width, canvas.height) / 800);
     for (const lr of labelRects) {
-      if (imgX >= lr.x && imgX <= lr.x + lr.w && imgY >= lr.y && imgY <= lr.y + lr.h) {
+      if (imgX >= lr.x - pad && imgX <= lr.x + lr.w + pad &&
+          imgY >= lr.y - pad && imgY <= lr.y + lr.h + pad) {
         return lr;
       }
     }
@@ -591,6 +594,17 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
     if (nearby && nearby.id !== activeMarkerId) {
       onSelectMarker(nearby.id);
       return;
+    }
+
+    // Safety: don't create new marker if tap is near any assigned marker's label
+    for (const lr of labelRects) {
+      const pad = 30 * (Math.max(canvas.width, canvas.height) / 800);
+      if (imgX >= lr.x - pad && imgX <= lr.x + lr.w + pad &&
+          imgY >= lr.y - pad && imgY <= lr.y + lr.h + pad) {
+        // Tapped on/near a label — select that marker instead
+        onSelectMarker(lr.markerId);
+        return;
+      }
     }
 
     resolvePickAt(touch.clientX, touch.clientY, "new");
