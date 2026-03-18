@@ -96,21 +96,23 @@ export default function Home() {
       }
 
       if (action === "new") {
-        // Remove any unassigned markers before adding new one
-        const cleaned = markers.filter((m) => m.assignedPaint !== null);
-        const newMarker: Marker = { id: nextMarkerId, x, y, hex, assignedPaint: null };
-        const updated = [...cleaned, newMarker];
-        setMarkers(updated);
+        setMarkers((prev) => {
+          const cleaned = prev.filter((m) => m.assignedPaint !== null);
+          const newMarker: Marker = { id: nextMarkerId, x, y, hex, assignedPaint: null };
+          const updated = [...cleaned, newMarker];
+          saveMarkers(updated);
+          return updated;
+        });
         setActiveMarkerId(nextMarkerId);
         setNextMarkerId(nextMarkerId + 1);
-        saveMarkers(updated);
       } else {
-        // reselect: update active marker position and color
-        const updated = markers.map((m) =>
-          m.id === activeMarkerId ? { ...m, x, y, hex, assignedPaint: null } : m
-        );
-        setMarkers(updated);
-        saveMarkers(updated);
+        setMarkers((prev) => {
+          const updated = prev.map((m) =>
+            m.id === activeMarkerId ? { ...m, x, y, hex, assignedPaint: null } : m
+          );
+          saveMarkers(updated);
+          return updated;
+        });
       }
 
       // Show bottom sheet on mobile
@@ -124,25 +126,29 @@ export default function Home() {
   const assignPaint = useCallback(
     (paint: PaintMatch) => {
       if (!activeMarkerId) return;
-      const updated = markers.map((m) =>
-        m.id === activeMarkerId ? { ...m, assignedPaint: paint } : m
-      );
-      setMarkers(updated);
-      saveMarkers(updated);
+      setMarkers((prev) => {
+        const updated = prev.map((m) =>
+          m.id === activeMarkerId ? { ...m, assignedPaint: paint } : m
+        );
+        saveMarkers(updated);
+        return updated;
+      });
     },
-    [markers, activeMarkerId]
+    [activeMarkerId]
   );
 
   const removeMarker = useCallback(
     (id: number) => {
-      const updated = markers.filter((m) => m.id !== id);
-      setMarkers(updated);
-      saveMarkers(updated);
-      if (activeMarkerId === id) {
-        setActiveMarkerId(updated.length > 0 ? updated[updated.length - 1].id : null);
-      }
+      setMarkers((prev) => {
+        const updated = prev.filter((m) => m.id !== id);
+        saveMarkers(updated);
+        if (activeMarkerId === id) {
+          setActiveMarkerId(updated.length > 0 ? updated[updated.length - 1].id : null);
+        }
+        return updated;
+      });
     },
-    [markers, activeMarkerId]
+    [activeMarkerId]
   );
 
   const selectMarker = useCallback((id: number) => {
@@ -151,13 +157,15 @@ export default function Home() {
 
   const updateMarkerLabel = useCallback(
     (id: number, labelX: number, labelY: number) => {
-      const updated = markers.map((m) =>
-        m.id === id ? { ...m, labelX, labelY } : m
-      );
-      setMarkers(updated);
-      saveMarkers(updated);
+      setMarkers((prev) => {
+        const updated = prev.map((m) =>
+          m.id === id ? { ...m, labelX, labelY } : m
+        );
+        saveMarkers(updated);
+        return updated;
+      });
     },
-    [markers]
+    []
   );
 
   const clearAllMarkers = useCallback(() => {
