@@ -44,6 +44,7 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
   const imageDataRef = useRef<HTMLImageElement | null>(null);
   const paintImgCache = useRef<Map<string, HTMLImageElement | null>>(new Map());
   const [paintImgVersion, setPaintImgVersion] = useState(0);
+  const [resizeVersion, setResizeVersion] = useState(0);
   const draggingLabelRef = useRef<{ markerId: number; offsetX: number; offsetY: number } | null>(null);
 
   const drawImage = useCallback((img: HTMLImageElement) => {
@@ -335,7 +336,7 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
   // Redraw markers whenever they change
   useEffect(() => {
     if (hasImage) drawAllMarkers();
-  }, [markers, activeMarkerId, hasImage, drawAllMarkers, paintImgVersion]);
+  }, [markers, activeMarkerId, hasImage, drawAllMarkers, paintImgVersion, resizeVersion]);
 
   const drawLoupeToCanvas = useCallback(
     (canvasEl: HTMLCanvasElement | null, imgX: number, imgY: number) => {
@@ -539,8 +540,28 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
   const touchHandlerRef = useRef<((e: TouchEvent) => void) | null>(null);
   touchHandlerRef.current = (e: TouchEvent) => {
     if (!pickMode) return;
-    e.preventDefault();
     const touch = e.touches[0];
+
+    // Check if touching a label — start drag instead of pick
+    const hit = hitTestLabel(touch.clientX, touch.clientY);
+    if (hit) {
+      e.preventDefault();
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const imgX = (touch.clientX - rect.left) * scaleX;
+      const imgY = (touch.clientY - rect.top) * scaleY;
+      draggingLabelRef.current = {
+        markerId: hit.markerId,
+        offsetX: imgX - hit.x,
+        offsetY: imgY - hit.y,
+      };
+      return;
+    }
+
+    e.preventDefault();
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
@@ -562,8 +583,28 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
     const canvas = canvasRef.current;
     if (!canvas) return;
     const handler = (e: TouchEvent) => touchHandlerRef.current?.(e);
+    const moveHandler = (e: TouchEvent) => {
+      if (!draggingLabelRef.current) return;
+      e.preventDefault();
+      const touch = e.touches[0];
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const imgX = (touch.clientX - rect.left) * scaleX;
+      const imgY = (touch.clientY - rect.top) * scaleY;
+      const newX = imgX - draggingLabelRef.current.offsetX;
+      const newY = imgY - draggingLabelRef.current.offsetY;
+      onUpdateMarkerLabel?.(draggingLabelRef.current.markerId, newX, newY);
+    };
+    const endHandler = () => { draggingLabelRef.current = null; };
     canvas.addEventListener("touchstart", handler, { passive: false });
-    return () => canvas.removeEventListener("touchstart", handler);
+    canvas.addEventListener("touchmove", moveHandler, { passive: false });
+    canvas.addEventListener("touchend", endHandler);
+    return () => {
+      canvas.removeEventListener("touchstart", handler);
+      canvas.removeEventListener("touchmove", moveHandler);
+      canvas.removeEventListener("touchend", endHandler);
+    };
   }, []);
 
   useEffect(() => {
@@ -578,7 +619,10 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
 
   useEffect(() => {
     const handleResize = () => {
-      if (imageDataRef.current) drawImage(imageDataRef.current);
+      if (imageDataRef.current) {
+        drawImage(imageDataRef.current);
+        setResizeVersion((v) => v + 1);
+      }
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);

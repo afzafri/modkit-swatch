@@ -29,7 +29,9 @@ function loadMarkers(): Marker[] {
 }
 
 function saveMarkers(markers: Marker[]) {
-  localStorage.setItem(MARKERS_KEY, JSON.stringify(markers));
+  // Only persist markers that have an assigned paint
+  const assigned = markers.filter((m) => m.assignedPaint !== null);
+  localStorage.setItem(MARKERS_KEY, JSON.stringify(assigned));
 }
 
 export default function Home() {
