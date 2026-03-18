@@ -538,14 +538,20 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
 
   // Attach touchstart as non-passive so preventDefault works
   const touchHandlerRef = useRef<((e: TouchEvent) => void) | null>(null);
+  const touchDragActiveRef = useRef(false);
+  const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressTriggeredRef = useRef(false);
+
   touchHandlerRef.current = (e: TouchEvent) => {
     if (!pickMode) return;
     const touch = e.touches[0];
+    longPressTriggeredRef.current = false;
 
-    // Check if touching a label — start drag instead of pick
+    // Check if touching a label — start drag or long-press to remove
     const hit = hitTestLabel(touch.clientX, touch.clientY);
     if (hit) {
       e.preventDefault();
+      e.stopPropagation();
       const canvas = canvasRef.current;
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
@@ -558,6 +564,17 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
         offsetX: imgX - hit.x,
         offsetY: imgY - hit.y,
       };
+      touchDragActiveRef.current = true;
+
+      // Start long-press timer (600ms) — remove marker if held without moving
+      longPressTimerRef.current = setTimeout(() => {
+        if (draggingLabelRef.current && !longPressTriggeredRef.current) {
+          longPressTriggeredRef.current = true;
+          draggingLabelRef.current = null;
+          touchDragActiveRef.current = false;
+          onRemoveMarker(hit.markerId);
+        }
+      }, 600);
       return;
     }
 
@@ -584,7 +601,12 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
     if (!canvas) return;
     const handler = (e: TouchEvent) => touchHandlerRef.current?.(e);
     const moveHandler = (e: TouchEvent) => {
-      if (!draggingLabelRef.current) return;
+      // Cancel long-press if finger moves (user is dragging, not holding)
+      if (longPressTimerRef.current) {
+        clearTimeout(longPressTimerRef.current);
+        longPressTimerRef.current = null;
+      }
+      if (!draggingLabelRef.current || longPressTriggeredRef.current) return;
       e.preventDefault();
       const touch = e.touches[0];
       const rect = canvas.getBoundingClientRect();
@@ -596,7 +618,11 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
       const newY = imgY - draggingLabelRef.current.offsetY;
       onUpdateMarkerLabel?.(draggingLabelRef.current.markerId, newX, newY);
     };
-    const endHandler = () => { draggingLabelRef.current = null; };
+    const endHandler = () => {
+      if (longPressTimerRef.current) { clearTimeout(longPressTimerRef.current); longPressTimerRef.current = null; }
+      draggingLabelRef.current = null;
+      touchDragActiveRef.current = false;
+    };
     canvas.addEventListener("touchstart", handler, { passive: false });
     canvas.addEventListener("touchmove", moveHandler, { passive: false });
     canvas.addEventListener("touchend", endHandler);
@@ -681,16 +707,6 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
           style={{ touchAction: pickMode && isTouchDevice ? "none" : "auto", cursor: pickMode ? "crosshair" : "default" }}
         />
         <div className="absolute top-3 right-3 flex gap-2">
-          {isTouchDevice && (
-            <button
-              onClick={() => setPickMode(!pickMode)}
-              className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm ${
-                pickMode ? "bg-sky-500/90 hover:bg-sky-600/90 text-white" : "bg-black/50 hover:bg-black/70 text-white"
-              }`}
-            >
-              {pickMode ? (<><Crosshair className="w-3.5 h-3.5" />Picking</>) : (<><Unlock className="w-3.5 h-3.5" />Scroll</>)}
-            </button>
-          )}
           {markers.filter((m) => m.assignedPaint).length > 0 && (
             <button
               onClick={exportImage}
@@ -708,8 +724,8 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
           </button>
         </div>
 
-        {/* Remove buttons on label cards */}
-        {labelRects.map((lr) => {
+        {/* Remove buttons on label cards (desktop only — mobile uses AssignmentsPanel) */}
+        {!isTouchDevice && labelRects.map((lr) => {
           const canvas = canvasRef.current;
           if (!canvas) return null;
           const displayW = canvas.clientWidth;

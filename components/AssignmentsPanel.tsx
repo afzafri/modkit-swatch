@@ -117,10 +117,10 @@ export default function AssignmentsPanel({
               {/* Remove */}
               <button
                 onClick={(e) => { e.stopPropagation(); onRemoveMarker(m.id); }}
-                className="opacity-0 group-hover:opacity-100 transition-opacity text-slate-400 hover:text-red-500 shrink-0"
+                className="text-slate-300 hover:text-red-500 active:text-red-500 transition-colors shrink-0 p-1"
                 title="Remove marker"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
           );
