@@ -12,6 +12,7 @@ type Props = {
   onColorPick: (hex: string, metallicSignal: MetallicSignal, x: number, y: number, action: "new" | "reselect") => void;
   onSelectMarker: (id: number) => void;
   onRemoveMarker: (id: number) => void;
+  onUpdateMarkerLabel?: (id: number, labelX: number, labelY: number) => void;
 };
 
 type LabelRect = {
@@ -23,7 +24,7 @@ const ZOOM_LEVEL = 4;
 const LOUPE_SIZE = 120;
 const MARKER_RADIUS = 28;
 
-export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSelectMarker, onRemoveMarker }: Props) {
+export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSelectMarker, onRemoveMarker, onUpdateMarkerLabel }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const loupeCanvasRef = useRef<HTMLCanvasElement>(null);
   const pinnedLoupeCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -41,6 +42,9 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
   }>({ visible: false, x: 0, y: 0, hex: "#000000", imgX: 0, imgY: 0 });
   const [labelRects, setLabelRects] = useState<LabelRect[]>([]);
   const imageDataRef = useRef<HTMLImageElement | null>(null);
+  const paintImgCache = useRef<Map<string, HTMLImageElement | null>>(new Map());
+  const [paintImgVersion, setPaintImgVersion] = useState(0);
+  const draggingLabelRef = useRef<{ markerId: number; offsetX: number; offsetY: number } | null>(null);
 
   const drawImage = useCallback((img: HTMLImageElement) => {
     const canvas = canvasRef.current;
@@ -93,6 +97,20 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
     [loadImageFromSrc]
   );
 
+  // Preload paint images
+  useEffect(() => {
+    for (const m of markers) {
+      if (!m.assignedPaint) continue;
+      const slug = m.assignedPaint.brand.toLowerCase().replace(/[\s.]+/g, "-");
+      const key = `${slug}/${m.assignedPaint.code}`;
+      if (paintImgCache.current.has(key)) continue;
+      const img = new Image();
+      img.onload = () => { paintImgCache.current.set(key, img); setPaintImgVersion((v) => v + 1); };
+      img.onerror = () => { paintImgCache.current.set(key, null); };
+      img.src = `/paints/${key}.jpg`;
+    }
+  }, [markers]);
+
   // Restore image from localStorage on mount
   useEffect(() => {
     const stored = localStorage.getItem("modkitswatch_image");
@@ -141,12 +159,24 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
       ctx.beginPath(); ctx.arc(m.x, m.y, dotR + 2 * s, 0, 2 * Math.PI); ctx.strokeStyle = "rgba(0,0,0,0.4)"; ctx.lineWidth = 1 * s; ctx.stroke();
 
       const fontSize1 = Math.round(16 * s); const fontSize2 = Math.round(14 * s);
-      const pad = 10 * s; const lineGap = 4 * s; const cornerR = 8 * s;
+      const fontSizeHex = Math.round(11 * s);
+      const pad = 6 * s; const lineGap = 6 * s; const cornerR = 6 * s;
       const codeLine = `${paint.brand} ${paint.code}`; const nameLine = paint.name;
+
+      // Paint thumbnail
+      const imgSlug = paint.brand.toLowerCase().replace(/[\s.]+/g, "-");
+      const imgKey = `${imgSlug}/${paint.code}`;
+      const paintImg = paintImgCache.current.get(imgKey) || null;
+      const thumbW = paintImg ? 48 * s : 0;
+      const thumbPad = paintImg ? 8 * s : 0;
+
       ctx.font = `bold ${fontSize1}px system-ui, sans-serif`; const codeWidth = ctx.measureText(codeLine).width;
       ctx.font = `${fontSize2}px system-ui, sans-serif`; const nameWidth = ctx.measureText(nameLine).width;
-      const cardW = Math.max(codeWidth, nameWidth) + pad * 2;
-      const cardH = fontSize1 + fontSize2 + lineGap + pad * 2;
+      ctx.font = `${fontSizeHex}px system-ui, sans-serif`; const hexWidth = ctx.measureText(paint.hex).width;
+      const hexBadgeFullH = fontSizeHex + 6 * s;
+      const textAreaW = Math.max(codeWidth, nameWidth, hexWidth + 14 * s) + pad * 2;
+      const cardW = thumbW + thumbPad + textAreaW;
+      const cardH = Math.max(fontSize1 + fontSize2 + hexBadgeFullH + lineGap * 2 + pad * 2, thumbW + pad * 2);
       const gap = 30 * s;
 
       const candidates = [
@@ -172,8 +202,15 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
         score += (Math.abs(cardCenterX - cw / 2) / (cw / 2) + Math.abs(cardCenterY - ch / 2) / (ch / 2)) * 50;
         if (score > bestScore) { bestScore = score; bestCand = { x: cx, y: cy }; }
       }
-      let cardX = Math.max(4 * s, Math.min(bestCand.x, cw - cardW - 4 * s));
-      let cardY = Math.max(4 * s, Math.min(bestCand.y, ch - cardH - 4 * s));
+      // Use user-dragged position if available, otherwise auto-position
+      let cardX: number, cardY: number;
+      if (m.labelX != null && m.labelY != null) {
+        cardX = m.labelX;
+        cardY = m.labelY;
+      } else {
+        cardX = Math.max(4 * s, Math.min(bestCand.x, cw - cardW - 4 * s));
+        cardY = Math.max(4 * s, Math.min(bestCand.y, ch - cardH - 4 * s));
+      }
       const centerCardX = cardX + cardW / 2; const centerCardY = cardY + cardH / 2;
       let lineFromX: number, lineFromY: number;
       if (m.x > centerCardX) { lineFromX = cardX + cardW; } else { lineFromX = cardX; }
@@ -186,16 +223,46 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
       ctx.beginPath(); ctx.moveTo(lineFromX, lineFromY); ctx.lineTo(m.x, m.y);
       ctx.strokeStyle = "rgba(255,255,255,0.95)"; ctx.lineWidth = 3 * s; ctx.stroke();
 
-      // Card — no active highlight for export (activeId = null)
+      // Card background
       ctx.fillStyle = "rgba(255,255,255,0.93)";
       ctx.beginPath(); ctx.roundRect(cardX, cardY, cardW, cardH, cornerR); ctx.fill();
       ctx.strokeStyle = isActive ? "rgba(56,189,248,0.8)" : "rgba(0,0,0,0.12)";
       ctx.lineWidth = isActive ? 3 * s : 1.5 * s; ctx.stroke();
 
+      // Paint thumbnail
+      const textX = cardX + thumbW + thumbPad + pad;
+      if (paintImg) {
+        const tX = cardX + pad; const tY = cardY + pad; const tH = cardH - pad * 2;
+        ctx.save();
+        ctx.beginPath(); ctx.roundRect(tX, tY, thumbW, tH, 4 * s); ctx.clip();
+        ctx.fillStyle = "#ffffff"; ctx.fillRect(tX, tY, thumbW, tH);
+        const aspect = paintImg.width / paintImg.height;
+        let dW = thumbW, dH = tH;
+        if (aspect > thumbW / tH) { dH = thumbW / aspect; } else { dW = tH * aspect; }
+        ctx.drawImage(paintImg, tX + (thumbW - dW) / 2, tY + (tH - dH) / 2, dW, dH);
+        ctx.restore();
+        ctx.beginPath(); ctx.roundRect(tX, tY, thumbW, tH, 4 * s);
+        ctx.strokeStyle = "rgba(0,0,0,0.08)"; ctx.lineWidth = 1 * s; ctx.stroke();
+      }
+
+      // Code text
       ctx.font = `bold ${fontSize1}px system-ui, sans-serif`; ctx.fillStyle = "#0f172a";
-      ctx.fillText(codeLine, cardX + pad, cardY + pad + fontSize1);
+      ctx.fillText(codeLine, textX, cardY + pad + fontSize1);
+
+      // Name text
       ctx.font = `${fontSize2}px system-ui, sans-serif`; ctx.fillStyle = "#64748b";
-      ctx.fillText(nameLine, cardX + pad, cardY + pad + fontSize1 + lineGap + fontSize2);
+      ctx.fillText(nameLine, textX, cardY + pad + fontSize1 + lineGap + fontSize2);
+
+      // Hex badge
+      const paintHex = paint.hex;
+      const hexY = cardY + pad + fontSize1 + lineGap + fontSize2 + lineGap;
+      const hexBadgeW = hexWidth + 12 * s;
+      ctx.fillStyle = paintHex;
+      ctx.beginPath(); ctx.roundRect(textX, hexY, hexBadgeW, hexBadgeFullH, 3 * s); ctx.fill();
+      ctx.font = `bold ${fontSizeHex}px system-ui, sans-serif`;
+      const hexTextColor = parseInt(paintHex.slice(1, 3), 16) * 0.299 + parseInt(paintHex.slice(3, 5), 16) * 0.587 + parseInt(paintHex.slice(5, 7), 16) * 0.114 > 128 ? "#000000" : "#ffffff";
+      ctx.fillStyle = hexTextColor;
+      ctx.fillText(paintHex, textX + 6 * s, hexY + fontSizeHex + 1 * s);
     }
 
     return labelRects;
@@ -263,12 +330,12 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
 
     const rects = drawMarkersToCtx(ctx, canvas.width, canvas.height, img, activeMarkerId);
     setLabelRects(rects);
-  }, [markers, activeMarkerId, drawMarkersToCtx]);
+  }, [markers, activeMarkerId, drawMarkersToCtx, paintImgVersion]);
 
   // Redraw markers whenever they change
   useEffect(() => {
     if (hasImage) drawAllMarkers();
-  }, [markers, activeMarkerId, hasImage, drawAllMarkers]);
+  }, [markers, activeMarkerId, hasImage, drawAllMarkers, paintImgVersion]);
 
   const drawLoupeToCanvas = useCallback(
     (canvasEl: HTMLCanvasElement | null, imgX: number, imgY: number) => {
@@ -328,12 +395,77 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
       if (!containerRect) return;
       setLoupe({ visible: true, x: e.clientX - containerRect.left, y: e.clientY - containerRect.top, hex });
       drawLoupeToCanvas(loupeCanvasRef.current, imgX, imgY);
+
     },
     [drawLoupeToCanvas]
   );
 
   const handleMouseLeave = useCallback(() => {
     setLoupe((prev) => ({ ...prev, visible: false }));
+  }, []);
+
+  // Label dragging via canvas mouse events
+  const hitTestLabel = useCallback((clientX: number, clientY: number): LabelRect | null => {
+    const canvas = canvasRef.current;
+    if (!canvas) return null;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const imgX = (clientX - rect.left) * scaleX;
+    const imgY = (clientY - rect.top) * scaleY;
+    for (const lr of labelRects) {
+      if (imgX >= lr.x && imgX <= lr.x + lr.w && imgY >= lr.y && imgY <= lr.y + lr.h) {
+        return lr;
+      }
+    }
+    return null;
+  }, [labelRects]);
+
+  const handleLabelDragStart = useCallback((e: React.MouseEvent) => {
+    const hit = hitTestLabel(e.clientX, e.clientY);
+    if (!hit) return false;
+    const canvas = canvasRef.current;
+    if (!canvas) return false;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const imgX = (e.clientX - rect.left) * scaleX;
+    const imgY = (e.clientY - rect.top) * scaleY;
+    draggingLabelRef.current = {
+      markerId: hit.markerId,
+      offsetX: imgX - hit.x,
+      offsetY: imgY - hit.y,
+    };
+    return true;
+  }, [hitTestLabel]);
+
+  const handleContainerMouseMove = useCallback((e: React.MouseEvent) => {
+    // Always update cursor based on label hit
+    const canvasEl = canvasRef.current;
+    if (canvasEl) {
+      if (draggingLabelRef.current) {
+        canvasEl.style.cursor = "grabbing";
+      } else {
+        const hit = hitTestLabel(e.clientX, e.clientY);
+        canvasEl.style.cursor = hit ? "move" : (pickMode ? "crosshair" : "default");
+      }
+    }
+
+    if (!draggingLabelRef.current) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const imgX = (e.clientX - rect.left) * scaleX;
+    const imgY = (e.clientY - rect.top) * scaleY;
+    const newX = imgX - draggingLabelRef.current.offsetX;
+    const newY = imgY - draggingLabelRef.current.offsetY;
+    onUpdateMarkerLabel?.(draggingLabelRef.current.markerId, newX, newY);
+  }, [onUpdateMarkerLabel, hitTestLabel, pickMode]);
+
+  const handleContainerMouseUp = useCallback(() => {
+    draggingLabelRef.current = null;
   }, []);
 
   // Check if click is near an existing marker
@@ -377,8 +509,11 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
     [onColorPick]
   );
 
-  const handleCanvasClick = useCallback(
+  const handleCanvasMouseDown = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
+      // Check if clicking on a label (start drag)
+      if (handleLabelDragStart(e)) return;
+
       const canvas = canvasRef.current;
       if (!canvas) return;
       const rect = canvas.getBoundingClientRect();
@@ -397,7 +532,7 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
       // Always create a new marker
       resolvePickAt(e.clientX, e.clientY, "new");
     },
-    [markers, activeMarkerId, findNearbyMarker, resolvePickAt, onSelectMarker]
+    [markers, activeMarkerId, findNearbyMarker, resolvePickAt, onSelectMarker, handleLabelDragStart]
   );
 
   // Attach touchstart as non-passive so preventDefault works
@@ -460,7 +595,10 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
   });
 
   return (
-    <div ref={containerRef} className="w-full relative overflow-visible">
+    <div ref={containerRef} className="w-full relative overflow-visible"
+      onMouseMove={handleContainerMouseMove}
+      onMouseUp={handleContainerMouseUp}
+      onMouseLeave={handleContainerMouseUp}>
       {!hasImage && (
         <div
           className={`border-2 border-dashed rounded-2xl p-12 text-center transition-all cursor-pointer ${
@@ -492,11 +630,11 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
         )}
         <canvas
           ref={canvasRef}
-          className={`rounded-2xl block ${pickMode ? "cursor-crosshair" : "cursor-default"}`}
-          onClick={pickMode ? handleCanvasClick : undefined}
+          className="rounded-2xl block"
+          onMouseDown={pickMode ? handleCanvasMouseDown : undefined}
           onMouseMove={pickMode ? handleMouseMove : undefined}
           onMouseLeave={handleMouseLeave}
-          style={{ touchAction: pickMode && isTouchDevice ? "none" : "auto" }}
+          style={{ touchAction: pickMode && isTouchDevice ? "none" : "auto", cursor: pickMode ? "crosshair" : "default" }}
         />
         <div className="absolute top-3 right-3 flex gap-2">
           {isTouchDevice && (

@@ -147,6 +147,17 @@ export default function Home() {
     setActiveMarkerId(id);
   }, []);
 
+  const updateMarkerLabel = useCallback(
+    (id: number, labelX: number, labelY: number) => {
+      const updated = markers.map((m) =>
+        m.id === id ? { ...m, labelX, labelY } : m
+      );
+      setMarkers(updated);
+      saveMarkers(updated);
+    },
+    [markers]
+  );
+
   const clearAllMarkers = useCallback(() => {
     setMarkers([]);
     setActiveMarkerId(null);
@@ -193,6 +204,7 @@ export default function Home() {
               onColorPick={handleColorPick}
               onSelectMarker={selectMarker}
               onRemoveMarker={removeMarker}
+              onUpdateMarkerLabel={updateMarkerLabel}
             />
             <AssignmentsPanel
               markers={markers}

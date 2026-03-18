@@ -31,4 +31,6 @@ export type Marker = {
   y: number;
   hex: string;
   assignedPaint: PaintMatch | null;
+  labelX?: number;
+  labelY?: number;
 };
