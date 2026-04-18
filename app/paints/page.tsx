@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Wind, PenLine } from "lucide-react";
+import Link from "next/link";
+import { Search, Wind, PenLine, Beaker } from "lucide-react";
 import paintsData from "@/data/paints.json";
 import { getContrastColor } from "@/lib/colorMath";
 import { extractFilterOptions } from "@/lib/matcher";
@@ -190,13 +191,25 @@ function PaintGridCard({ paint }: { paint: Paint }) {
           )}
         </div>
         <p className="text-xs text-slate-500 truncate mt-0.5">{paint.name}</p>
-        <div className="flex gap-1 mt-1.5">
+        <div className="flex items-center gap-1 mt-1.5">
           <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-500 border border-slate-100">
             {capitalize(paint.finish)}
           </span>
           <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-50 text-slate-500 border border-slate-100">
             {capitalize(paint.type)}
           </span>
+          <div className="ml-auto relative group/mix">
+            <Link
+              href={`/mix?target=${encodeURIComponent(paint.hex)}`}
+              className="inline-flex items-center gap-1 text-[10px] font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+            >
+              <Beaker className="w-3 h-3" />
+              Mix
+            </Link>
+            <span className="absolute bottom-full right-0 mb-1.5 px-2 py-1 text-[10px] font-medium bg-slate-900 text-white rounded-md whitespace-nowrap opacity-0 group-hover/mix:opacity-100 transition-opacity pointer-events-none shadow-lg">
+              Try mixing this paint yourself
+            </span>
+          </div>
         </div>
       </div>
     </div>
