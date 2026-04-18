@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { ChevronRight, Beaker } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import paintsData from "@/data/paints.json";
@@ -228,6 +229,16 @@ export default function Home() {
           {/* Right panel (desktop only) */}
           <div className="hidden lg:flex w-full lg:w-[45%] flex-col gap-4">
             <ColorSwatch hex={pickedColor} />
+
+            {pickedColor && (
+              <Link
+                href={`/mix?target=${encodeURIComponent(pickedColor)}`}
+                className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-white border border-slate-200 hover:border-sky-400 hover:bg-sky-50 text-slate-700 hover:text-sky-700 text-xs font-medium transition-colors"
+              >
+                <Beaker className="w-3.5 h-3.5" />
+                Can&apos;t find a perfect match? <span className="font-semibold underline underline-offset-2">Mix this color</span>
+              </Link>
+            )}
 
             {/* Metallic detection hint */}
             {pickedColor && metallicSignal !== "none" && (

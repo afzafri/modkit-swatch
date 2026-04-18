@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { X, ClipboardCopy, Check } from "lucide-react";
+import Link from "next/link";
+import { X, ClipboardCopy, Check, Beaker } from "lucide-react";
 import { getContrastColor } from "@/lib/colorMath";
 import type { Marker } from "@/types/paint";
 
@@ -113,6 +114,17 @@ export default function AssignmentsPanel({
                   Active
                 </span>
               )}
+
+              {/* Mix shortcut */}
+              <Link
+                href={`/mix?target=${encodeURIComponent(m.hex)}`}
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex items-center gap-1 text-[10px] font-semibold text-sky-600 hover:text-white bg-sky-50 hover:bg-sky-500 px-2 py-1 rounded-md border border-sky-100 hover:border-sky-500 transition-colors shrink-0"
+                title="Mix a custom color from this target"
+              >
+                <Beaker className="w-3 h-3" />
+                Mix
+              </Link>
 
               {/* Remove */}
               <button

@@ -13,6 +13,7 @@ export default function SiteHeader({ paintCount }: Props) {
 
   const navItems = [
     { href: "/", label: "Matcher" },
+    { href: "/mix", label: "Mixer" },
     { href: "/paints", label: "Browse Paints" },
   ];
 

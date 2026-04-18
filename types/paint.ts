@@ -34,3 +34,19 @@ export type Marker = {
   labelX?: number;
   labelY?: number;
 };
+
+export type MixIngredient = {
+  brand: string;
+  code: string;
+  name: string;
+  hex: string;
+  parts: number;
+};
+
+export type MixRecipe = {
+  id: string;
+  createdAt: number;
+  targetHex: string;
+  ingredients: MixIngredient[];
+  mixedHex: string;
+};
