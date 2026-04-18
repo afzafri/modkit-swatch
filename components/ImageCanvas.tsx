@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect } from "react";
-import { Crosshair, Unlock, Download } from "lucide-react";
+import { Crosshair, Unlock, Download, ImageOff } from "lucide-react";
 import { rgbToHex, sampleRegion, hexToLab, detectMetallic } from "@/lib/colorMath";
+import { compressImageForStorage } from "@/lib/imageCompression";
 import type { MetallicSignal } from "@/lib/colorMath";
 import type { Marker } from "@/types/paint";
 
@@ -13,6 +14,7 @@ type Props = {
   onSelectMarker: (id: number) => void;
   onRemoveMarker: (id: number) => void;
   onUpdateMarkerLabel?: (id: number, labelX: number, labelY: number) => void;
+  onImageRemoved?: () => void;
 };
 
 type LabelRect = {
@@ -24,7 +26,7 @@ const ZOOM_LEVEL = 4;
 const LOUPE_SIZE = 120;
 const MARKER_RADIUS = 28;
 
-export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSelectMarker, onRemoveMarker, onUpdateMarkerLabel }: Props) {
+export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSelectMarker, onRemoveMarker, onUpdateMarkerLabel, onImageRemoved }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const loupeCanvasRef = useRef<HTMLCanvasElement>(null);
   const pinnedLoupeCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -87,11 +89,14 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
       reader.onload = (e) => {
         const dataUrl = e.target?.result as string;
         loadImageFromSrc(dataUrl);
-        try {
-          localStorage.setItem("modkitswatch_image", dataUrl);
-        } catch {
-          // localStorage full — silently skip
-        }
+        compressImageForStorage(dataUrl)
+          .then((compressed) => {
+            try { localStorage.setItem("modkitswatch_image", compressed); } catch {}
+          })
+          .catch(() => {
+            // compression failed — try raw as a last resort
+            try { localStorage.setItem("modkitswatch_image", dataUrl); } catch {}
+          });
       };
       reader.readAsDataURL(file);
     },
@@ -705,7 +710,7 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
           {markers.filter((m) => m.assignedPaint).length > 0 && (
             <button
               onClick={exportImage}
-              className="flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/20"
+              className="flex items-center gap-1.5 bg-slate-900/75 hover:bg-slate-900 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/10"
             >
               <Download className="w-3.5 h-3.5" />
               Export
@@ -713,9 +718,23 @@ export default function ImageCanvas({ markers, activeMarkerId, onColorPick, onSe
           )}
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/20"
+            className="bg-slate-900/75 hover:bg-slate-900 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/10"
           >
             Change Image
+          </button>
+          <button
+            onClick={() => {
+              imageDataRef.current = null;
+              setHasImage(false);
+              setLabelRects([]);
+              try { localStorage.removeItem("modkitswatch_image"); } catch {}
+              onImageRemoved?.();
+            }}
+            className="flex items-center gap-1.5 bg-slate-900/75 hover:bg-slate-900 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/10"
+            title="Remove image"
+          >
+            <ImageOff className="w-3.5 h-3.5" />
+            Remove
           </button>
         </div>
 

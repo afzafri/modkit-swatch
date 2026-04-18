@@ -118,7 +118,13 @@ export default function AssignmentsPanel({
               {/* Mix shortcut */}
               <Link
                 href={`/mix?target=${encodeURIComponent(m.hex)}`}
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  try {
+                    const img = localStorage.getItem("modkitswatch_image");
+                    if (img) localStorage.setItem("modkitswatch_mix_image", img);
+                  } catch {}
+                }}
                 className="inline-flex items-center gap-1 text-[10px] font-semibold text-sky-600 hover:text-white bg-sky-50 hover:bg-sky-500 px-2 py-1 rounded-md border border-sky-100 hover:border-sky-500 transition-colors shrink-0"
                 title="Mix a custom color from this target"
               >

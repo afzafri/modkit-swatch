@@ -216,6 +216,7 @@ export default function Home() {
               onSelectMarker={selectMarker}
               onRemoveMarker={removeMarker}
               onUpdateMarkerLabel={updateMarkerLabel}
+              onImageRemoved={clearAllMarkers}
             />
             <AssignmentsPanel
               markers={markers}
@@ -233,6 +234,12 @@ export default function Home() {
             {pickedColor && (
               <Link
                 href={`/mix?target=${encodeURIComponent(pickedColor)}`}
+                onClick={() => {
+                  try {
+                    const img = localStorage.getItem("modkitswatch_image");
+                    if (img) localStorage.setItem("modkitswatch_mix_image", img);
+                  } catch {}
+                }}
                 className="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-white border border-slate-200 hover:border-sky-400 hover:bg-sky-50 text-slate-700 hover:text-sky-700 text-xs font-medium transition-colors"
               >
                 <Beaker className="w-3.5 h-3.5" />

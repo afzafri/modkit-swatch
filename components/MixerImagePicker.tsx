@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState, useCallback, useEffect } from "react";
-import { Crosshair } from "lucide-react";
+import { Crosshair, Download, ImageOff } from "lucide-react";
 import { rgbToHex, sampleRegion } from "@/lib/colorMath";
+import { compressImageForStorage } from "@/lib/imageCompression";
 
 type Marker = { x: number; y: number; hex: string };
 
@@ -11,18 +12,23 @@ type Props = {
   pickEnabled?: boolean;
   onRequestPick?: () => void;
   marker?: Marker | null;
+  onImageLoaded?: (img: HTMLImageElement | null) => void;
+  onExport?: () => void;
+  canExport?: boolean;
 };
+
 
 const ZOOM_LEVEL = 4;
 const LOUPE_SIZE = 120;
 
-export default function MixerImagePicker({ onPick, pickEnabled = true, onRequestPick, marker = null }: Props) {
+export default function MixerImagePicker({ onPick, pickEnabled = true, onRequestPick, marker = null, onImageLoaded, onExport, canExport = false }: Props) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const loupeCanvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imageDataRef = useRef<HTMLImageElement | null>(null);
   const [hasImage, setHasImage] = useState(false);
+  const [imageVersion, setImageVersion] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [loupe, setLoupe] = useState<{ visible: boolean; x: number; y: number; hex: string }>({
@@ -72,7 +78,9 @@ export default function MixerImagePicker({ onPick, pickEnabled = true, onRequest
     canvas.style.height = `${img.height * scale}px`;
     imageDataRef.current = img;
     setHasImage(true);
-  }, []);
+    setImageVersion((v) => v + 1);
+    onImageLoaded?.(img);
+  }, [onImageLoaded]);
 
   const loadImageFromSrc = useCallback((src: string) => {
     const img = new Image();
@@ -85,14 +93,21 @@ export default function MixerImagePicker({ onPick, pickEnabled = true, onRequest
     const reader = new FileReader();
     reader.onload = (e) => {
       const dataUrl = e.target?.result as string;
+      // Display full-resolution original
       loadImageFromSrc(dataUrl);
-      try { localStorage.setItem("modkitswatch_image", dataUrl); } catch {}
+      // Persist a compressed copy (JPEG, <=1600px long side) so it fits in localStorage
+      compressImageForStorage(dataUrl)
+        .then((compressed) => {
+          try { localStorage.setItem("modkitswatch_mix_image", compressed); }
+          catch { /* quota still exceeded — drop persistence, in-memory image still works */ }
+        })
+        .catch(() => { /* compression failed — skip persistence */ });
     };
     reader.readAsDataURL(file);
   }, [loadImageFromSrc]);
 
   useEffect(() => {
-    const stored = localStorage.getItem("modkitswatch_image");
+    const stored = localStorage.getItem("modkitswatch_mix_image");
     if (stored) loadImageFromSrc(stored);
   }, [loadImageFromSrc]);
 
@@ -106,10 +121,10 @@ export default function MixerImagePicker({ onPick, pickEnabled = true, onRequest
     return () => window.removeEventListener("resize", handleResize);
   }, [drawImage]);
 
-  // Redraw whenever marker or image changes
+  // Redraw whenever marker or image changes (imageVersion bumps on every new image load / resize)
   useEffect(() => {
     if (hasImage) drawScene();
-  }, [hasImage, drawScene]);
+  }, [hasImage, imageVersion, drawScene]);
 
   const drawLoupeToCanvas = useCallback((imgX: number, imgY: number) => {
     const canvasEl = loupeCanvasRef.current;
@@ -248,10 +263,19 @@ export default function MixerImagePicker({ onPick, pickEnabled = true, onRequest
           style={{ touchAction: pickEnabled && isTouchDevice ? "none" : "auto", cursor: pickEnabled ? "crosshair" : "default" }}
         />
         <div className="absolute top-3 right-3 flex gap-2 z-20">
+          {onExport && canExport && (
+            <button
+              onClick={onExport}
+              className="inline-flex items-center gap-1.5 bg-slate-900/75 hover:bg-slate-900 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/10"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Export
+            </button>
+          )}
           {!pickEnabled && onRequestPick && (
             <button
               onClick={onRequestPick}
-              className="inline-flex items-center gap-1.5 bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/20"
+              className="inline-flex items-center gap-1.5 bg-slate-900/75 hover:bg-slate-900 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/10"
             >
               <Crosshair className="w-3.5 h-3.5" />
               Re-pick target
@@ -259,9 +283,23 @@ export default function MixerImagePicker({ onPick, pickEnabled = true, onRequest
           )}
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/20"
+            className="bg-slate-900/75 hover:bg-slate-900 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/10"
           >
             Change Image
+          </button>
+          <button
+            onClick={() => {
+              imageDataRef.current = null;
+              setHasImage(false);
+              setImageVersion((v) => v + 1);
+              try { localStorage.removeItem("modkitswatch_mix_image"); } catch {}
+              onImageLoaded?.(null);
+            }}
+            className="inline-flex items-center gap-1.5 bg-slate-900/75 hover:bg-slate-900 text-white text-xs px-3 py-1.5 rounded-lg transition-colors backdrop-blur-sm border border-white/10"
+            title="Remove image"
+          >
+            <ImageOff className="w-3.5 h-3.5" />
+            Remove
           </button>
         </div>
       </div>

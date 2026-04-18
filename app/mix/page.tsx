@@ -7,6 +7,7 @@ import SiteFooter from "@/components/SiteFooter";
 import paintsData from "@/data/paints.json";
 import { hexToLab, deltaE } from "@/lib/colorMath";
 import { mixPaints, normalizeRatios } from "@/lib/mixer";
+import { exportMix } from "@/lib/mixerExport";
 import { matchPaints, extractFilterOptions } from "@/lib/matcher";
 import type { PaintWithLab, PaintMatch, MixIngredient, MixRecipe } from "@/types/paint";
 import MixerImagePicker from "@/components/MixerImagePicker";
@@ -64,7 +65,9 @@ export default function MixPage() {
   const [recipes, setRecipes] = useState<MixRecipe[]>([]);
   const [repickMode, setRepickMode] = useState(false);
   const [showMobileSheet, setShowMobileSheet] = useState(false);
+  const [hasImage, setHasImage] = useState(false);
   const seededTargetRef = useRef<string | null>(null);
+  const imageElRef = useRef<HTMLImageElement | null>(null);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -184,7 +187,7 @@ export default function MixPage() {
   }, [ingredients, pickerReplaceIndex]);
 
   const handleSave = useCallback(() => {
-    if (!targetHex || !mixedHex || ingredients.length === 0) return;
+    if (!mixedHex || ingredients.length === 0) return;
     const recipe: MixRecipe = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       createdAt: Date.now(),
@@ -198,6 +201,37 @@ export default function MixPage() {
       return next;
     });
   }, [targetHex, mixedHex, ingredients]);
+
+  const handleImageLoaded = useCallback((img: HTMLImageElement | null) => {
+    imageElRef.current = img;
+    setHasImage(!!img);
+    // When the image is removed, any crosshair marker is in stale coords — clear it
+    if (!img) {
+      setMarker(null);
+    }
+  }, []);
+
+  const handleExport = useCallback(() => {
+    if (!mixedHex || ingredients.length === 0) return;
+    exportMix({
+      targetHex,
+      mixedHex,
+      deltaE: currentDeltaE,
+      ingredients,
+      percentages,
+      marker,
+      image: imageElRef.current,
+    });
+  }, [targetHex, mixedHex, currentDeltaE, ingredients, percentages, marker]);
+
+  const handleStartFromScratch = useCallback(() => {
+    // Leave target null, skip seeding. Open picker immediately.
+    seededTargetRef.current = null;
+    setIngredientsAutoSeeded(false);
+    setPickerReplaceIndex(null);
+    setPickerOpen(true);
+    if (window.innerWidth < 1024) setShowMobileSheet(true);
+  }, []);
 
   const handleLoadRecipe = useCallback((recipe: MixRecipe) => {
     seededTargetRef.current = recipe.targetHex;
@@ -251,10 +285,24 @@ export default function MixPage() {
               pickEnabled={!targetHex || repickMode}
               onRequestPick={handleRequestRepick}
               marker={marker}
+              onImageLoaded={handleImageLoaded}
+              onExport={handleExport}
+              canExport={ingredients.length > 0 && !!mixedHex}
             />
 
+            {/* Mix-from-scratch link — visible when no target yet */}
+            {!targetHex && (
+              <button
+                onClick={handleStartFromScratch}
+                className="self-start inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-slate-900 transition-colors"
+              >
+                or mix from scratch without a target
+                <ChevronRight className="w-3 h-3" />
+              </button>
+            )}
+
             {/* Mobile: inline re-open button under image */}
-            {targetHex && !showMobileSheet && (
+            {(targetHex || ingredients.length > 0) && !showMobileSheet && (
               <button
                 onClick={() => setShowMobileSheet(true)}
                 className="lg:hidden inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-900 text-white text-sm font-semibold shadow-sm hover:bg-slate-800 transition-colors"
@@ -267,11 +315,19 @@ export default function MixPage() {
 
           {/* Right panel (desktop only) */}
           <div className="hidden lg:flex w-full lg:w-[45%] flex-col gap-4">
-            {!targetHex ? (
+            {!targetHex && ingredients.length === 0 ? (
               <div className="rounded-xl p-8 text-center bg-slate-100/80 border border-slate-200/60">
-                <p className="text-sm text-slate-400 font-light">
+                <p className="text-sm text-slate-400 font-light mb-4">
                   Upload a photo and click to pick your target color
                 </p>
+                <div className="text-[11px] text-slate-400 mb-3">— or —</div>
+                <button
+                  onClick={handleStartFromScratch}
+                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-slate-700 text-xs font-medium transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  Mix from scratch (no target)
+                </button>
               </div>
             ) : (
               <>
@@ -282,6 +338,8 @@ export default function MixPage() {
                   closest={closestPaint}
                   canSave={ingredients.length > 0 && !!mixedHex}
                   onSave={handleSave}
+                  onExport={!hasImage ? handleExport : undefined}
+                  canExport={!hasImage && ingredients.length > 0 && !!mixedHex}
                 />
 
                 <div className="flex flex-col gap-3">
@@ -356,8 +414,8 @@ export default function MixPage() {
         </div>
       </main>
 
-      {/* Mobile FAB — always reachable when sheet is closed and target is set */}
-      {targetHex && !showMobileSheet && !pickerOpen && (
+      {/* Mobile FAB — reachable when sheet closed and mix is active (target OR ingredients) */}
+      {(targetHex || ingredients.length > 0) && !showMobileSheet && !pickerOpen && (
         <button
           onClick={() => setShowMobileSheet(true)}
           className="lg:hidden fixed bottom-4 right-4 z-30 inline-flex items-center gap-2 px-4 py-3 rounded-full bg-slate-900 text-white text-sm font-semibold shadow-lg hover:bg-slate-800 transition-colors"
@@ -384,6 +442,8 @@ export default function MixPage() {
         onAddIngredient={openAddPicker}
         onSave={handleSave}
         canSave={ingredients.length > 0 && !!mixedHex}
+        onExport={!hasImage ? handleExport : () => { setShowMobileSheet(false); handleExport(); }}
+        canExport={ingredients.length > 0 && !!mixedHex}
         onDismiss={() => setShowMobileSheet(false)}
       />
 

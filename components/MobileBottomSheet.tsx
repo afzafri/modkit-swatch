@@ -172,7 +172,13 @@ export default function MobileBottomSheet({
         <div className="px-4 pt-2">
           <Link
             href={`/mix?target=${encodeURIComponent(hex)}`}
-            onClick={close}
+            onClick={() => {
+              try {
+                const img = localStorage.getItem("modkitswatch_image");
+                if (img) localStorage.setItem("modkitswatch_mix_image", img);
+              } catch {}
+              close();
+            }}
             className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-sky-600 bg-sky-50 active:bg-sky-500 active:text-white px-2.5 py-1.5 rounded-md border border-sky-100 transition-colors"
           >
             <Beaker className="w-3 h-3" />

@@ -46,7 +46,7 @@ export type MixIngredient = {
 export type MixRecipe = {
   id: string;
   createdAt: number;
-  targetHex: string;
+  targetHex: string | null;
   ingredients: MixIngredient[];
   mixedHex: string;
 };

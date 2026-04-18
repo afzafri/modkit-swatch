@@ -22,6 +22,8 @@ type Props = {
   onAddIngredient: () => void;
   onSave: () => void;
   canSave: boolean;
+  onExport: () => void;
+  canExport: boolean;
   onDismiss: () => void;
 };
 
@@ -41,6 +43,8 @@ export default function MixerMobileSheet({
   onAddIngredient,
   onSave,
   canSave,
+  onExport,
+  canExport,
   onDismiss,
 }: Props) {
   const [rendered, setRendered] = useState(false);
@@ -99,7 +103,7 @@ export default function MixerMobileSheet({
     setDragY(0);
   }, [dragY, close]);
 
-  if (!rendered || !targetHex) return null;
+  if (!rendered) return null;
 
   return (
     <>
@@ -136,7 +140,9 @@ export default function MixerMobileSheet({
             <p className="text-sm font-semibold text-slate-900" style={{ fontFamily: "var(--font-display)" }}>
               Mix a custom color
             </p>
-            <p className="text-xs text-slate-400">Target {targetHex.toUpperCase()}</p>
+            <p className="text-xs text-slate-400">
+              {targetHex ? `Target ${targetHex.toUpperCase()}` : "Mixing from scratch"}
+            </p>
           </div>
           <button onClick={close} className="text-slate-400 hover:text-slate-600 p-1">
             <X className="w-5 h-5" />
@@ -155,6 +161,8 @@ export default function MixerMobileSheet({
             closest={closest}
             canSave={canSave}
             onSave={onSave}
+            onExport={onExport}
+            canExport={canExport}
           />
 
           <div className="flex flex-col gap-3">
